@@ -161,7 +161,7 @@ $('b4').onclick=()=>{try{load(JSON.parse($('ta').value));say('Backup restaurado.
 $('fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{load(JSON.parse(r.result));say('Arquivo restaurado.')}catch(x){say('Arquivo inválido.')}};r.readAsText(f)};
 $('b6').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='notas-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()};
 // ---- Nuvem (Supabase). Preencha url e key para ativar; vazio = só neste navegador ----
-const CLOUD={url:'',key:''};
+const CLOUD={url:'https://lvfhxcmnqylioalsluvy.supabase.co',key:'sb_publishable_gZ4FF1BgIlhIzK1b4y91bQ_YPw9WfXN'};
 let sess=null,pt=null;try{sess=JSON.parse(localStorage.getItem('notas-sess'))}catch(e){}
 const on=()=>CLOUD.url&&CLOUD.key;
 function st(m){const b=$('cl');b.style.display=on()?'':'none';b.textContent=m}
