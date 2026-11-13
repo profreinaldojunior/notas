@@ -1,9 +1,12 @@
--- Rode uma vez no Supabase: SQL Editor > New query > Run
+-- JÁ APLICADO na base emdesenvol (só guarde como registro).
 create table if not exists notas_app (
   id int primary key,
   data jsonb not null,
   updated_at timestamptz default now()
 );
 alter table notas_app enable row level security;
-create policy "somente usuario logado" on notas_app
-  for all to authenticated using (true) with check (true);
+drop policy if exists "somente usuario logado" on notas_app;
+create policy "somente o professor" on notas_app
+  for all to authenticated
+  using ((auth.jwt()->>'email') = 'prof.reinaldojunior@gmail.com')
+  with check ((auth.jwt()->>'email') = 'prof.reinaldojunior@gmail.com');
