@@ -110,6 +110,10 @@ body{border:0;background:#fff}
 #pr td.rd{color:#c92a2a;font-weight:700}
 #pr p{margin:8px 0}
 }
+
+#cl{width:150px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;padding-left:6px;padding-right:6px}
+td.m.p3m{outline:3px solid #f5c400;outline-offset:-3px}
+.lb3.on{background:var(--half);border-color:#e0a800}
 </style>
 </head>
 <body>
@@ -174,13 +178,13 @@ function render(){
  if(S.view){painel();return}
  const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t);
  const LL=L(S.bim,t);
- let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> ${fund?'<button class="btn" id="p3b">🖨 Lista P3</button> ':''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
- h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th>${fund?'<th title="Recuperação da P1">P3</th>':''}<th>P2</th><th>Eng/T</th><th>Média</th></tr></thead><tbody>`;
+ let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> ${fund?`<button class="btn lb3 ${S.p3?'on':''}" id="p3v" title="Mostrar/ocultar coluna P3">👁 P3</button> <button class="btn" id="p3b">🖨 Lista P3</button> `:''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
+ h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th><th>P2</th><th>Eng/T</th>${fund&&S.p3?'<th title="Recuperação da P1">P3</th>':''}<th>Média</th></tr></thead><tbody>`;
  if(!ros.length)h+=`<tr><td colspan="10" class="empty">Nenhum aluno nesta turma.</td></tr>`;
  ros.forEach((s,i)=>{const g=gr[s.id]||{};
   h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n">${i+1}</td><td class="nm">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label><br><input class="in" style="width:95%;text-align:left;margin-top:4px" data-obs="${s.id}" placeholder="Observação" value="${esc(s.obs||'')}">`:s.n+(s.off?'<span class="tag">saiu</span>':'')+(s.obs?'<div class="obs">'+esc(s.obs)+'</div>':'')}</td>`;
   for(let k=0;k<4;k++){const v=(g.a||[])[k];h+=`<td><button class="a ${v==2?'v2':v==1?'v1':''}" data-k="${k}">${v==null?'·':fmt(v)}</button></td>`}
-  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>`
+  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>${S.p3?`<td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td>`:''}`
         :`<td class="c" data-c="p1"></td><td class="c" data-c="p2"></td><td><input class="in p" data-f="e" inputmode="decimal" value="${fmt(g.e)}" placeholder="0–2"></td>`;
   h+=`<td class="c m" data-c="m"></td></tr>`});
  h+=`</tbody></table></div><div class="foot" id="foot"></div>`;
@@ -202,7 +206,7 @@ function render(){
  card.querySelectorAll('[data-off]').forEach(c=>c.onchange=()=>{const s=ros.find(x=>x.id==c.dataset.off);if(s){s.off=c.checked?1:0;save();c.closest('tr').classList.toggle('off',c.checked);foot()}});
  card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;l[k]=l[k]?0:1;if(l.dirty)Object.keys(l.dirty).forEach(i=>{l.dirty[i]=l.dirty[i].filter(c=>c!=k);if(!l.dirty[i].length)delete l.dirty[i]});save();chips();render()});
  card.querySelectorAll('[data-obs]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.obs);if(s){s.obs=i.value.trim();save()}});
- $('rp').onclick=()=>report(0);const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
+ $('rp').onclick=()=>report(0);const pv=$('p3v');if(pv)pv.onclick=()=>{S.p3=!S.p3;render()};const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
  const ed=$('ed');if(ed)ed.onclick=()=>{S.edit=!S.edit;render()};
  $('lk').onclick=()=>{S.unlock=!S.unlock;if(!S.unlock)S.edit=false;render();if(!S.unlock)poll()};
  card.querySelectorAll('[data-rn]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.rn);if(s&&i.value.trim()){s.n=i.value.trim();save()}});
@@ -214,7 +218,7 @@ function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)r
  tr.querySelectorAll('[data-c]').forEach(td=>{const k=td.dataset.c,v=r[k];let c;
   if(k=='m'){td.innerHTML=r.any?fmt(v)+(r.u3?'<sup title="P1 substituída pela P3">P3</sup>':''):'';c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
   else{td.textContent=fmt(v);c=r.cnt==0?'org':(k=='e'?'':low(v))}
-  mark(td,o(c))});
+  mark(td,o(c));if(k=='m')td.classList.toggle('p3m',!!r.u3)});
  const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
  if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3)}}
  else mark(cell('e'),o(g.e==null?'org':''))}
