@@ -111,20 +111,21 @@ body{border:0;background:#fff}
 #pr p{margin:8px 0}
 }
 
-#cl{width:150px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;padding-left:6px;padding-right:6px}
-td.m.p3m{outline:3px solid #f5c400;outline-offset:-3px}
-.lb3.on{background:var(--half);border-color:#e0a800}
+.chipbar{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.chipbar .chips{flex:1;margin:0;min-width:0}
+#cl{flex:0 0 124px;width:124px;font-size:12px;padding:6px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.lock{min-width:172px;text-align:center}
+td.p3m{box-shadow:inset 0 0 0 3px #f5c400}
 </style>
 </head>
 <body>
- <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5c28177b38414288bf064ed708b25853"}'></script><!-- End Cloudflare Web Analytics -->
 <div class="wrap">
 <header>
 <h1>📚 Notas · Lab. de Informática</h1>
 <div class="bims" id="bims"><button class="bb" data-b="1">1º Bim</button><button class="bb" data-b="2">2º Bim</button><button class="bb" data-b="3">3º Bim</button><button class="bb" data-b="4">4º Bim</button></div>
-<button class="btn" id="pn">📋 Painel</button><button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="cl" style="display:none" title="Sincronizar"></button><button class="btn" id="bk">Backup / Exportar</button>
+<button class="btn" id="pn">📋 Painel</button><button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="bk">Backup / Exportar</button>
 </header>
-<div class="chips" id="chips"></div>
+<div class="chipbar"><div class="chips" id="chips"></div><button class="btn" id="cl" style="display:none" title="Sincronizar agora"></button></div>
 <div class="card" id="card"></div>
 <div class="sched" id="sched"></div>
 </div>
@@ -147,7 +148,7 @@ const KEY='notas-lab-info-v1';
 let db=null;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.roster)db=DATA;
-const S={bim:'4',t:db.turmas[0],edit:false};
+const S={bim:'4',t:db.turmas[0],edit:false,p3v:false};
 const $=id=>document.getElementById(id);
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}push()}
 const fmt=v=>v==null?'':(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -156,6 +157,7 @@ const CUR='4',MEDIA_MIN=6,PROVA_MIN=3.5,P3_MAX=4;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const L=(b,t)=>{db.launch=db.launch||{};db.launch[b]=db.launch[b]||{};return db.launch[b][t]=db.launch[b][t]||{}};
 const G=(b,t)=>((db.grades[b]=db.grades[b]||{})[t]=db.grades[b][t]||{});
+const p3pend=(ros,gr)=>ros.filter(s=>{const g=gr[s.id]||{};return !s.off&&g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length;
 function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const cnt=vs.length,sum=vs.reduce((s,v)=>s+v,0);let p1,p2,e,p3=null;
  if(f1(t)){p1=g.p1==null?null:g.p1;p3=g.p3==null?null:g.p3;p2=sum;e=cnt/2}else{p1=sum;p2=cnt*2;e=g.e==null?null:g.e}
  const any=cnt>0||g.p1!=null||g.e!=null||p3!=null;
@@ -179,18 +181,18 @@ function render(){
  if(S.view){painel();return}
  const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t);
  const LL=L(S.bim,t);
- let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> ${fund?`<button class="btn lb3 ${S.p3?'on':''}" id="p3v" title="Mostrar/ocultar coluna P3">👁 P3</button> <button class="btn" id="p3b">🖨 Lista P3</button> `:''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
- h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th><th>P2</th><th>Eng/T</th>${fund&&S.p3?'<th title="Recuperação da P1">P3</th>':''}<th>Média</th></tr></thead><tbody>`;
- if(!ros.length)h+=`<tr><td colspan="10" class="empty">Nenhum aluno nesta turma.</td></tr>`;
+ let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> ${fund?`<button class="btn" id="p3v">${S.p3v?'🙈 Ocultar P3':'👁 P3'} (${p3pend(ros,gr)})</button> <button class="btn" id="p3b">🖨 Lista P3</button> `:''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
+ h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th><th>P2</th><th>Eng/T</th>${fund&&S.p3v?'<th title="Recuperação da P1">P3</th>':''}<th>Média</th></tr></thead><tbody>`;
+ if(!ros.length)h+=`<tr><td colspan="11" class="empty">Nenhum aluno nesta turma.</td></tr>`;
  ros.forEach((s,i)=>{const g=gr[s.id]||{};
   h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n">${i+1}</td><td class="nm">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label><br><input class="in" style="width:95%;text-align:left;margin-top:4px" data-obs="${s.id}" placeholder="Observação" value="${esc(s.obs||'')}">`:s.n+(s.off?'<span class="tag">saiu</span>':'')+(s.obs?'<div class="obs">'+esc(s.obs)+'</div>':'')}</td>`;
   for(let k=0;k<4;k++){const v=(g.a||[])[k];h+=`<td><button class="a ${v==2?'v2':v==1?'v1':''}" data-k="${k}">${v==null?'·':fmt(v)}</button></td>`}
-  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>${S.p3?`<td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td>`:''}`
+  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>${S.p3v?`<td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td>`:''}`
         :`<td class="c" data-c="p1"></td><td class="c" data-c="p2"></td><td><input class="in p" data-f="e" inputmode="decimal" value="${fmt(g.e)}" placeholder="0–2"></td>`;
   h+=`<td class="c m" data-c="m"></td></tr>`});
  h+=`</tbody></table></div><div class="foot" id="foot"></div>`;
  if(S.edit)h+=`<div class="add"><input id="newn" placeholder="Nome do novo aluno"><button class="btn pri" id="addb">Adicionar aluno</button></div>`;
- h+=`<div class="rule">${fund?'Fundamental I: P1 digitada · P2 = soma das atividades · Eng/T = 0,5 por atividade entregue · Média = (P1 + P2) ÷ 2 + Eng/T.':'Fundamental II: P1 = soma das atividades · P2 = 2 por atividade entregue · Eng/T digitada · Média = (P1 + P2) ÷ 2 + Eng/T.'} Toque na atividade: 2 → 1 → em branco.</div>`;
+ h+=`<div class="rule">${fund?'Fundamental I: P1 digitada · P2 = soma das atividades · Eng/T = 0,5 por atividade entregue · Média = (P1 + P2) ÷ 2 + Eng/T.':'Fundamental II: P1 = soma das atividades · P2 = 2 por atividade entregue · Eng/T digitada · Média = (P1 + P2) ÷ 2 + Eng/T.'} Toque na atividade: 2 → 1 → em branco. Contorno amarelo na média = a P3 entrou no cálculo.</div>`;
  $('card').innerHTML=h;$('card').classList.toggle('locked',!S.unlock);
  ros.forEach(s=>upd(s.id));foot();warn();
  const card=$('card');
@@ -207,9 +209,10 @@ function render(){
  card.querySelectorAll('[data-off]').forEach(c=>c.onchange=()=>{const s=ros.find(x=>x.id==c.dataset.off);if(s){s.off=c.checked?1:0;save();c.closest('tr').classList.toggle('off',c.checked);foot()}});
  card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;l[k]=l[k]?0:1;if(l.dirty)Object.keys(l.dirty).forEach(i=>{l.dirty[i]=l.dirty[i].filter(c=>c!=k);if(!l.dirty[i].length)delete l.dirty[i]});save();chips();render()});
  card.querySelectorAll('[data-obs]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.obs);if(s){s.obs=i.value.trim();save()}});
- $('rp').onclick=()=>report(0);const pv=$('p3v');if(pv)pv.onclick=()=>{S.p3=!S.p3;render()};const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
+ $('rp').onclick=()=>report(0);const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
  const ed=$('ed');if(ed)ed.onclick=()=>{S.edit=!S.edit;render()};
- $('lk').onclick=()=>{S.unlock=!S.unlock;if(!S.unlock)S.edit=false;render();if(!S.unlock)poll()};
+ const pv=$('p3v');if(pv)pv.onclick=()=>{S.p3v=!S.p3v;render()};
+ $('lk').onclick=async()=>{if(S.unlock){S.unlock=false;S.edit=false;render();poll();return}await poll(true);S.unlock=true;render()};
  card.querySelectorAll('[data-rn]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.rn);if(s&&i.value.trim()){s.n=i.value.trim();save()}});
  card.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(b.dataset.sure){const id=b.dataset.del;db.roster[t]=ros.filter(x=>x.id!=id);Object.keys(db.grades).forEach(bm=>{if(db.grades[bm][t])delete db.grades[bm][t][id]});save();render()}else{b.dataset.sure=1;b.textContent='Remover?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='✕'}},3000)}});
  const ab=$('addb');if(ab){const add=()=>{const v=$('newn').value.trim();if(!v)return;ros.push({id:t+'-'+Date.now(),n:v});db.roster[t]=ros;save();render();const n=$('newn');if(n)n.focus()};ab.onclick=add;$('newn').onkeydown=e=>{if(e.key=='Enter')add()}}}
@@ -217,9 +220,9 @@ function mark(td,c){if(!td)return;td.classList.toggle('red',c=='red');td.classLi
 function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)return;const t=S.t,g=G(S.bim,t)[id]||{},r=calc(t,g),off=tr.classList.contains('off'),f=f1(t);
  const low=v=>v!=null&&v<=PROVA_MIN?'red':'';const o=c=>c=='org'&&off?'':c;
  tr.querySelectorAll('[data-c]').forEach(td=>{const k=td.dataset.c,v=r[k];let c;
-  if(k=='m'){td.innerHTML=r.any?fmt(v)+(r.u3?'<sup title="P1 substituída pela P3">P3</sup>':''):'';c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
+  if(k=='m'){td.textContent=r.any?fmt(v):'';td.classList.toggle('p3m',!!r.u3);td.title=r.u3?'Média com a nota da P3':'';c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
   else{td.textContent=fmt(v);c=r.cnt==0?'org':(k=='e'?'':low(v))}
-  mark(td,o(c));if(k=='m')td.classList.toggle('p3m',!!r.u3)});
+  mark(td,o(c))});
  const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
  if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3)}}
  else mark(cell('e'),o(g.e==null?'org':''))}
@@ -243,9 +246,9 @@ function report(kind){const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t),
  if(kind){const el=act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX});
   head='<th>Nº</th><th>Nome</th><th>Motivo</th><th>P1</th><th style="width:70px">P3</th>';
   rows=el.map(s=>{const g=gr[s.id]||{};return `<tr><td>${ros.indexOf(s)+1}</td><td>${esc(s.n)}</td><td>${g.p1==null?'P1 não feita':'P1 baixa'}</td><td>${fmt(g.p1)}</td><td>${g.p3==null?'&nbsp;':fmt(g.p3)}</td></tr>`}).join('')}
- else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th>'+(fund?'<th>P3</th>':'')+'<th>P2</th><th>Eng/T</th><th>Média</th><th>Obs</th>';
+ else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th><th>P2</th><th>Eng/T</th>'+(fund?'<th>P3</th>':'')+'<th>Média</th><th>Obs</th>';
   rows=ros.map((s,i)=>{const g=gr[s.id]||{},r=calc(t,g),a=g.a||[],rd=v=>r.cnt>0&&v!=null&&v<=PROVA_MIN?'rd':'';
-   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+(fund?`<td>${fmt(r.p3)}</td>`:'')+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td><td class="${r.any&&r.m<MEDIA_MIN?'rd':''}"><b>${r.any?fmt(r.m):''}</b></td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
+   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td>`+(fund?`<td>${fmt(r.p3)}</td>`:'')+`<td class="${r.any&&r.m<MEDIA_MIN?'rd':''}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):''}</b></td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
  const ms=act.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),av=ms.length?ms.reduce((a,c)=>a+c,0)/ms.length:null;
  const sm=kind?`<p>Alunos listados: <b>${rows?act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX}).length:0}</b> · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`:`<p>Alunos na sala: <b>${act.length}</b> · Média da turma: <b>${fmt(av)||'–'}</b> · Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b> · Lançado na escola: P1 ${l.p1?'✓':'☐'} P2 ${l.p2?'✓':'☐'} Eng/T ${l.t?'✓':'☐'} · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;
  $('pr').innerHTML=hd+'<table><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table>'+sm;window.print()}
@@ -259,8 +262,8 @@ function say(m){$('msg').textContent=m}
 $('bk').onclick=()=>{$('ov').classList.add('on');say('')};
 $('b5').onclick=()=>$('ov').classList.remove('on');
 $('b1').onclick=()=>{$('ta').value=JSON.stringify(db);say('Backup gerado. Toque em “Copiar texto” e guarde.')};
-$('b2').onclick=()=>{const t=S.t,gr=G(S.bim,t);const L=['Nº\tNome\tAtiv1\tAtiv2\tAtiv3\tAtiv4\tP1\tP3\tP2\tEng/T\tMédia\tObs'];
- (db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p3),fmt(r.p2),fmt(r.e),r.any?fmt(r.m):'',[s.off?'Saiu da turma':'',s.obs||'',f1(t)&&g.p1==null?'P1 não feita':''].filter(Boolean).join('; ')].join('\t'))});
+$('b2').onclick=()=>{const t=S.t,gr=G(S.bim,t);const L=['Nº\tNome\tAtiv1\tAtiv2\tAtiv3\tAtiv4\tP1\tP2\tEng/T\tP3\tMédia\tObs'];
+ (db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p2),fmt(r.e),fmt(r.p3),r.any?fmt(r.m):'',[s.off?'Saiu da turma':'',s.obs||'',f1(t)&&g.p1==null?'P1 não feita':''].filter(Boolean).join('; ')].join('\t'))});
  $('ta').value=L.join('\n');say('Notas de '+turmaTitle(t)+' · '+S.bim+'º bimestre.')};
 $('b3').onclick=()=>{const ta=$('ta');ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}say(ok?'Copiado!':'Selecione o texto e copie manualmente.')};
 
@@ -277,7 +280,7 @@ $('b6').onclick=()=>{const a=document.createElement('a');a.href=URL.createObject
 const CLOUD={url:'https://lvfhxcmnqylioalsluvy.supabase.co',key:'sb_publishable_gZ4FF1BgIlhIzK1b4y91bQ_YPw9WfXN'};
 let sess=null,pt=null,pushing=false,polling=false,remoteTs=null;try{sess=JSON.parse(localStorage.getItem('notas-sess'))}catch(e){}
 const on=()=>CLOUD.url&&CLOUD.key;
-function st(m){const b=$('cl');b.style.display=on()?'':'none';b.textContent=m}
+function st(m){const b=$('cl');b.style.display=on()?'':'none';b.textContent=m.replace('sincronizado','sinc.').replace('atualizado','atual.');b.title=m+' · toque para sincronizar'}
 async function auth(body,q){const r=await fetch(CLOUD.url+'/auth/v1/token?grant_type='+q,{method:'POST',headers:{apikey:CLOUD.key,'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('auth');sess=await r.json();try{localStorage.setItem('notas-sess',JSON.stringify(sess))}catch(e){}}
 async function rest(m,body){const go=()=>fetch(CLOUD.url+'/rest/v1/notas_app'+(m=='GET'||m=='TS'?'?id=eq.1&select='+(m=='TS'?'updated_at':'data,updated_at'):''),{method:m=='TS'?'GET':m,headers:{apikey:CLOUD.key,Authorization:'Bearer '+(sess&&sess.access_token),'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:body&&JSON.stringify(body)});
  let r=await go();if(r.status==401&&sess&&sess.refresh_token){await auth({refresh_token:sess.refresh_token},'refresh_token');r=await go()}return r}
