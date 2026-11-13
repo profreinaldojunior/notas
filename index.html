@@ -21,8 +21,8 @@ select,.btn{background:var(--card);border:1px solid var(--bd);border-radius:8px;
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chip{border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-weight:600}
 .chip.on{background:var(--pri);border-color:var(--pri);color:#fff}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
-.card h2{margin:0;padding:10px 12px;font-size:16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:3px solid var(--bc,var(--bd));border-radius:12px;overflow:hidden}
+.card h2{margin:0;padding:10px 12px;font-size:17px;background:var(--bc,var(--card));color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .card h2 small{color:var(--mut);font-weight:400}
 .scroll{overflow-x:auto}
 table{border-collapse:collapse;width:100%;min-width:560px}
@@ -60,13 +60,32 @@ td.red .in{background:transparent;color:var(--badtx);border-color:var(--badtx);f
 tr.off td{background:var(--yel)}
 tr.off td.nm{font-weight:600}
 .tag{font-size:11px;background:#f59f00;color:#000;border-radius:6px;padding:1px 6px;margin-left:6px}
+
+:root{--orgbg:#ffa94d;--orgtx:#4a2300}
+:root[data-theme="dark"]{--orgbg:#9c5410;--orgtx:#ffe0bf}
+[data-bim="1"]{--bc:#1971c2}[data-bim="2"]{--bc:#2f9e44}[data-bim="3"]{--bc:#7048e8}[data-bim="4"]{--bc:#d6009a}
+body{border-top:8px solid var(--bc)}
+.bims{display:flex;gap:6px}
+.bb{border:2px solid var(--c);color:var(--c);background:transparent;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
+.bb[data-b="1"]{--c:#1971c2}.bb[data-b="2"]{--c:#2f9e44}.bb[data-b="3"]{--c:#7048e8}.bb[data-b="4"]{--c:#d6009a}
+.bb.on{background:var(--c);color:#fff}
+.chip.on{background:var(--bc);border-color:var(--bc)}
+td.org{background:var(--orgbg)!important;color:var(--orgtx);font-weight:700}
+td.org .in{background:transparent;color:var(--orgtx);border-color:var(--orgtx)}
+td.elig .in{border:2px dashed #e67700;background:var(--half)}
+td.used .in{border:2px solid var(--ok)}
+.lanc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--bd);font-size:13px}
+.lb{border:1px solid var(--bd);background:var(--card);border-radius:8px;padding:5px 10px;cursor:pointer;font-weight:600}
+.lb.on{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.obs{font-size:12px;color:var(--mut);font-weight:400}
+sup{font-size:9px;margin-left:2px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
 <h1>📚 Notas · Lab. de Informática</h1>
-<select id="bim" aria-label="Bimestre"><option value="1">1º bimestre</option><option value="2">2º bimestre</option><option value="3">3º bimestre</option><option value="4">4º bimestre</option></select>
+<div class="bims" id="bims"><button class="bb" data-b="1">1º Bim</button><button class="bb" data-b="2">2º Bim</button><button class="bb" data-b="3">3º Bim</button><button class="bb" data-b="4">4º Bim</button></div>
 <button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="cl" style="display:none" title="Sincronizar"></button><button class="btn" id="bk">Backup / Exportar</button>
 </header>
 <div class="chips" id="chips"></div>
@@ -95,24 +114,29 @@ const $=id=>document.getElementById(id);
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}push()}
 const fmt=v=>v==null?'':(Math.round(v*10)/10).toFixed(1).replace('.',',');
 const f1=t=>+t[0]<=5;
+const CUR='4',MEDIA_MIN=6,PROVA_MIN=3.5,P3_MAX=4;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const L=(b,t)=>{db.launch=db.launch||{};db.launch[b]=db.launch[b]||{};return db.launch[b][t]=db.launch[b][t]||{}};
 const G=(b,t)=>((db.grades[b]=db.grades[b]||{})[t]=db.grades[b][t]||{});
-function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const cnt=vs.length,sum=vs.reduce((s,v)=>s+v,0);let p1,p2,e;
- if(f1(t)){p1=g.p1==null?null:g.p1;p2=sum;e=cnt/2}else{p1=sum;p2=cnt*2;e=g.e==null?null:g.e}
- const any=cnt>0||g.p1!=null||g.e!=null;
- return{p1,p2,e,m:any?((p1||0)+p2)/2+(e||0):null,any}}
+function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const cnt=vs.length,sum=vs.reduce((s,v)=>s+v,0);let p1,p2,e,p3=null;
+ if(f1(t)){p1=g.p1==null?null:g.p1;p3=g.p3==null?null:g.p3;p2=sum;e=cnt/2}else{p1=sum;p2=cnt*2;e=g.e==null?null:g.e}
+ const any=cnt>0||g.p1!=null||g.e!=null||p3!=null;
+ let pu=p1,u3=false;if(p3!=null&&(p1==null||p3>p1)){pu=p3;u3=true}
+ return{p1,p2,e,p3,cnt,u3,m:any?((pu||0)+p2)/2+(e||0):null,any}}
 function num(s){s=String(s).trim().replace(',','.');if(s==='')return null;const v=parseFloat(s);return isNaN(v)?null:Math.min(10,Math.max(0,v))}
 function turmaTitle(t){return t[0]+'º ano '+t.slice(1)}
-function chips(){$('chips').innerHTML=db.turmas.map(t=>`<button class="chip ${t===S.t?'on':''}" data-t="${t}">${t}</button>`).join('');
+function chips(){$('chips').innerHTML=db.turmas.map(t=>{const l=(((db.launch||{})[S.bim]||{})[t])||{},n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<button class="chip ${t===S.t?'on':''}" data-t="${t}" title="Lançado na escola: ${n}/3">${t}${n==3?' ✓':n?' ◐':''}</button>`}).join('');
  $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.t=b.dataset.t;S.edit=false;chips();render()})}
 function render(){
  const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t);
- let h=`<h2><span>${turmaTitle(t)} · ${S.bim}º bimestre</span><span><button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button></span></h2>`;
- h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th><th>P2</th><th>Eng/T</th><th>Média</th></tr></thead><tbody>`;
- if(!ros.length)h+=`<tr><td colspan="9" class="empty">Nenhum aluno nesta turma.</td></tr>`;
+ const LL=L(S.bim,t);
+ let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button></span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div>`;
+ h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th>${fund?'<th title="Recuperação da P1">P3</th>':''}<th>P2</th><th>Eng/T</th><th>Média</th></tr></thead><tbody>`;
+ if(!ros.length)h+=`<tr><td colspan="10" class="empty">Nenhum aluno nesta turma.</td></tr>`;
  ros.forEach((s,i)=>{const g=gr[s.id]||{};
-  h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n">${i+1}</td><td class="nm">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label>`:s.n+(s.off?'<span class="tag">saiu</span>':'')}</td>`;
+  h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n">${i+1}</td><td class="nm">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label><br><input class="in" style="width:95%;text-align:left;margin-top:4px" data-obs="${s.id}" placeholder="Observação" value="${esc(s.obs||'')}">`:s.n+(s.off?'<span class="tag">saiu</span>':'')+(s.obs?'<div class="obs">'+esc(s.obs)+'</div>':'')}</td>`;
   for(let k=0;k<4;k++){const v=(g.a||[])[k];h+=`<td><button class="a ${v==2?'v2':v==1?'v1':''}" data-k="${k}">${v==null?'·':fmt(v)}</button></td>`}
-  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>`
+  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="0–8"></td><td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>`
         :`<td class="c" data-c="p1"></td><td class="c" data-c="p2"></td><td><input class="in p" data-f="e" inputmode="decimal" value="${fmt(g.e)}" placeholder="0–2"></td>`;
   h+=`<td class="c m" data-c="m"></td></tr>`});
  h+=`</tbody></table></div><div class="foot" id="foot"></div>`;
@@ -128,27 +152,38 @@ function render(){
   inp.oninput=()=>{const id=inp.closest('tr').dataset.id,g=(gr[id]=gr[id]||{});g[inp.dataset.f]=num(inp.value);save();upd(id);foot()};
   inp.onblur=()=>{const v=num(inp.value);inp.value=fmt(v)};
   inp.onfocus=()=>inp.select();
-  inp.onkeydown=e=>{const all=[...card.querySelectorAll('input.p')],i=all.indexOf(inp);
+  inp.onkeydown=e=>{const all=[...card.querySelectorAll('input.p[data-f="'+inp.dataset.f+'"]')],i=all.indexOf(inp);
    if(e.key=='Enter'||e.key=='ArrowDown'){e.preventDefault();(all[i+1]||inp).focus()}
    if(e.key=='ArrowUp'){e.preventDefault();(all[i-1]||inp).focus()}}});
  card.querySelectorAll('[data-off]').forEach(c=>c.onchange=()=>{const s=ros.find(x=>x.id==c.dataset.off);if(s){s.off=c.checked?1:0;save();c.closest('tr').classList.toggle('off',c.checked);foot()}});
+ card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;l[k]=l[k]?0:1;save();chips();render()});
+ card.querySelectorAll('[data-obs]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.obs);if(s){s.obs=i.value.trim();save()}});
  const ed=$('ed');if(ed)ed.onclick=()=>{S.edit=!S.edit;render()};
  card.querySelectorAll('[data-rn]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.rn);if(s&&i.value.trim()){s.n=i.value.trim();save()}});
  card.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(b.dataset.sure){const id=b.dataset.del;db.roster[t]=ros.filter(x=>x.id!=id);Object.keys(db.grades).forEach(bm=>{if(db.grades[bm][t])delete db.grades[bm][t][id]});save();render()}else{b.dataset.sure=1;b.textContent='Remover?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='✕'}},3000)}});
  const ab=$('addb');if(ab){const add=()=>{const v=$('newn').value.trim();if(!v)return;ros.push({id:t+'-'+Date.now(),n:v});db.roster[t]=ros;save();render();const n=$('newn');if(n)n.focus()};ab.onclick=add;$('newn').onkeydown=e=>{if(e.key=='Enter')add()}}}
-function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)return;const r=calc(S.t,G(S.bim,S.t)[id]);
- tr.querySelectorAll('[data-c]').forEach(td=>{const k=td.dataset.c,v=r[k];td.textContent=(k=='m'&&!r.any)?'':fmt(v);if(k=='m')td.classList.toggle('low',v!=null&&v<6);if(k=='p1'||k=='p2')td.classList.toggle('red',r.any&&v!=null&&v<=3.5)});
- const pi=tr.querySelector('input.p[data-f="p1"]');if(pi)pi.parentNode.classList.toggle('red',r.p1!=null&&r.p1<=3.5)}
+function mark(td,c){if(!td)return;td.classList.toggle('red',c=='red');td.classList.toggle('org',c=='org')}
+function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)return;const t=S.t,g=G(S.bim,t)[id]||{},r=calc(t,g),off=tr.classList.contains('off'),f=f1(t);
+ const low=v=>v!=null&&v<=PROVA_MIN?'red':'';const o=c=>c=='org'&&off?'':c;
+ tr.querySelectorAll('[data-c]').forEach(td=>{const k=td.dataset.c,v=r[k];let c;
+  if(k=='m'){td.innerHTML=r.any?fmt(v)+(r.u3?'<sup title="P1 substituída pela P3">P3</sup>':''):'';c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
+  else{td.textContent=fmt(v);c=r.cnt==0?'org':(k=='e'?'':low(v))}
+  mark(td,o(c))});
+ const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
+ if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3)}}
+ else mark(cell('e'),o(g.e==null?'org':''))}
 function foot(){const all=db.roster[S.t]||[],ros=all.filter(s=>!s.off),gr=G(S.bim,S.t);const ms=ros.map(s=>calc(S.t,gr[s.id]).m).filter(m=>m!=null);
  const avg=ms.length?ms.reduce((a,b)=>a+b,0)/ms.length:null;
- $('foot').innerHTML=`<span>Na sala: <b>${ros.length}</b></span><span>Saíram: <b>${all.length-ros.length}</b></span><span>Com nota: <b>${ms.length}</b></span><span>Média da turma: <b>${fmt(avg)||'–'}</b></span><span>Abaixo de 6: <b>${ms.filter(m=>m<6).length}</b></span>`}
-$('bim').value=S.bim;$('bim').onchange=e=>{S.bim=e.target.value;render()};
+ $('foot').innerHTML=`<span>Na sala: <b>${ros.length}</b></span><span>Saíram: <b>${all.length-ros.length}</b></span><span>Com nota: <b>${ms.length}</b></span><span>Média da turma: <b>${fmt(avg)||'–'}</b></span><span>Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b></span><span>Sem nenhuma nota: <b>${ros.length-ms.length}</b></span>${f1(S.t)?`<span>Podem fazer P3: <b>${ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length}</b></span>`:''}`}
+function setBim(b){S.bim=b;document.documentElement.dataset.bim=b;document.querySelectorAll('.bb').forEach(x=>x.classList.toggle('on',x.dataset.b==b))}
+document.querySelectorAll('.bb').forEach(x=>x.onclick=()=>{setBim(x.dataset.b);S.edit=false;chips();render()});
+setBim(CUR);
 function say(m){$('msg').textContent=m}
 $('bk').onclick=()=>{$('ov').classList.add('on');say('')};
 $('b5').onclick=()=>$('ov').classList.remove('on');
 $('b1').onclick=()=>{$('ta').value=JSON.stringify(db);say('Backup gerado. Toque em “Copiar texto” e guarde.')};
-$('b2').onclick=()=>{const t=S.t,gr=G(S.bim,t);const L=['Nº\tNome\tAtiv1\tAtiv2\tAtiv3\tAtiv4\tP1\tP2\tEng/T\tMédia\tObs'];
- (db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p2),fmt(r.e),r.any?fmt(r.m):'',s.off?'Saiu da turma':''].join('\t'))});
+$('b2').onclick=()=>{const t=S.t,gr=G(S.bim,t);const L=['Nº\tNome\tAtiv1\tAtiv2\tAtiv3\tAtiv4\tP1\tP3\tP2\tEng/T\tMédia\tObs'];
+ (db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p3),fmt(r.p2),fmt(r.e),r.any?fmt(r.m):'',[s.off?'Saiu da turma':'',s.obs||'',f1(t)&&g.p1==null?'P1 não feita':''].filter(Boolean).join('; ')].join('\t'))});
  $('ta').value=L.join('\n');say('Notas de '+turmaTitle(t)+' · '+S.bim+'º bimestre.')};
 $('b3').onclick=()=>{const ta=$('ta');ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}say(ok?'Copiado!':'Selecione o texto e copie manualmente.')};
 
