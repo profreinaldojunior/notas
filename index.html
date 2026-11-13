@@ -79,6 +79,24 @@ td.used .in{border:2px solid var(--ok)}
 .lb.on{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
 .obs{font-size:12px;color:var(--mut);font-weight:400}
 sup{font-size:9px;margin-left:2px}
+
+.warn{background:var(--half);border-bottom:1px solid #e0a800;padding:8px 12px;font-size:13px}
+.wm{color:#e67700;margin-left:2px}
+tr.go{cursor:pointer}tr.go:hover td{background:var(--bg)}
+#pr{display:none}
+@media print{
+@page{size:A4 portrait;margin:12mm}
+body>*:not(#pr){display:none!important}
+body{border:0;background:#fff}
+#pr{display:block;color:#000;font:12px/1.3 system-ui,sans-serif}
+#pr h2{font-size:15px;margin:0 0 8px}
+#pr table{width:100%;border-collapse:collapse;min-width:0}
+#pr th,#pr td{border:1px solid #888;padding:3px 5px;text-align:center;color:#000;background:none;position:static}
+#pr td:nth-child(2){text-align:left}
+#pr tr.off td{background:#fff3bf;font-style:italic;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#pr td.rd{color:#c92a2a;font-weight:700}
+#pr p{margin:8px 0}
+}
 </style>
 </head>
 <body>
@@ -86,7 +104,7 @@ sup{font-size:9px;margin-left:2px}
 <header>
 <h1>📚 Notas · Lab. de Informática</h1>
 <div class="bims" id="bims"><button class="bb" data-b="1">1º Bim</button><button class="bb" data-b="2">2º Bim</button><button class="bb" data-b="3">3º Bim</button><button class="bb" data-b="4">4º Bim</button></div>
-<button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="cl" style="display:none" title="Sincronizar"></button><button class="btn" id="bk">Backup / Exportar</button>
+<button class="btn" id="pn">📋 Painel</button><button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="cl" style="display:none" title="Sincronizar"></button><button class="btn" id="bk">Backup / Exportar</button>
 </header>
 <div class="chips" id="chips"></div>
 <div class="card" id="card"></div>
@@ -99,6 +117,7 @@ sup{font-size:9px;margin-left:2px}
 <div class="row"><button class="btn" id="b3">Copiar texto</button><button class="btn" id="b4">Restaurar backup colado</button><button class="btn" id="b6">Baixar arquivo .json</button><label class="btn">Restaurar de arquivo<input type="file" id="fi" accept=".json" hidden></label><button class="btn" id="b5">Fechar</button></div>
 <p id="msg"></p>
 </div></div>
+<div id="pr"></div>
 <div class="ov" id="lg"><div class="box"><b>Entrar</b><p>Acesso restrito ao professor.</p>
 <div class="row"><input class="in" style="width:100%;text-align:left" id="em" type="email" placeholder="E-mail" autocomplete="username"></div>
 <div class="row"><input class="in" style="width:100%;text-align:left" id="pw" type="password" placeholder="Senha" autocomplete="current-password"></div>
@@ -125,12 +144,13 @@ function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const c
  return{p1,p2,e,p3,cnt,u3,m:any?((pu||0)+p2)/2+(e||0):null,any}}
 function num(s){s=String(s).trim().replace(',','.');if(s==='')return null;const v=parseFloat(s);return isNaN(v)?null:Math.min(10,Math.max(0,v))}
 function turmaTitle(t){return t[0]+'º ano '+t.slice(1)}
-function chips(){$('chips').innerHTML=db.turmas.map(t=>{const l=(((db.launch||{})[S.bim]||{})[t])||{},n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<button class="chip ${t===S.t?'on':''}" data-t="${t}" title="Lançado na escola: ${n}/3">${t}${n==3?' ✓':n?' ◐':''}</button>`}).join('');
- $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.t=b.dataset.t;S.edit=false;chips();render()})}
+function chips(){$('chips').innerHTML=db.turmas.map(t=>{const l=(((db.launch||{})[S.bim]||{})[t])||{},n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<button class="chip ${t===S.t?'on':''}" data-t="${t}" title="Lançado na escola: ${n}/3">${t}${n==3?' ✓':n?' ◐':''}${Object.keys(l.dirty||{}).length?' ⚠':''}</button>`}).join('');
+ $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.t=b.dataset.t;S.edit=false;S.view=null;chips();render()})}
 function render(){
+ if(S.view){painel();return}
  const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t);
  const LL=L(S.bim,t);
- let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button></span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div>`;
+ let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn" id="rp">🖨 Relatório</button> ${fund?'<button class="btn" id="p3b">🖨 Lista P3</button> ':''}<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button></span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t','Eng/T']].map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
  h+=`<div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1</th>${fund?'<th title="Recuperação da P1">P3</th>':''}<th>P2</th><th>Eng/T</th><th>Média</th></tr></thead><tbody>`;
  if(!ros.length)h+=`<tr><td colspan="10" class="empty">Nenhum aluno nesta turma.</td></tr>`;
  ros.forEach((s,i)=>{const g=gr[s.id]||{};
@@ -143,21 +163,22 @@ function render(){
  if(S.edit)h+=`<div class="add"><input id="newn" placeholder="Nome do novo aluno"><button class="btn pri" id="addb">Adicionar aluno</button></div>`;
  h+=`<div class="rule">${fund?'Fundamental I: P1 digitada · P2 = soma das atividades · Eng/T = 0,5 por atividade entregue · Média = (P1 + P2) ÷ 2 + Eng/T.':'Fundamental II: P1 = soma das atividades · P2 = 2 por atividade entregue · Eng/T digitada · Média = (P1 + P2) ÷ 2 + Eng/T.'} Toque na atividade: 2 → 1 → em branco.</div>`;
  $('card').innerHTML=h;
- ros.forEach(s=>upd(s.id));foot();
+ ros.forEach(s=>upd(s.id));foot();warn();
  const card=$('card');
  card.querySelectorAll('.a').forEach(b=>b.onclick=()=>{const id=b.closest('tr').dataset.id,k=+b.dataset.k,g=(gr[id]=gr[id]||{a:[null,null,null,null]});g.a=g.a||[null,null,null,null];
-  const c=g.a[k];g.a[k]=c==null?2:c==2?1:null;b.className='a '+(g.a[k]==2?'v2':g.a[k]==1?'v1':'');b.textContent=g.a[k]==null?'·':fmt(g.a[k]);save();upd(id);foot()});
- card.querySelectorAll('th.fill').forEach(th=>th.onclick=()=>{const k=+th.dataset.f;ros.forEach(s=>{const g=(gr[s.id]=gr[s.id]||{a:[null,null,null,null]});g.a=g.a||[null,null,null,null];if(g.a[k]==null)g.a[k]=2});save();render()});
+  const c=g.a[k];g.a[k]=c==null?2:c==2?1:null;b.className='a '+(g.a[k]==2?'v2':g.a[k]==1?'v1':'');b.textContent=g.a[k]==null?'·':fmt(g.a[k]);touch(id,'a');save();upd(id);foot()});
+ card.querySelectorAll('th.fill').forEach(th=>th.onclick=()=>{const k=+th.dataset.f;ros.forEach(s=>{const g=(gr[s.id]=gr[s.id]||{a:[null,null,null,null]});g.a=g.a||[null,null,null,null];if(g.a[k]==null){g.a[k]=2;touch(s.id,'a')}});save();render()});
  card.querySelectorAll('input.p').forEach(inp=>{
-  inp.oninput=()=>{const id=inp.closest('tr').dataset.id,g=(gr[id]=gr[id]||{});g[inp.dataset.f]=num(inp.value);save();upd(id);foot()};
+  inp.oninput=()=>{const id=inp.closest('tr').dataset.id,g=(gr[id]=gr[id]||{});g[inp.dataset.f]=num(inp.value);touch(id,inp.dataset.f);save();upd(id);foot()};
   inp.onblur=()=>{const v=num(inp.value);inp.value=fmt(v)};
   inp.onfocus=()=>inp.select();
   inp.onkeydown=e=>{const all=[...card.querySelectorAll('input.p[data-f="'+inp.dataset.f+'"]')],i=all.indexOf(inp);
    if(e.key=='Enter'||e.key=='ArrowDown'){e.preventDefault();(all[i+1]||inp).focus()}
    if(e.key=='ArrowUp'){e.preventDefault();(all[i-1]||inp).focus()}}});
  card.querySelectorAll('[data-off]').forEach(c=>c.onchange=()=>{const s=ros.find(x=>x.id==c.dataset.off);if(s){s.off=c.checked?1:0;save();c.closest('tr').classList.toggle('off',c.checked);foot()}});
- card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;l[k]=l[k]?0:1;save();chips();render()});
+ card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;l[k]=l[k]?0:1;if(l.dirty)Object.keys(l.dirty).forEach(i=>{l.dirty[i]=l.dirty[i].filter(c=>c!=k);if(!l.dirty[i].length)delete l.dirty[i]});save();chips();render()});
  card.querySelectorAll('[data-obs]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.obs);if(s){s.obs=i.value.trim();save()}});
+ $('rp').onclick=()=>report(0);const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
  const ed=$('ed');if(ed)ed.onclick=()=>{S.edit=!S.edit;render()};
  card.querySelectorAll('[data-rn]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.rn);if(s&&i.value.trim()){s.n=i.value.trim();save()}});
  card.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(b.dataset.sure){const id=b.dataset.del;db.roster[t]=ros.filter(x=>x.id!=id);Object.keys(db.grades).forEach(bm=>{if(db.grades[bm][t])delete db.grades[bm][t][id]});save();render()}else{b.dataset.sure=1;b.textContent='Remover?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='✕'}},3000)}});
@@ -172,6 +193,32 @@ function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)r
  const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
  if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3)}}
  else mark(cell('e'),o(g.e==null?'org':''))}
+const COMP=(t,f)=>f=='a'?(f1(t)?['p2','t']:['p1','p2']):f=='e'?['t']:['p1'];
+function touch(id,f){const l=L(S.bim,S.t);COMP(S.t,f).forEach(c=>{if(l[c]){l.dirty=l.dirty||{};const d=l.dirty[id]=l.dirty[id]||[];if(!d.includes(c))d.push(c)}});warn()}
+function warn(){const w=$('warn');if(!w)return;const l=L(S.bim,S.t),d=l.dirty||{},ids=Object.keys(d),ros=db.roster[S.t]||[],NM={p1:'P1',p2:'P2',t:'Eng/T'};
+ document.querySelectorAll('td.n .wm').forEach(x=>x.remove());
+ ids.forEach(id=>{const tr=document.querySelector(`tr[data-id="${id}"]`);if(tr)tr.querySelector('td.n').insertAdjacentHTML('beforeend','<span class="wm" title="Alterado depois de lançar">⚠</span>')});
+ w.innerHTML=ids.length?`<div class="warn"><b>⚠ ${ids.length} aluno(s) alterado(s) depois de lançar na escola:</b> ${ids.map(id=>{const s=ros.find(x=>x.id==id);return s?esc(s.n)+' ('+d[id].map(c=>NM[c]).join(', ')+')':''}).join('; ')} <button class="btn" id="rl">Já relancei</button></div>`:'';
+ const rl=$('rl');if(rl)rl.onclick=()=>{l.dirty={};save();warn()};chips()}
+function painel(){const b=S.bim,ck=v=>v?'✓':'☐';
+ let h=`<h2><span>${b}º BIMESTRE / 2026 · Painel das turmas</span><span><button class="btn" id="pv">Voltar</button></span></h2><div class="scroll"><table><thead><tr><th style="text-align:left">Turma</th><th>Alunos</th><th>Sem nota</th><th>P1 em branco</th><th>Podem P3</th><th>Média</th><th>Lançado P1</th><th>P2</th><th>Eng/T</th><th>⚠</th></tr></thead><tbody>`;
+ db.turmas.forEach(t=>{const ros=(db.roster[t]||[]).filter(s=>!s.off),gr=(db.grades[b]||{})[t]||{},l=(((db.launch||{})[b])||{})[t]||{},f=f1(t),ms=ros.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),sem=ros.length-ms.length,
+  p1b=f?ros.filter(s=>(gr[s.id]||{}).p1==null).length:null,p3=f?ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length:null,dd=Object.keys(l.dirty||{}).length;
+  h+=`<tr class="go" data-t="${t}"><td style="text-align:left"><b>${t}</b></td><td>${ros.length}</td><td class="${sem?'org':''}">${sem}</td><td class="${p1b?'org':''}">${p1b==null?'–':p1b}</td><td>${p3==null?'–':p3}</td><td>${ms.length?fmt(ms.reduce((a,c)=>a+c,0)/ms.length):'–'}</td><td>${ck(l.p1)}</td><td>${ck(l.p2)}</td><td>${ck(l.t)}</td><td class="${dd?'red':''}">${dd||''}</td></tr>`});
+ h+='</tbody></table></div><div class="rule">Toque em uma turma para abrir. Laranja = ainda há alunos sem nota. ⚠ = notas alteradas depois de lançadas na escola.</div>';
+ $('card').innerHTML=h;$('pv').onclick=()=>{S.view=null;render()};
+ $('card').querySelectorAll('tr.go').forEach(r=>r.onclick=()=>{S.t=r.dataset.t;S.view=null;chips();render()})}
+function report(kind){const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t),l=L(S.bim,t),act=ros.filter(s=>!s.off);
+ const hd=`<h2>Lab. de Informática · ${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}${kind?' · Lista de recuperação P3':''}</h2>`;let head,rows;
+ if(kind){const el=act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX});
+  head='<th>Nº</th><th>Nome</th><th>Motivo</th><th>P1</th><th style="width:70px">P3</th>';
+  rows=el.map(s=>{const g=gr[s.id]||{};return `<tr><td>${ros.indexOf(s)+1}</td><td>${esc(s.n)}</td><td>${g.p1==null?'P1 não feita':'P1 baixa'}</td><td>${fmt(g.p1)}</td><td>${g.p3==null?'&nbsp;':fmt(g.p3)}</td></tr>`}).join('')}
+ else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th>'+(fund?'<th>P3</th>':'')+'<th>P2</th><th>Eng/T</th><th>Média</th><th>Obs</th>';
+  rows=ros.map((s,i)=>{const g=gr[s.id]||{},r=calc(t,g),a=g.a||[],rd=v=>r.cnt>0&&v!=null&&v<=PROVA_MIN?'rd':'';
+   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+(fund?`<td>${fmt(r.p3)}</td>`:'')+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td><td class="${r.any&&r.m<MEDIA_MIN?'rd':''}"><b>${r.any?fmt(r.m):''}</b></td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
+ const ms=act.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),av=ms.length?ms.reduce((a,c)=>a+c,0)/ms.length:null;
+ const sm=kind?`<p>Alunos listados: <b>${rows?act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX}).length:0}</b> · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`:`<p>Alunos na sala: <b>${act.length}</b> · Média da turma: <b>${fmt(av)||'–'}</b> · Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b> · Lançado na escola: P1 ${l.p1?'✓':'☐'} P2 ${l.p2?'✓':'☐'} Eng/T ${l.t?'✓':'☐'} · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;
+ $('pr').innerHTML=hd+'<table><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table>'+sm;window.print()}
 function foot(){const all=db.roster[S.t]||[],ros=all.filter(s=>!s.off),gr=G(S.bim,S.t);const ms=ros.map(s=>calc(S.t,gr[s.id]).m).filter(m=>m!=null);
  const avg=ms.length?ms.reduce((a,b)=>a+b,0)/ms.length:null;
  $('foot').innerHTML=`<span>Na sala: <b>${ros.length}</b></span><span>Saíram: <b>${all.length-ros.length}</b></span><span>Com nota: <b>${ms.length}</b></span><span>Média da turma: <b>${fmt(avg)||'–'}</b></span><span>Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b></span><span>Sem nenhuma nota: <b>${ros.length-ms.length}</b></span>${f1(S.t)?`<span>Podem fazer P3: <b>${ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length}</b></span>`:''}`}
@@ -190,6 +237,7 @@ $('b3').onclick=()=>{const ta=$('ta');ta.select();let ok=false;try{ok=document.e
 function theme(x){document.documentElement.dataset.theme=x;$('th').textContent=x=='dark'?'☀️':'🌙';try{localStorage.setItem('notas-theme',x)}catch(e){}}
 let th=null;try{th=localStorage.getItem('notas-theme')}catch(e){}
 theme(th||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+$('pn').onclick=()=>{S.view=S.view?null:'p';S.edit=false;render()};
 $('th').onclick=()=>theme(document.documentElement.dataset.theme=='dark'?'light':'dark');
 function load(d){if(!d.roster||!d.grades||!d.turmas)throw 0;db=d;save();if(!db.turmas.includes(S.t))S.t=db.turmas[0];chips();render()}
 $('b4').onclick=()=>{try{load(JSON.parse($('ta').value));say('Backup restaurado.')}catch(e){say('Texto inválido. Cole o backup completo.')}};
