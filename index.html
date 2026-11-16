@@ -148,6 +148,12 @@ td.p3m{box-shadow:inset 0 0 0 3px #f5c400}
 .dy{background:var(--bg);border-radius:10px;padding:8px}.dy.hoje{outline:2px solid var(--bc)}.dy .ln{font-size:13px;padding:3px 0;cursor:pointer;border-top:1px solid var(--bd)}
 td.nm{cursor:pointer}tr[data-fi]{cursor:pointer}
 @media print{#pr button{display:none}}
+
+td.p3n{background:#ffd43b!important;color:#3d2f00;font-weight:700}
+td.p3n .in{background:transparent;color:#3d2f00;border-color:#3d2f00}
+:root[data-theme="dark"] td.p3n{background:#8a6d00!important;color:#fff3bf}
+:root[data-theme="dark"] td.p3n .in{color:#fff3bf;border-color:#fff3bf}
+@media print{#pr td.p3n{background:#ffd43b}}
 </style>
 </head>
 <body>
@@ -262,7 +268,7 @@ function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)r
   else{td.textContent=fmt(v);c=r.cnt==0?'org':(k=='e'?'':low(v))}
   mark(td,o(c))});
  const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
- if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3)}}
+ if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!!r.u3);c3.classList.toggle('p3n',g.p3!=null&&!r.u3)}}
  else mark(cell('e'),o(g.e==null?'org':''))}
 const COMP=(t,f)=>f=='a'?(f1(t)?['p2','t']:['p1','p2']):f=='e'?['t']:['p1'];
 function touch(id,f){const l=L(S.bim,S.t);COMP(S.t,f).forEach(c=>{if(l[c]){l.dirty=l.dirty||{};const d=l.dirty[id]=l.dirty[id]||[];if(!d.includes(c))d.push(c)}});warn()}
@@ -300,10 +306,18 @@ c(){const bs=['1','2','3','4'],rows=db.turmas.map(t=>({t,v:bs.map(b=>stat(t,b).a
   h+=`<tr><td style="text-align:left"><b>${r.t}</b></td>`+r.v.map(v=>`<td class="${bc(v)}">${FM(v)}</td>`).join('')+`<td>${d==null?'–':(d>0?'▲ +':d<0?'▼ ':'= ')+fmt(d)}</td></tr>`});
  const tot=bs.map(b=>avgOf(db.turmas.flatMap(t=>stat(t,b).ms)));
  return h+'<tr><td style="text-align:left"><b>Geral</b></td>'+tot.map(v=>`<td class="${bc(v)}"><b>${FM(v)}</b></td>`).join('')+'<td></td></tr></tbody></table></div>'},
-a(){const all=db.turmas.map(t=>stat(t,S.bim)),fl=f=>all.flatMap(x=>x.rs.filter(y=>f(x,y)).map(y=>[x,y]));
- const row=([x,y])=>`<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td>${f1(x.t)?FM(y.r.p3):'–'}</td><td class="${bc(y.r.any?y.r.m:null)}">${y.r.any?fmt(y.r.m):'–'}</td></tr>`;
- const sec=(tt,l)=>`<h3>${tt} (${l.length})</h3>`+(l.length?`<div class="scroll"><table><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>P1</th><th>P2</th><th>Eng/T</th><th>P3</th><th>Média</th></tr></thead><tbody>${l.map(row).join('')}</tbody></table></div>`:'<p style="color:var(--mut)">Nenhum aluno.</p>');
- return sec('Média abaixo de '+MEDIA_MIN,fl((x,y)=>y.r.any&&y.r.m<MEDIA_MIN).sort((p,q)=>p[1].r.m-q[1].r.m))+sec('P1 não feita (Fundamental I)',fl((x,y)=>f1(x.t)&&y.g.p1==null&&y.r.any))+sec('Sem nenhuma nota',fl((x,y)=>!y.r.any))},
+a(){const b=S.bim,pb=String(+b-1),all=db.turmas.map(x=>stat(x,b)),oi=x=>db.turmas.indexOf(x),
+ fl=f=>all.flatMap(x=>x.rs.filter(y=>f(x,y)).map(y=>[x,y])).sort((p,q)=>oi(p[0].t)-oi(q[0].t)||cmpN(p[1].s.n,q[1].s.n));
+ const row=([x,y])=>`<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}${y.s.obs?`<div class="mi">${esc(y.s.obs)}</div>`:''}</td><td>${y.r.cnt}/4</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td class="${y.r.p3!=null&&!y.r.u3?'p3n':''}">${f1(x.t)?FM(y.r.p3):'–'}</td><td class="${bc(y.r.any?y.r.m:null)}">${y.r.any?fmt(y.r.m):'–'}</td></tr>`;
+ const sec=(tt,l,nt)=>`<h3>${tt} (${l.length})</h3>`+(nt?`<p class="mi">${nt}</p>`:'')+(l.length?`<div class="scroll"><table><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>Ativ.</th><th>P1</th><th>P2</th><th>Eng/T</th><th>P3</th><th>Média</th></tr></thead><tbody>${l.map(row).join('')}</tbody></table></div>`:'<p class="mi">Nenhum aluno.</p>');
+ const qd=+b>1?fl((x,y)=>{const g=((db.grades[pb]||{})[x.t]||{})[y.s.id],r0=g&&calc(x.t,g);return y.r.any&&r0&&r0.any&&r0.m-y.r.m>=1}):[];
+ const qh=+b>1?`<h3>Queda de média de 1,0 ou mais em relação ao ${pb}º bimestre (${qd.length})</h3>`+(qd.length?`<div class="scroll"><table><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>${pb}º</th><th>${b}º</th><th>Variação</th></tr></thead><tbody>${qd.map(([x,y])=>{const q=calc(x.t,((db.grades[pb]||{})[x.t]||{})[y.s.id]).m;return `<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}</td><td>${fmt(q)}</td><td class="bd">${fmt(y.r.m)}</td><td>▼ ${fmt(y.r.m-q)}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="mi">Nenhum aluno.</p>'):'';
+ return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" id="rcF1">📤 Lista para as professoras (Fund. I)</button><button class="btn" id="rcF2">🖨 PDF da lista Fund. I</button></div>'
+  +sec('Recuperação bimestral · média abaixo de '+MEDIA_MIN,fl((x,y)=>y.r.any&&y.r.m<MEDIA_MIN),'Ordem: turma e, dentro da turma, ordem alfabética.')
+  +sec('Nenhuma atividade entregue',fl((x,y)=>y.r.any&&y.r.cnt==0),'Alunos válidos que não fizeram atividades (nota zero lançada).')
+  +sec('P1 não feita (Fundamental I)',fl((x,y)=>f1(x.t)&&y.g.p1==null&&y.r.any))
+  +sec('P3 feita sem efeito na média',fl((x,y)=>y.r.p3!=null&&!y.r.u3),'A P3 ficou igual ou abaixo da P1: o aluno fez a prova, mas ela não influenciou a média.')
+  +qh+sec('Sem nenhuma nota',fl((x,y)=>!y.r.any))},
 t(){const t=S.rtt||S.t,b=S.bim,x=stat(t,b),ms=x.ms.slice().sort((p,q)=>p-q),fund=f1(t),L2=ms.length,
   med=L2?(L2%2?ms[(L2-1)/2]:(ms[L2/2-1]+ms[L2/2])/2):null;
  let h=kp([[x.n,'alunos na sala'],[FM(x.avg),'média da turma'],[FM(med),'mediana'],[FM(L2?ms[L2-1]:null),'maior média'],[FM(L2?ms[0]:null),'menor média'],[x.low,'abaixo de '+MEDIA_MIN],[x.sem,'sem nota']]);
@@ -312,7 +326,7 @@ t(){const t=S.rtt||S.t,b=S.bim,x=stat(t,b),ms=x.ms.slice().sort((p,q)=>p-q),fund
  h+='<h3>Entrega das atividades</h3>'+bars([0,1,2,3].map(k=>{const d=x.rs.filter(y=>(y.g.a||[])[k]!=null).length,p=x.n?d/x.n*100:0;return['Ativ '+(k+1),p,'var(--ok)',d+'/'+x.n+' ('+Math.round(p)+'%)']}),100);
  h+=`<h3>Alunos e evolução</h3><div class="scroll"><table><thead><tr><th>Nº</th><th style="text-align:left">Nome</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>Eng/T</th>${fund?'<th>P3</th>':''}<th>Média</th><th>1º</th><th>2º</th><th>3º</th><th>4º</th></tr></thead><tbody>`;
  (db.roster[t]||[]).forEach((s,i)=>{const g=((db.grades[b]||{})[t]||{})[s.id]||{},r=calc(t,g),a=g.a||[];
-  h+=`<tr class="${s.off?'off':''}" data-fi="${s.id}" data-t="${t}"><td>${i+1}</td><td style="text-align:left">${esc(s.n)}${s.off?' (saiu)':''}</td>${[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')}<td>${FM(r.p1)}</td><td>${FM(r.p2)}</td><td>${FM(r.e)}</td>${fund?`<td>${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td>`+['1','2','3','4'].map(bb=>{const rr=calc(t,((db.grades[bb]||{})[t]||{})[s.id]);return `<td>${rr.any?fmt(rr.m):'–'}</td>`}).join('')+'</tr>'});
+  h+=`<tr class="${s.off?'off':''}" data-fi="${s.id}" data-t="${t}"><td>${i+1}</td><td style="text-align:left">${esc(s.n)}${s.off?' (saiu)':''}</td>${[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')}<td>${FM(r.p1)}</td><td>${FM(r.p2)}</td><td>${FM(r.e)}</td>${fund?`<td class="${r.p3!=null&&!r.u3?'p3n':''}">${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td>`+['1','2','3','4'].map(bb=>{const rr=calc(t,((db.grades[bb]||{})[t]||{})[s.id]);return `<td>${rr.any?fmt(rr.m):'–'}</td>`}).join('')+'</tr>'});
  return h+'</tbody></table></div>'},
 s(){const b=S.bim,all=db.turmas.map(t=>stat(t,b)),sd=a=>{if(a.length<2)return null;const m=avgOf(a);return Math.sqrt(avgOf(a.map(x=>(x-m)**2)))};
  const pc=p=>p==null?'':p<60?'bd':p<85?'bm':'bo',th=l=>'<thead><tr><th style="text-align:left">Turma</th>'+l.map(x=>`<th>${x}</th>`).join('')+'</tr></thead>';
@@ -327,6 +341,10 @@ s(){const b=S.bim,all=db.turmas.map(t=>stat(t,b)),sd=a=>{if(a.length<2)return nu
 h(){const L0=db.log||[];if(!L0.length)return '<p>Nenhuma alteração registrada ainda. A partir de agora, cada nota alterada aparece aqui, com opção de desfazer.</p>';
  const LB={p1:'P1',p3:'P3',e:'Eng/T',a1:'Ativ 1',a2:'Ativ 2',a3:'Ativ 3',a4:'Ativ 4',Lp1:'Lançado P1',Lp2:'Lançado P2',Lt:'Lançado Eng/T'},vv=(f,v)=>f[0]=='L'?(v?'✓':'☐'):FM(v);
  return `<p class="mi" id="lgm">Últimas ${Math.min(120,L0.length)} alterações (guardo até 400). Toque em ↩ duas vezes para desfazer.</p><div class="scroll"><table><thead><tr><th>Quando</th><th>Bim</th><th>Turma</th><th style="text-align:left">Aluno</th><th>Campo</th><th>De</th><th>Para</th><th></th></tr></thead><tbody>`+L0.map((e,i)=>[e,i]).reverse().slice(0,120).map(([e,i])=>{const s=(db.roster[e[2]]||[]).find(x=>x.id==e[3]);return `<tr><td>${new Date(e[0]).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</td><td>${e[1]}º</td><td>${e[2]}</td><td style="text-align:left">${s?esc(s.n):'—'}</td><td>${LB[e[4]]||e[4]}</td><td>${vv(e[4],e[5])}</td><td>${vv(e[4],e[6])}</td><td><button class="btn" data-u="${i}">↩</button></td></tr>`}).join('')+'</tbody></table></div>'}};
+const cmpN=(a,b)=>a.localeCompare(b,'pt-BR');
+function recList(fn){return db.turmas.filter(fn).map(x=>[x,stat(x,S.bim).rs.filter(y=>y.r.any&&y.r.m<MEDIA_MIN).sort((p,q)=>cmpN(p.s.n,q.s.n))]).filter(z=>z[1].length)}
+function recText(){const L=recList(f1);return `Recuperação bimestral · ${S.bim}º bimestre/2026 · Fundamental I (1º ao 5º ano)\n\n`+(L.length?L.map(([x,l])=>turmaNome(x)+' · '+l.length+' aluno(s)\n'+l.map(y=>'• '+y.s.n+' — média '+fmt(y.r.m)+(y.g.p1==null?' (P1 não feita)':'')).join('\n')).join('\n\n'):'Nenhum aluno.')}
+function recPdf(){const L=recList(f1);$('pr').innerHTML=`<h2>Lab. de Informática · Recuperação bimestral · ${S.bim}º BIMESTRE / 2026 · Fundamental I</h2>`+(L.length?L.map(([x,l])=>`<h3>${turmaNome(x)} (${l.length})</h3><table><thead><tr><th>Nº</th><th>Aluno</th><th>P1</th><th>P2</th><th>Eng/T</th><th>P3</th><th>Média</th></tr></thead><tbody>${l.map(y=>`<tr><td>${(db.roster[x]||[]).indexOf(y.s)+1}</td><td>${esc(y.s.n)}</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td>${FM(y.r.p3)}</td><td class="bd">${fmt(y.r.m)}</td></tr>`).join('')}</tbody></table>`).join(''):'<p>Nenhum aluno.</p>')+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}
 function undo(i){const e=(db.log||[])[i];if(!e)return 'Registro não encontrado.';const[,b,t,id,f,o,n]=e;
  if(f[0]=='L'){const l=L(b,t),k=f.slice(1);if((l[k]?1:0)!==n)return 'O valor já mudou depois dessa alteração.';l[k]=o}
  else{const gb=G(b,t),g=(gb[id]=gb[id]||{}),cur=f[0]=='a'?(g.a||[])[+f[1]-1]:g[f];if((cur==null?null:cur)!==n)return 'O valor já mudou depois dessa alteração.';
@@ -338,6 +356,7 @@ function relat(){const b=S.bim,k=S.rt||'g',tabs=[['g','Visão geral'],['c','Comp
  c.querySelectorAll('.tb').forEach(x=>x.onclick=()=>{S.rt=x.dataset.rt;relat()});
  const sel=$('rtt');if(sel)sel.onchange=()=>{S.rtt=sel.value;relat()};
  $('rvb').onclick=()=>{S.view=null;render()};
+ const r1=$('rcF1');if(r1){r1.onclick=()=>{$('ta').value=recText();$('ov').classList.add('on');say('Lista pronta: toque em “Copiar texto” e envie às professoras.')};$('rcF2').onclick=recPdf}
  $('rpf').onclick=()=>{const nm={g:'Visão geral',c:'Comparativo entre bimestres',a:'Alunos em atenção',s:'Estatísticas',h:'Histórico de alterações',t:'Turma '+(S.rtt||S.t)}[k];$('pr').innerHTML=`<h2>Lab. de Informática · ${k=='c'?'':b+'º BIMESTRE / 2026 · '}${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
  c.querySelectorAll('tr[data-fi]').forEach(r=>r.onclick=()=>{S.fi={t:r.dataset.t,id:r.dataset.fi};S.view='f';render()});
  c.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{if(!b.dataset.sure){b.dataset.sure=1;b.textContent='Confirmar?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='↩'}},3000);return}const m=undo(+b.dataset.u);if(m)$('lgm').textContent=m;else relat()});
@@ -350,7 +369,7 @@ function pend(){const b=S.bim,o=[];db.turmas.forEach(t=>{const x=stat(t,b),l=LR(
  if(x.sem&&x.n)o.push([t,`Digitar notas · ${x.sem} aluno(s) sem nota`]);
  if(x.ms.length){const f=[['p1','P1'],['p2','P2'],['t','Eng/T']].filter(([k])=>!l[k]).map(q=>q[1]);if(f.length)o.push([t,'Lançar na escola · '+f.join(', ')])}
  if(dd)o.push([t,`⚠ Relançar alterações · ${dd} aluno(s)`]);
- if(f1(t)){const n=x.rs.filter(y=>y.g.p3==null&&(y.g.p1==null||y.g.p1<=P3_MAX)).length;if(n)o.push([t,`P3 pendente · ${n} aluno(s)`])}});return o}
+});return o}
 function open_(t){S.t=t;S.view=null;S.unlock=false;S.edit=false;chips();render()}
 function home(){const d=new Date(),dow=d.getDay(),hh=d.toTimeString().slice(0,5),b=S.bim,hj=isoD(d);
  let a=aulas(dow),lbl='Hoje',off=0;if(!a.length){for(let i=1;i<=7&&!a.length;i++){a=aulas((dow+i)%7);off=i}lbl='Próximas aulas · '+DAYS[(dow+off)%7]+'-feira'}
@@ -379,7 +398,7 @@ function ficha(){const{t,id}=S.fi,b=S.bim,s=(db.roster[t]||[]).find(x=>x.id==id)
  const ln=(arr,c,dash)=>{const pt=arr.map((v,i)=>v==null?null:[px(i),py(v)]).filter(Boolean);return(pt.length>1?`<polyline fill="none" stroke="${c}" stroke-width="2" ${dash?'stroke-dasharray="4 3"':''} points="${pt.map(q=>q.join(',')).join(' ')}"/>`:'')+pt.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="${c}"/>`).join('')};
  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px">`+[0,5,10].map(v=>`<line x1="30" x2="${W-20}" y1="${py(v)}" y2="${py(v)}" stroke="#999" stroke-opacity=".35"/><text x="4" y="${py(v)+4}" font-size="10" fill="#888">${v}</text>`).join('')+[0,1,2,3].map(i=>`<text x="${px(i)}" y="${H-4}" font-size="10" text-anchor="middle" fill="#888">${i+1}º bim</text>`).join('')+ln(tm,'#999',1)+ln(B.map(q=>q.r.any?q.r.m:null),'#3b5bdb')+'</svg>';
  let h=`<h2><span>📄 ${esc(s.n)} · ${turmaNome(t)}</span><span><button class="btn" id="fp">🖨 Gerar PDF</button> <button class="btn" id="fb">Voltar</button></span></h2><div class="rvw" id="rv">`+kp([[cur.r.any?fmt(cur.r.m):'–',b+'º bim · média'],[rank?rank+'º de '+x.ms.length:'–','posição na turma'],[FM(x.avg),'média da turma'],[cur.r.cnt+'/4','atividades entregues']])+'<h3>Evolução da média</h3>'+svg+'<div class="mi"><span style="color:#3b5bdb">●</span> aluno · <span style="color:#999">●</span> média da turma (tracejado)</div><h3>Notas por bimestre</h3><div class="scroll"><table><thead><tr><th>Bim</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>Eng/T</th>'+(fund?'<th>P3</th>':'')+'<th>Média</th></tr></thead><tbody>'
-  +B.map(({bb,g,r})=>{const a=g.a||[];return `<tr><td><b>${bb}º</b></td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td>${r.any?FM(r.p1):'–'}</td><td>${r.any?FM(r.p2):'–'}</td><td>${r.any?FM(r.e):'–'}</td>${fund?`<td>${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td></tr>`}).join('')+'</tbody></table></div>'+(s.obs?`<h3>Observação</h3><p>${esc(s.obs)}</p>`:'')+(s.off?'<p><b>Aluno não está mais na turma.</b></p>':'')+'</div>';
+  +B.map(({bb,g,r})=>{const a=g.a||[];return `<tr><td><b>${bb}º</b></td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td>${r.any?FM(r.p1):'–'}</td><td>${r.any?FM(r.p2):'–'}</td><td>${r.any?FM(r.e):'–'}</td>${fund?`<td class="${r.p3!=null&&!r.u3?'p3n':''}">${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td></tr>`}).join('')+'</tbody></table></div>'+(s.obs?`<h3>Observação</h3><p>${esc(s.obs)}</p>`:'')+(s.off?'<p><b>Aluno não está mais na turma.</b></p>':'')+'</div>';
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
  $('fb').onclick=()=>open_(t);
  $('fp').onclick=()=>{$('pr').innerHTML=`<h2>Lab. de Informática · Ficha do aluno · ${esc(s.n)} · ${turmaTitle(t)}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}}
@@ -398,7 +417,7 @@ function report(kind){const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t),
   rows=el.map(s=>{const g=gr[s.id]||{};return `<tr><td>${ros.indexOf(s)+1}</td><td>${esc(s.n)}</td><td>${g.p1==null?'P1 não feita':'P1 baixa'}</td><td>${fmt(g.p1)}</td><td>${g.p3==null?'&nbsp;':fmt(g.p3)}</td></tr>`}).join('')}
  else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th><th>P2</th><th>Eng/T</th>'+(fund?'<th>P3</th>':'')+'<th>Média</th><th>Obs</th>';
   rows=ros.map((s,i)=>{const g=gr[s.id]||{},r=calc(t,g),a=g.a||[],rd=v=>r.cnt>0&&v!=null&&v<=PROVA_MIN?'rd':'';
-   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td>`+(fund?`<td>${fmt(r.p3)}</td>`:'')+`<td class="${r.any&&r.m<MEDIA_MIN?'rd':''}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):''}</b></td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
+   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td>`+(fund?`<td class="${r.p3!=null&&!r.u3?'p3n':''}">${fmt(r.p3)}</td>`:'')+`<td class="${r.any&&r.m<MEDIA_MIN?'rd':''}${r.u3?' p3m':''}"><b>${r.any?fmt(r.m):''}</b></td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
  const ms=act.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),av=ms.length?ms.reduce((a,c)=>a+c,0)/ms.length:null;
  const sm=kind?`<p>Alunos listados: <b>${rows?act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX}).length:0}</b> · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`:`<p>Alunos na sala: <b>${act.length}</b> · Média da turma: <b>${fmt(av)||'–'}</b> · Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b> · Lançado na escola: P1 ${l.p1?'✓':'☐'} P2 ${l.p2?'✓':'☐'} Eng/T ${l.t?'✓':'☐'} · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;
  $('pr').innerHTML=hd+'<table><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table>'+sm;window.print()}
