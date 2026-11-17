@@ -1,4 +1,34 @@
 <!DOCTYPE html>
+<!--
+ Notas · Lab. de Informática
+ VERSÃO 1.5.0 · build 17/11/2026 09:30 (horário de Brasília)
+ Histórico (mais recente primeiro):
+ 1.5.0 (17/11/2026)
+   - Efeito zebra mais marcado no computador (no celular continua igual).
+   - Ao passar o mouse, a linha fica destacada e as outras esmaecem.
+   - Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.
+   - Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50).
+ 1.4.0 (16/11/2026)
+   - Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.
+   - Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).
+   - P3 feita sem efeito na média fica amarela; "P3 pendente" saiu das pendências.
+   - Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).
+   - Alunos que não fizeram nada recebem zero.
+ 1.3.0 (nov/2026)
+   - Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.
+   - Ficha do aluno com gráfico de evolução.
+   - Histórico de alterações com desfazer.
+   - Aba Estatísticas e app instalável (PWA).
+ 1.2.0 (nov/2026)
+   - Relatórios: visão geral, comparativo, atenção e turma, com PDF.
+   - Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).
+   - Aviso de nota alterada depois de lançada.
+ 1.1.0 (nov/2026)
+   - Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.
+   - Coluna P3 escondida com contorno amarelo na média.
+ 1.0.0 (nov/2026)
+   - Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro.
+-->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -162,6 +192,21 @@ td.p3n .in{background:transparent;color:#3d2f00;border-color:#3d2f00}
 .stk th:nth-child(2),.stk td:nth-child(2){position:sticky;left:42px;z-index:2;background:var(--rb,var(--card));box-shadow:2px 0 3px -2px rgba(0,0,0,.22)}
 .stk th:nth-child(1),.stk th:nth-child(2){z-index:3;background:var(--card)}
 @media(max-width:600px){.stk td:nth-child(2){min-width:108px;max-width:112px;font-size:12.5px;line-height:1.25;white-space:normal}}
+
+:root{--hov:#d9e6fb;--yelh:#ffe680}:root[data-theme="dark"]{--hov:#2e3a57;--yelh:#6b5a10}
+.gp{background:var(--orgbg);color:var(--orgtx);border-radius:6px;font-size:12px;text-align:center;margin:3px 0;padding:3px 4px;font-weight:600}
+.tn{font-size:11px;font-weight:700;text-align:center;background:var(--b1);color:var(--bct);border-radius:6px;margin:6px 0 3px;padding:2px}
+.tn+.ln{border-top:0}
+.ver{text-align:center;font-size:11px;color:var(--mut);margin:14px 0 6px;cursor:pointer}
+@media (hover:hover) and (pointer:fine){
+ :root{--zebra:#e8edf6}
+ .card tbody tr{transition:background-color .18s ease,filter .18s ease}
+ .card tbody tr:hover{background:var(--hov);--rb:var(--hov)}
+ .card tbody tr.off:hover{--rb:var(--yelh)}
+ .card tbody tr.off:hover td{background:var(--yelh)}
+ .card tbody:hover tr:not(:hover){filter:saturate(.6)}
+ tr.go:hover td{background:transparent}
+}
 </style>
 </head>
 <body>
@@ -174,6 +219,7 @@ td.p3n .in{background:transparent;color:#3d2f00;border-color:#3d2f00}
 <div class="chipbar"><div class="chips" id="chips"></div><button class="btn" id="cl" style="display:none" title="Sincronizar agora"></button></div>
 <div class="card" id="card"></div>
 <div class="sched" id="sched"></div>
+<div class="ver" id="ver" title="Ver histórico de versões"></div>
 </div>
 <div class="ov" id="ov"><div class="box">
 <b>Backup e exportação</b>
@@ -183,6 +229,7 @@ td.p3n .in{background:transparent;color:#3d2f00;border-color:#3d2f00}
 <div class="row"><button class="btn" id="b3">Copiar texto</button><button class="btn" id="b4">Restaurar backup colado</button><button class="btn" id="b6">Baixar arquivo .json</button><label class="btn">Restaurar de arquivo<input type="file" id="fi" accept=".json" hidden></label><label class="btn">Mesclar bimestres (arquivo)<input type="file" id="fm" accept=".json" hidden></label><button class="btn" id="b5">Fechar</button></div>
 <p id="msg"></p>
 </div></div>
+<div class="ov" id="vo"><div class="box"><b>Histórico de versões</b><div id="vl"></div><div class="row"><button class="btn" id="vc">Fechar</button></div></div></div>
 <div id="pr"></div>
 <div class="ov" id="lg"><div class="box"><b>Entrar</b><p>Acesso restrito ao professor.</p>
 <div class="row"><input class="in" style="width:100%;text-align:left" id="em" type="email" placeholder="E-mail" autocomplete="username"></div>
@@ -222,7 +269,7 @@ const SCH={'2A':['Segunda',['07:00–07:50']],'3A':['Segunda',['11:00–11:50']]
 const DN={'Segunda':1,'Terça':2,'Quarta':3,'Quinta':4,'Sexta':5};
 function sched(){const el=$('sched');if(!el)return;const s=SCH[S.t];if(S.view||!s){el.style.display='none';return}
  const turno=+s[1][0].slice(0,2)<12?'Matutino':'Vespertino',hoje=new Date().getDay()==DN[s[0]];
- el.style.display='';el.innerHTML='<b>Dia e horário da aula · '+turmaTitle(S.t)+'</b><div class="sl"><span>'+s[0]+'-feira · '+s[1].join(' e ')+'</span><span style="color:var(--mut);font-weight:400;font-size:13px">'+turno+'</span>'+(hoje?'<span class="hj">hoje</span>':'')+'</div>'}
+ el.style.display='';el.innerHTML='<b>Dia e horário da aula · '+turmaTitle(S.t)+'</b><div class="sl"><span>'+s[0]+'-feira · '+s[1].flatMap(split).join(' e ')+'</span><span style="color:var(--mut);font-weight:400;font-size:13px">'+turno+'</span>'+(hoje?'<span class="hj">hoje</span>':'')+'</div>'}
 function render(){
  sched();
  if(S.view=='h'){home();sched();return}
@@ -372,7 +419,12 @@ function relat(){const b=S.bim,k=S.rt||'g',tabs=[['g','Visão geral'],['c','Comp
 const turmaNome=t=>t[0]+'º '+t.slice(1),DAYS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const tasks=()=>(db.tasks=db.tasks||[]);
-function aulas(dow){const o=[];Object.keys(SCH).forEach(t=>{if(DN[SCH[t][0]]==dow)SCH[t][1].forEach(r=>{const[i,f]=r.split('–');o.push([t,i,f])})});return o.sort((a,b)=>a[1]<b[1]?-1:1)}
+const mm=s=>+s.slice(0,2)*60+ +s.slice(3),hm2=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const split=r=>{const[i,f]=r.split('–');let a=mm(i),e=mm(f),o=[];while(a<e){const b=Math.min(a+50,e);o.push(hm2(a)+'–'+hm2(b));a=b}return o};
+function aulas(dow){const o=[];Object.keys(SCH).forEach(t=>{if(DN[SCH[t][0]]==dow)SCH[t][1].flatMap(split).forEach(r=>{const[i,f]=r.split('–');o.push([t,i,f])})});return o.sort((a,b)=>a[1]<b[1]?-1:1)}
+function dia(dow){const p=aulas(dow),o=[];let tn='';p.forEach((x,k)=>{const M=mm(x[1])<750;if(tn!==(M?'M':'V')){tn=M?'M':'V';o.push({k:'n',txt:M?'Matutino':'Vespertino'})}
+ if(k&&(mm(p[k-1][1])<750)==M){const g=mm(x[1])-mm(p[k-1][2]);if(g==20)o.push({k:'g',txt:'Intervalo',i:p[k-1][2],f:x[1]});else if(g>20){const h=Math.floor(g/60),m=g%60;o.push({k:'g',txt:'Janela · '+(h?h+'h':'')+(h&&m?' e ':'')+(m?m+'min':''),i:p[k-1][2],f:x[1]})}}
+ o.push({k:'a',t:x[0],i:x[1],f:x[2]})});return o}
 function pend(){const b=S.bim,o=[];db.turmas.forEach(t=>{const x=stat(t,b),l=LR(b,t),dd=Object.keys(l.dirty||{}).length;
  if(x.sem&&x.n)o.push([t,`Digitar notas · ${x.sem} aluno(s) sem nota`]);
  if(x.ms.length){const f=[['p1','P1'],['p2','P2'],['t','Eng/T']].filter(([k])=>!l[k]).map(q=>q[1]);if(f.length)o.push([t,'Lançar na escola · '+f.join(', ')])}
@@ -383,7 +435,8 @@ function home(){const d=new Date(),dow=d.getDay(),hh=d.toTimeString().slice(0,5)
  let a=aulas(dow),lbl='Hoje',off=0;if(!a.length){for(let i=1;i<=7&&!a.length;i++){a=aulas((dow+i)%7);off=i}lbl='Próximas aulas · '+DAYS[(dow+off)%7]+'-feira'}
  const all=db.turmas.map(t=>stat(t,b)),by={};all.forEach(x=>by[x.t]=x);
  let h=`<h2><span>🏠 ${DAYS[dow]}, ${d.toLocaleDateString('pt-BR')} · ${b}º BIMESTRE</span></h2><div class="rvw"><h3 style="margin-top:0">📅 ${lbl}</h3>`;
- h+=a.length?'<div class="wk">'+a.map(([t,i,f])=>{const x=by[t],l=LR(b,t),n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0),s=off?'':(hh>=f?'passou':hh>=i?'agora':'prox');
+ const tl=dia((dow+off)%7);
+ h+=a.length?'<div class="wk">'+tl.map(z=>{if(z.k=='n')return '';if(z.k=='g')return `<div class="gp" style="grid-column:1/-1">${z.txt} · ${z.i}–${z.f}</div>`;const{t,i,f}=z;const x=by[t],l=LR(b,t),n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0),s=off?'':(hh>=f?'passou':hh>=i?'agora':'prox');
   return `<div class="ac ${s}" data-t="${t}"><b>${turmaNome(t)}</b> <small>${i}–${f}</small>${s?`<span class="tag">${s=='agora'?'em aula agora':s=='passou'?'já passou':'próxima'}</span>`:''}<div class="mi">média ${FM(x.avg)} · ${x.sem} sem nota · lançado ${n}/3</div></div>`}).join('')+'</div>':'<p>Sem aulas cadastradas.</p>';
  const pe=pend(),hojeT=new Set(aulas(dow).map(q=>q[0]));pe.sort((p,q)=>hojeT.has(q[0])-hojeT.has(p[0]));
  h+=`<h3>✅ Pendências automáticas (${pe.length})</h3>`+(pe.length?'<div class="pl">'+pe.slice(0,10).map(([t,x])=>`<div class="pi" data-t="${t}"><b>${turmaNome(t)}</b> · ${x}</div>`).join('')+(pe.length>10?`<div class="mi">+ ${pe.length-10} no 📋 Painel</div>`:'')+'</div>':'<p>Nada pendente 🎉</p>');
@@ -391,7 +444,7 @@ function home(){const d=new Date(),dow=d.getDay(),hh=d.toTimeString().slice(0,5)
  h+=`<h3>📝 Minhas tarefas (${ts.filter(x=>!x.ok).length})</h3>`+ts.map(x=>`<div class="tk2 ${x.ok?'ok':''}"><label><input type="checkbox" data-tk="${x.id}" ${x.ok?'checked':''}> ${esc(x.x)}</label>${x.d?`<small class="${!x.ok&&x.d<hj?'late':'mi'}">${x.d.split('-').reverse().join('/')}</small>`:''}<button class="x" data-tx="${x.id}" title="Remover">✕</button></div>`).join('')+'<div class="add"><input id="nt" placeholder="Nova tarefa…"><input type="date" id="nd"><button class="btn pri" id="na">Adicionar</button></div>';
  const ms=all.flatMap(x=>x.ms),n=all.reduce((s,x)=>s+x.n,0),lan=db.turmas.filter(t=>{const l=LR(b,t);return l.p1&&l.p2&&l.t}).length;
  h+='<h3>📊 Resumo das turmas</h3>'+kp([[FM(avgOf(ms)),'média geral'],[ms.filter(m=>m<MEDIA_MIN).length,'abaixo de '+MEDIA_MIN],[n-ms.length,'sem nota'],[lan+'/'+db.turmas.length,'turmas lançadas']])+bars(all.map(x=>[x.t,x.avg,col(x.avg),FM(x.avg)]),10)+'<p><button class="btn" id="hr">Ver relatórios completos →</button></p>';
- h+='<h3>🗓 Horários da semana</h3><div class="wk">'+[1,2,3,4,5].map(i=>`<div class="dy ${i==dow?'hoje':''}"><b>${DAYS[i]}</b>${aulas(i).map(([t,x,f])=>`<div class="ln" data-t="${t}">${x}–${f} · <b>${turmaNome(t)}</b></div>`).join('')}</div>`).join('')+'</div></div>';
+ h+='<h3>🗓 Horários da semana</h3><div class="wk">'+[1,2,3,4,5].map(i=>`<div class="dy ${i==dow?'hoje':''}"><b>${DAYS[i]}</b>${dia(i).map(z=>z.k=='n'?`<div class="tn">${z.txt}</div>`:z.k=='g'?`<div class="gp">${z.txt} · ${z.i}–${z.f}</div>`:`<div class="ln" data-t="${z.t}">${z.i}–${z.f} · <b>${turmaNome(z.t)}</b></div>`).join('')}</div>`).join('')+'</div></div>';
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
  c.querySelectorAll('[data-t]').forEach(e=>e.onclick=()=>open_(e.dataset.t));
  const add=()=>{const v=$('nt').value.trim();if(!v)return;tasks().push({id:Date.now(),x:v,d:$('nd').value,ok:0});save();home()};
@@ -481,6 +534,10 @@ $('pw').onkeydown=e=>{if(e.key=='Enter')$('go').click()};
 $('cl').onclick=()=>{if(sess)poll(true);else $('lg').classList.add('on')};
 if(on()){if(sess){st('☁️ conectando…');pull()}else{st('☁️ entrar');$('lg').classList.add('on')}}
 chips();render();
+const VER='1.5.0',BUILD='17/11/2026 09:30',CHANGES=[["1.5.0", "17/11/2026", ["Efeito zebra mais marcado no computador (no celular continua igual).", "Ao passar o mouse, a linha fica destacada e as outras esmaecem.", "Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.", "Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50)."]], ["1.4.0", "16/11/2026", ["Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.", "Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).", "P3 feita sem efeito na média fica amarela; \"P3 pendente\" saiu das pendências.", "Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).", "Alunos que não fizeram nada recebem zero."]], ["1.3.0", "nov/2026", ["Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.", "Ficha do aluno com gráfico de evolução.", "Histórico de alterações com desfazer.", "Aba Estatísticas e app instalável (PWA)."]], ["1.2.0", "nov/2026", ["Relatórios: visão geral, comparativo, atenção e turma, com PDF.", "Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).", "Aviso de nota alterada depois de lançada."]], ["1.1.0", "nov/2026", ["Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.", "Coluna P3 escondida com contorno amarelo na média."]], ["1.0.0", "nov/2026", ["Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro."]]];
+$('ver').textContent='Notas · v'+VER+' · build '+BUILD;
+$('ver').onclick=()=>{$('vl').innerHTML=CHANGES.map(c=>`<p><b>v${c[0]}</b> · ${c[1]}</p><ul>${c[2].map(x=>`<li>${x}</li>`).join('')}</ul>`).join('');$('vo').classList.add('on')};
+$('vc').onclick=()=>$('vo').classList.remove('on');
 if('serviceWorker' in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
