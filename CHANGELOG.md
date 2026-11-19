@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v1.6.0 · 18/11/2026
+- Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).
+- Campo da P1 só com a identificação "P1"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.
+- Alunos em amarelo (saíram ou mudaram de turma): sem destaques de P3 (campo, borda e contorno da média).
+- Relatório de Atenção: recuperação bimestral separada em Fundamental I e Fundamental II.
+
 ## v1.5.0 · 17/11/2026
 - Efeito zebra mais marcado no computador (no celular continua igual).
 - Ao passar o mouse, a linha fica destacada e as outras esmaecem.
@@ -31,4 +37,4 @@
 ## v1.0.0 · nov/2026
 - Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro.
 
-Build atual: 17/11/2026 09:30 (horário de Brasília)
+Build atual: 18/11/2026 22:50 (horário de Brasília)
