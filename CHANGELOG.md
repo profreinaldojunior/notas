@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## v1.7.0 · 19/11/2026
+- Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.
+- Busca de aluno pelo nome, na parte de cima, abre a ficha.
+- Aviso de nova versão: o app avisa quando há versão nova e atualiza com um toque.
+- Exportar o bimestre em planilha Excel (.xlsx), uma aba por turma + resumo (Relatórios e Backup).
+- Frequência: chamada por turma e data (botão 📝 Chamada), pendência automática da chamada do dia, relatório Frequência (presença por turma e faltosos com média baixa) e faltas na ficha.
+
 ## v1.6.0 · 18/11/2026
 - Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).
 - Campo da P1 só com a identificação "P1"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.
@@ -37,4 +44,4 @@
 ## v1.0.0 · nov/2026
 - Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro.
 
-Build atual: 18/11/2026 22:50 (horário de Brasília)
+Build atual: 19/11/2026 08:49 (horário de Brasília)
