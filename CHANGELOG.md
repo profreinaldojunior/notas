@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v1.8.2 · 23/11/2026
+- A tabela de **média anual** na área de Conselho passa a abrir sempre na **1A** (a turma com menos alunos), evitando uma página gigante. Para ver todas as situações, escolha **Todas as turmas** no seletor.
+- A **Pauta do Conselho** continua mostrando todas as turmas, sem filtro.
+
 ## v1.8.1 · 23/11/2026
 - A área **🎓 Conselho / Fechamento** ganhou identidade visual própria (roxo): a barra superior e o selo “CONSELHO” mostram que você está fora dos bimestres.
 - **Sem turma padrão:** ao entrar, a lista já mostra todas as turmas. O seletor começa em “Todas as turmas”.
