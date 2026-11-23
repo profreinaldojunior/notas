@@ -1,5 +1,8 @@
 # Histórico de versões
 
+## v1.8.3 · 23/11/2026
+- Todas as listas da área de Conselho passam a seguir o mesmo padrão: **por turma e, dentro da turma, pela ordem da listagem (nº da chamada)**. Isso vale para a Pauta do Conselho, a tabela de média anual, as listas de resgate/REC final, o histórico de quem saiu e as abas do Excel.
+
 ## v1.8.2 · 23/11/2026
 - A tabela de **média anual** na área de Conselho passa a abrir sempre na **1A** (a turma com menos alunos), evitando uma página gigante. Para ver todas as situações, escolha **Todas as turmas** no seletor.
 - A **Pauta do Conselho** continua mostrando todas as turmas, sem filtro.
