@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v1.9.0 · 23/11/2026
+- **REC bimestral só para quem precisa:** o campo de nota e o botão **NF** passam a aparecer apenas para alunos com média abaixo de 6 que ainda estão na turma. Quem já tem **6 ou mais** não pode fazer REC e não recebe campo.
+- **A nota da REC substitui a média do bimestre** (antes era `(média + REC) ÷ 2`). A nota final aparece com o aviso **REC** e contorno azul, inclusive na ficha, nos relatórios e no Excel.
+- Alunos que saíram da turma também não recebem campo de REC. Se existir uma REC registrada para um aluno que não pode mais fazer a REC, ela aparece apenas como leitura, sem botão NF.
+- Textos da ficha e da lista de recuperação atualizados para explicar a nova regra.
+
 ## v1.8.3 · 23/11/2026
 - Todas as listas da área de Conselho passam a seguir o mesmo padrão: **por turma e, dentro da turma, pela ordem da listagem (nº da chamada)**. Isso vale para a Pauta do Conselho, a tabela de média anual, as listas de resgate/REC final, o histórico de quem saiu e as abas do Excel.
 
