@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## v1.7.1 · 23/11/2026
+- Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.
+- Chamada/Frequência removida por enquanto (não será usada agora).
+- REC (0 a 10): média final = (média + REC) ÷ 2, com indicação explícita "REC" na média e a conta na ficha do aluno.
+- Aluno que precisava e não fez a REC (botão NF): mantém a média anterior, com aviso "sem REC", e aparece na seção "Não fez a REC" do relatório de Atenção.
+
 ## v1.7.0 · 19/11/2026
 - Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.
 - Busca de aluno pelo nome, na parte de cima, abre a ficha.
@@ -44,4 +50,4 @@
 ## v1.0.0 · nov/2026
 - Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro.
 
-Build atual: 19/11/2026 08:49 (horário de Brasília)
+Build atual: 23/11/2026 07:33 (horário de Brasília)
