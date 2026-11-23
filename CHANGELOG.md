@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## v1.8.0 · 23/11/2026
+- Nova área **🎓 Conselho / Fechamento**, separada dos bimestres, com dois modos:
+  - **Acompanhamento:** média acumulada até o bimestre atual, alerta de risco (média baixa, queda de 1,0 ou mais e casos críticos), quanto precisa tirar nos bimestres que faltam para chegar a 6 e identificação do componente mais fraco (P1, atividades, presença, ENG/TRAB) e do bimestre em que caiu.
+  - **Fechamento:** tabela com os 4 bimestres, média anual e situação (Aprovado, Conselho ou REC final), lista de REC final por turma separada entre Fundamental I e II, quanto falta para 6 e o ajuste necessário no 4º bimestre.
+- Painel de números: REC final/risco por turma e por ano e distribuição das médias. A faixa de "Conselho" é ajustável na tela (padrão: falta de até 0,5 para 6).
+- Exportação em PDF e Excel da área de Conselho; alunos que saíram da turma ficam fora das listas e aparecem em um histórico separado.
+- Toque no nome do aluno na área de Conselho abre a ficha dele.
+
 ## v1.7.1 · 23/11/2026
 - Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.
 - Chamada/Frequência removida por enquanto (não será usada agora).
