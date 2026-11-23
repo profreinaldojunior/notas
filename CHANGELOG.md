@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## v1.8.1 · 23/11/2026
+- A área **🎓 Conselho / Fechamento** ganhou identidade visual própria (roxo): a barra superior e o selo “CONSELHO” mostram que você está fora dos bimestres.
+- **Sem turma padrão:** ao entrar, a lista já mostra todas as turmas. O seletor começa em “Todas as turmas”.
+- **🎯 Pauta do Conselho** no topo: alunos com média geral abaixo de 6 (soma dos 4 bimestres menor que 24 pontos). É a lista a discutir com os outros professores — na reunião, podem receber 1 ponto ou mais para não precisar de REC final e passar direto. Ordenada pela maior falta, com turma, notas dos 4 bimestres, soma, média, falta para 6 e pontos que faltam para 24.
+- A pauta também entra na exportação em Excel (aba “Pauta Conselho”) e no PDF.
+- Ao tocar no nome de um aluno na área de Conselho, o botão **Voltar** da ficha retorna ao Conselho.
+- Os gráficos em barras foram movidos para o **final** da tela: ao abrir, aparecem primeiro a pauta e a lista de alunos. Para ver todas as situações, basta manter **Todas as turmas** no seletor.
+
 ## v1.8.0 · 23/11/2026
 - Nova área **🎓 Conselho / Fechamento**, separada dos bimestres, com dois modos:
   - **Acompanhamento:** média acumulada até o bimestre atual, alerta de risco (média baixa, queda de 1,0 ou mais e casos críticos), quanto precisa tirar nos bimestres que faltam para chegar a 6 e identificação do componente mais fraco (P1, atividades, presença, ENG/TRAB) e do bimestre em que caiu.

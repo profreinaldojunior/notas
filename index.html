@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <!--
  Notas · Lab. de Informática
- VERSÃO 1.8.0 · build 23/11/2026 (horário de Brasília)
+ VERSÃO 1.8.1 · build 23/11/2026 (horário de Brasília)
  Histórico (mais recente primeiro):
+ 1.8.1 (23/11/2026)
+   - Conselho: identidade visual própria (roxo), sem turma padrão e com "Pauta do Conselho" no topo: alunos com média abaixo de 6 (soma dos 4 bimestres menor que 24) para receber pontos na reunião e evitar REC final.
  1.8.0 (23/11/2026)
    - Nova área 🎓 Conselho / Fechamento: acompanhamento durante o ano e fechamento anual, com média por bimestre, média anual, situação, lista de REC final, quanto falta para 6, ajuste necessário no 4º bimestre, ponto fraco por bimestre, lista de resgate, PDF e Excel.
  1.7.1 (23/11/2026)
@@ -115,6 +117,11 @@ tr.off td.nm{font-weight:600}
 :root{--b1:#a9c4e8;--b2:#b3d6b9;--b3:#c5bbe6;--b4:#e6b8d4;--bct:#1c2333}
 :root[data-theme="dark"]{--b1:#3a5578;--b2:#3d6648;--b3:#584d86;--b4:#7f4a6b;--bct:#e8eaf0}
 [data-bim="1"]{--bc:var(--b1)}[data-bim="2"]{--bc:var(--b2)}[data-bim="3"]{--bc:var(--b3)}[data-bim="4"]{--bc:var(--b4)}
+/* Identidade visual própria da área de Conselho (fora dos bimestres) */
+:root[data-area="c"]{--bc:#6741d9;--bct:#fff;--pri:#6741d9;--media:#5f3dc4;--mediabg:#e5dbff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-area="c"]{--bc:#9775fa;--bct:#14161c;--pri:#845ef7;--media:#b197fc;--mediabg:#2b2145}}
+:root[data-theme="dark"][data-area="c"]{--bc:#9775fa;--bct:#14161c;--pri:#845ef7;--media:#b197fc;--mediabg:#2b2145}
+:root[data-area="c"] .bims{opacity:.5}
 body{border-top:8px solid var(--bc)}
 .bims{display:flex;gap:6px}
 .bb{border:2px solid var(--c);color:var(--tx);background:transparent;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
@@ -251,6 +258,10 @@ td.rnf{background:var(--badbg)!important}td.rnf .in{background:transparent}td.rn
 .cn-hist{margin-top:14px}
 .cn-hist summary{cursor:pointer;font-weight:600;color:var(--mut);padding:6px 0}
 .cn-hist .scroll{margin-top:6px}
+.cn-prio{background:var(--mediabg);border:1px solid var(--bc);border-radius:10px;padding:8px 10px;margin:10px 0}
+.cn-prio h3{margin:0 0 4px;font-size:15px;color:var(--media)}
+.cn-prio .scroll{background:var(--card);border-radius:8px}
+.cn-area{display:inline-block;font-size:10px;letter-spacing:.08em;background:var(--mediabg);color:var(--media);border:1px solid var(--bc);border-radius:99px;padding:2px 8px;margin-right:8px;vertical-align:middle;font-weight:700}
 .rvw td small{display:block;font-size:10px;font-weight:400;color:var(--mut)}
 </style>
 </head>
@@ -288,7 +299,7 @@ const KEY='notas-lab-info-v1';
 let db=null;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.roster)db=DATA;
-const S={bim:'4',t:db.turmas[0],edit:false,p3v:false,recv:false,view:'h',cm:'f',ct:''};
+const S={bim:'4',t:db.turmas[0],edit:false,p3v:false,recv:false,view:'h',cm:'f',ct:'*'};
 const $=id=>document.getElementById(id);
 const lg=(b,t,id,f,o,n)=>{o=o==null?null:o;n=n==null?null:n;if(o===n)return;db.log=db.log||[];db.log.push([Date.now(),b,t,id,f,o,n]);if(db.log.length>400)db.log.splice(0,db.log.length-400)};
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}push()}
@@ -309,7 +320,7 @@ function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const c
 function num(s){s=String(s).trim().replace(',','.');if(s==='')return null;const v=parseFloat(s);return isNaN(v)?null:Math.min(10,Math.max(0,v))}
 function turmaTitle(t){return t[0]+'º ano '+t.slice(1)}
 function chips(){$('chips').innerHTML=db.turmas.map(t=>{const l=(((db.launch||{})[S.bim]||{})[t])||{},n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<button class="chip ${t===S.t&&!S.view?'on':''}" data-t="${t}" title="Lançado na escola: ${n}/3">${t}${n==3?' ✓':n?' ◐':''}${Object.keys(l.dirty||{}).length?' ⚠':''}</button>`}).join('');
- $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.t=b.dataset.t;S.edit=false;S.unlock=false;S.view=null;chips();render()})}
+ $('chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.t=b.dataset.t;S.edit=false;S.unlock=false;S.cnBack=false;S.view=null;chips();render()})}
 const SCH={'2A':['Segunda',['07:00–07:50']],'3A':['Segunda',['11:00–11:50']],'5D':['Segunda',['12:40–13:30']],
 '8A':['Terça',['07:00–08:40']],'8B':['Terça',['08:40–09:30','09:50–10:40']],'9B':['Terça',['10:40–12:20']],'2D':['Terça',['12:40–13:30']],'8D':['Terça',['15:10–16:00']],'9D':['Terça',['17:10–18:00']],
 '5A':['Quarta',['10:10–11:00']],'1A':['Quarta',['11:00–11:50']],'1D':['Quarta',['12:40–13:30']],
@@ -320,6 +331,8 @@ function sched(){const el=$('sched');if(!el)return;const s=SCH[S.t];if(S.view||!
  const turno=+s[1][0].slice(0,2)<12?'Matutino':'Vespertino',hoje=new Date().getDay()==DN[s[0]];
  el.style.display='';el.innerHTML='<b>Dia e horário da aula · '+turmaTitle(S.t)+'</b><div class="sl"><span>'+s[0]+'-feira · '+s[1].flatMap(split).join(' e ')+'</span><span style="color:var(--mut);font-weight:400;font-size:13px">'+turno+'</span>'+(hoje?'<span class="hj">hoje</span>':'')+'</div>'}
 function render(){
+ if(S.view=='c')document.documentElement.dataset.area='c';else delete document.documentElement.dataset.area;
+ const mt=document.querySelector('meta[name="theme-color"]');if(mt)mt.content=S.view=='c'?'#6741d9':'#8fb4e3';
  sched();
  if(S.view=='h'){home();sched();return}
  if(S.view=='f'){ficha();sched();return}
@@ -495,7 +508,7 @@ function conselhoRows(ate){
   let queda=null,quedaBim=null;for(let k=1;k<ate;k++){if(bms[k]==null||bms[k-1]==null)continue;const d=bms[k]-bms[k-1];if(queda==null||d<queda){queda=d;quedaBim=k+1}}
   let fraco=null;detalhe.slice(0,ate).forEach((d,k)=>{const p=d.r.any&&pontoFraco(t,BIMS[k],d.g,d.r);if(p&&(!fraco||p.ratio<fraco.ratio))fraco=p});
   const risco=media!=null&&(media<MEDIA_MIN||(queda!=null&&queda<=-1)||critico);
-  out.push({t,s,i:i+1,off:!!s.off,bms,media,n,falta,need,critico,alvo4,atinge4,sit,queda,quedaBim,fraco:fraco?fraco.txt:'',risco,obs:s.obs||''});
+  out.push({t,s,i:i+1,off:!!s.off,bms,soma,media,n,falta,need,critico,alvo4,atinge4,sit,queda,quedaBim,fraco:fraco?fraco.txt:'',risco,obs:s.obs||''});
  }));
  return out}
 function conselhoCorpo(rows,ate,fx,modo){
@@ -507,14 +520,14 @@ function conselhoCorpo(rows,ate,fx,modo){
  const parcial=at.some(r=>r.n<4)?' (parcial)':'';
  h+=kp(modo=='f'?[[at.length,'alunos na sala'],[FM(avgOf(medias)),'média anual'+parcial],[nap,'aprovados'],[ncon,'conselho'],[nrec,'REC final'],[nsem,'sem nota']]
   :[[at.length,'alunos na sala'],[FM(avgOf(medias)),'média acumulada'],[risco,'em risco'],[criticos,'críticos'],[quedas,'com queda ≥ 1,0'],[nsem,'sem nota']]);
- const taxa=a=>Math.round(a.filter(modo=='f'?r=>r.sit=='REC final':r=>r.risco).length/Math.max(1,a.length)*100);
- const linha=(l,a)=>[l,taxa(a),col(taxa(a)/100),a.filter(modo=='f'?r=>r.sit=='REC final':r=>r.risco).length+'/'+a.length];
- h+='<h3>'+(modo=='f'?'REC final':'Alunos em risco')+' por turma</h3>'+bars(db.turmas.map(t=>linha(t,at.filter(r=>r.t==t))),100);
- h+='<h3>'+(modo=='f'?'REC final':'Alunos em risco')+' por ano</h3>'+bars([...new Set(db.turmas.map(t=>t[0]))].map(y=>linha(y+'º ano',at.filter(r=>r.t[0]==y))),100);
- const cn=FX.map(f=>medias.filter(m=>m>=f[1]&&m<f[2]).length);
- h+='<h3>Distribuição das médias</h3>'+bars(FX.map((f,i)=>[f[0],cn[i],i<2?'var(--bad)':i==2?'#e0a800':'var(--ok)',cn[i]+' aluno(s)']),Math.max(1,...cn));
- h+=`<h3>${alvo}</h3><div class="lanc"><label style="text-align:left">Turma: <select id="cnTurma"><option value="">${esc(S.t)} (padrão)</option><option value="*" ${S.ct=='*'?'selected':''}>Todas as turmas</option>${db.turmas.map(t=>`<option value="${t}" ${S.ct==t?'selected':''}>${t}</option>`).join('')}</select></label><span class="mi">Toque no nome para abrir a ficha.</span></div>`;
- const lista=at.filter(r=>!S.ct||S.ct=='*'||r.t==S.ct).sort((a,b)=>cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n));
+ // Pauta do Conselho: quem não chegou a 24 pontos nos 4 bimestres (média < 6) e pode receber pontos na reunião.
+ const pauta=at.filter(r=>r.media!=null&&(r.n===4?r.soma<24:r.media<MEDIA_MIN)).sort((a,b)=>(b.falta-a.falta)||cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n));
+ const somaTag=r=>`${fmt(r.soma)}${r.n<4?`<small>${r.n}/4</small>`:''}`;
+ h+=`<div class="cn-prio"><h3>🎯 Pauta do Conselho · ${pauta.length} aluno(s)</h3><p class="cn-hint">${ate==4?'Alunos com <b>soma dos 4 bimestres abaixo de 24 pontos</b> (média geral &lt; 6).':'Alunos com <b>média abaixo de 6 até o '+ate+'º bimestre</b> (ainda não garantiram passagem direta).'} São os casos a discutir com os outros professores: na reunião, pode ser dado 1 ponto ou mais para não precisar de REC final e passar direto. Ordem: maior falta primeiro. Quem ainda não tem os 4 bimestres aparece com a soma parcial marcada.</p>`;
+ h+=pauta.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th>`+BIMS.map(b=>`<th>${b}º</th>`).join('')+`<th>Soma</th><th>Média</th><th>Falta p/ 6</th><th>Pontos p/ 24</th><th>Situação</th></tr></thead><tbody>`+pauta.map(r=>`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}"><td><b>${r.t}</b></td><td style="text-align:left">${esc(r.s.n)}</td>`+r.bms.map(v=>`<td class="${bc(v)}">${FM(v)}</td>`).join('')+`<td>${somaTag(r)}</td><td class="${bc(r.media)}"><b>${FM(r.media)}</b></td><td>${FM(r.falta)}</td><td>${r.n===4?fmt(Math.max(0,24-r.soma)):'–'}</td><td class="${({'Aprovado':'bo','Conselho':'bm','REC final':'bd'})[r.sit]||''}">${r.sit}</td></tr>`).join('')+'</tbody></table></div>':'<p class="mi">Nenhum aluno nesta pauta.</p>';
+ h+='</div>';
+ h+=`<h3>${alvo}</h3><div class="lanc"><label style="text-align:left">Turma: <select id="cnTurma"><option value="*" ${S.ct=='*'?'selected':''}>Todas as turmas</option>${db.turmas.map(t=>`<option value="${t}" ${S.ct==t?'selected':''}>${t}</option>`).join('')}</select></label><span class="mi">Sem turma padrão: ao entrar, você vê todas. Toque no nome para abrir a ficha.</span></div>`;
+ const lista=at.filter(r=>S.ct=='*'||r.t==S.ct).sort((a,b)=>cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n));
  const sitCls=s=>({'Aprovado':'bo','Conselho':'bm','REC final':'bd'})[s]||'';
  const ajuste=r=>r.media==null||r.media>=6||r.alvo4==null?'–':(!r.atinge4?'<b style="color:var(--bad)">não alcança com 10</b>':(r.bms[3]==null?`tirar ${fmt(r.alvo4)}`:`4º ${fmt(r.bms[3])} → ${fmt(r.alvo4)} (+${fmt(r.alvo4-r.bms[3])})`));
  const motivos=r=>{const a=[];if(r.media!=null&&r.media<MEDIA_MIN)a.push(`<span class="cn-tag r">faltam ${fmt(r.falta)}</span>`);if(r.queda!=null&&r.queda<=-1)a.push(`<span class="cn-tag y">queda ${fmt(r.queda)} no ${r.quedaBim}º</span>`);if(r.critico)a.push('<span class="cn-tag r">crítico</span>');if(r.fraco)a.push(`<span class="cn-tag">${esc(r.fraco)}</span>`);return a.join('')||'<span class="mi">–</span>'};
@@ -526,6 +539,14 @@ function conselhoCorpo(rows,ate,fx,modo){
  h+='<hr class="sepc">'+sec('Fundamental I · '+(modo=='f'?'REC final':'resgate'),alvoLista.filter(r=>f1(r.t)))+'<hr class="sepc">'+sec('Fundamental II · '+(modo=='f'?'REC final':'resgate'),alvoLista.filter(r=>!f1(r.t)));
  h+='<p class="cn-hint">Ordem: turma e, dentro da turma, nome em ordem alfabética. A justificativa mostra o bimestre em que o componente ficou mais fraco (P1, atividades, presença, ENG/TRAB).</p>';
  if(off.length){h+=`<details class="cn-hist"><summary>Histórico · ${off.length} aluno(s) que saíram da turma (fora das listas)</summary><div class="scroll"><table><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th>`+BIMS.map(b=>`<th>${b}º</th>`).join('')+`<th>Média</th><th>Situação</th><th style="text-align:left">Obs</th></tr></thead><tbody>`+off.sort((a,b)=>cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n)).map(r=>`<tr><td>${r.t}</td><td style="text-align:left">${esc(r.s.n)}</td>`+r.bms.map(v=>`<td>${FM(v)}</td>`).join('')+`<td>${FM(r.media)}</td><td>${r.sit}</td><td style="text-align:left">${esc(r.obs)}</td></tr>`).join('')+'</tbody></table></div></details>'}
+ // Gráficos ficam no fim: ao abrir, aparece primeiro a pauta e a lista de alunos.
+ const taxa=a=>Math.round(a.filter(modo=='f'?r=>r.sit=='REC final':r=>r.risco).length/Math.max(1,a.length)*100);
+ const linha=(l,a)=>[l,taxa(a),col(taxa(a)/100),a.filter(modo=='f'?r=>r.sit=='REC final':r=>r.risco).length+'/'+a.length];
+ const cn=FX.map(f=>medias.filter(m=>m>=f[1]&&m<f[2]).length);
+ h+='<hr class="sepc"><h3>📊 Gráficos · visão geral</h3><p class="cn-hint">Os gráficos consideram todas as turmas, mesmo quando você filtra a tabela acima.</p>';
+ h+='<h3>'+(modo=='f'?'REC final':'Alunos em risco')+' por turma</h3>'+bars(db.turmas.map(t=>linha(t,at.filter(r=>r.t==t))),100);
+ h+='<h3>'+(modo=='f'?'REC final':'Alunos em risco')+' por ano</h3>'+bars([...new Set(db.turmas.map(t=>t[0]))].map(y=>linha(y+'º ano',at.filter(r=>r.t[0]==y))),100);
+ h+='<h3>Distribuição das médias</h3>'+bars(FX.map((f,i)=>[f[0],cn[i],i<2?'var(--bad)':i==2?'#e0a800':'var(--ok)',cn[i]+' aluno(s)']),Math.max(1,...cn));
  return h}
 function conselhoXlsx(){
  const ate=S.cm=='f'?4:+S.bim,rows=conselhoRows(ate).filter(r=>!r.off),fx=faixaConselho(),R=v=>v==null?'':Math.round(v*100)/100;
@@ -533,6 +554,8 @@ function conselhoXlsx(){
  const linha=r=>[r.i,r.s.n,r.sit,...r.bms.map(R),R(r.media),r.n,R(r.falta),r.alvo4==null?'':(!r.atinge4?'não alcança com 10':(r.bms[3]==null?'tirar '+fmt(r.alvo4):'4º → '+fmt(r.alvo4))),just(r),r.obs];
  exportXlsxNamed(`Conselho-${S.cm=='f'?'anual-2026':ate+'bim-2026'}.xlsx`,()=>{
   const sheets=[{name:'Resumo',rows:[['Conselho / Fechamento · 2026'],['Modo',S.cm=='f'?'Fechamento':'Acompanhamento até '+ate+'º'],['Faixa de conselho',fmt(fx)],['Alunos na sala',rows.length],['Aprovados',rows.filter(r=>r.sit=='Aprovado').length],['Conselho',rows.filter(r=>r.sit=='Conselho').length],['REC final',rows.filter(r=>r.sit=='REC final').length],['Em risco',rows.filter(r=>r.risco).length]]}];
+  const pauta=rows.filter(r=>r.media!=null&&(r.n===4?r.soma<24:r.media<MEDIA_MIN)).sort((a,b)=>(b.falta-a.falta)||cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n));
+  sheets.push({name:'Pauta Conselho',rows:[['Pauta do Conselho · média < 6'+(ate==4?' (soma dos 4 bimestres < 24)':' (acumulado até '+ate+'º)')],['Turma','Nº','Nome','1º','2º','3º','4º','Soma','Bimestres','Média','Falta p/ 6','Pontos p/ 24','Situação'],...pauta.map(r=>[r.t,r.i,r.s.n,...r.bms.map(R),R(r.soma),r.n,R(r.media),R(r.falta),r.n===4?R(Math.max(0,24-r.soma)):'',r.sit])]});
   const rec=rows.filter(r=>r.sit=='REC final').sort((a,b)=>cmpN(a.t,b.t)||cmpN(a.s.n,b.s.n));
   sheets.push({name:'REC final',rows:[['Turma','Nº','Nome','Média','Falta','Ajuste','Motivo'],...rec.map(r=>[r.t,r.i,r.s.n,R(r.media),R(r.falta),linha(r)[10],just(r)])]});
   const hd=['Nº','Nome','Situação','1º','2º','3º','4º','Média','Bimestres com nota','Falta p/ 6','Ajuste','Motivo','Obs'];
@@ -542,15 +565,15 @@ function conselhoXlsx(){
 function conselho(){
  const modo=S.cm=='f'?'f':'a',ate=modo=='f'?4:+S.bim,fx=faixaConselho(),rows=conselhoRows(ate);
  const tabs=[['a','📈 Acompanhamento (até '+S.bim+'º)'],['f','🎓 Fechamento (ano)']];
- const h=`<h2><span>🎓 Conselho / Fechamento · ${modo=='f'?'ANO 2026':S.bim+'º BIMESTRE / 2026'}</span><span><button class="btn" id="cnXls">⬇ Excel</button> <button class="btn" id="cnPdf">🖨 Gerar PDF</button> <button class="btn" id="cnVoltar">Voltar</button></span></h2><div class="lanc">${tabs.map(([k,n])=>`<button class="tb ${k==modo?'on':''}" data-cm="${k}">${n}</button>`).join('')}<label class="mi" style="text-align:left">Conselho se faltar até <input class="in" id="cnFx" type="text" inputmode="decimal" style="width:56px" value="${fmt(fx)}"> para 6</label></div><div class="rvw" id="rv">${conselhoCorpo(rows,ate,fx,modo)}</div>`;
+ const h=`<h2><span><span class="cn-area">CONSELHO</span>🎓 Conselho / Fechamento · ${modo=='f'?'ANO 2026':S.bim+'º BIMESTRE / 2026'}</span><span><button class="btn" id="cnXls">⬇ Excel</button> <button class="btn" id="cnPdf">🖨 Gerar PDF</button> <button class="btn" id="cnVoltar">Voltar</button></span></h2><div class="lanc">${tabs.map(([k,n])=>`<button class="tb ${k==modo?'on':''}" data-cm="${k}">${n}</button>`).join('')}<label class="mi" style="text-align:left">Conselho se faltar até <input class="in" id="cnFx" type="text" inputmode="decimal" style="width:56px" value="${fmt(fx)}"> para 6</label></div><div class="rvw" id="rv">${conselhoCorpo(rows,ate,fx,modo)}</div>`;
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
  c.querySelectorAll('[data-cm]').forEach(x=>x.onclick=()=>{S.cm=x.dataset.cm;conselho()});
  $('cnFx').onchange=e=>{const v=num(e.target.value);db.cf=db.cf||{};db.cf.conselho=v==null||v<0||v>=MEDIA_MIN?0.5:v;save();conselho()};
- $('cnVoltar').onclick=()=>{S.view=null;render()};
+ $('cnVoltar').onclick=()=>{S.cnBack=false;S.view=null;render()};
  $('cnXls').onclick=conselhoXlsx;
  $('cnPdf').onclick=()=>{const nm=modo=='f'?'Fechamento anual 2026':`Acompanhamento até ${ate}º bimestre`;$('pr').innerHTML=`<h2>Lab. de Informática · Conselho / Fechamento · ${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
  const sel=$('cnTurma');if(sel)sel.onchange=()=>{S.ct=sel.value;conselho()};
- c.querySelectorAll('tr[data-fi]').forEach(r=>r.onclick=e=>{if(e.target.closest('select,input,button'))return;S.fi={t:r.dataset.t,id:r.dataset.fi};S.view='f';render()});
+ c.querySelectorAll('tr[data-fi]').forEach(r=>r.onclick=e=>{if(e.target.closest('select,input,button'))return;S.fi={t:r.dataset.t,id:r.dataset.fi};S.cnBack=true;S.view='f';render()});
 }
 const turmaNome=t=>t[0]+'º '+t.slice(1),DAYS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -602,7 +625,7 @@ function ficha(){const{t,id}=S.fi,b=S.bim,s=(db.roster[t]||[]).find(x=>x.id==id)
  let h=`<h2><span>📄 ${esc(s.n)} · ${turmaNome(t)} · Nº ${nc}</span><span><button class="btn" id="fp">🖨 Gerar PDF</button> <button class="btn" id="fb">Voltar</button></span></h2><div class="rvw" id="rv">`+kp([[nc,'nº da chamada'],[cur.r.any?fmt(cur.r.m):'–',b+'º bim · média'],[rank?rank+'º de '+x.ms.length:'–','posição na turma'],[FM(x.avg),'média da turma'],[cur.r.cnt+'/4','atividades entregues']])+'<h3>Evolução da média</h3>'+svg+'<div class="mi"><span style="color:#3b5bdb">●</span> aluno · <span style="color:#999">●</span> média da turma (tracejado)</div><h3>Notas por bimestre</h3><div class="scroll"><table><thead><tr><th>Bim</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>'+(fund?'ENG':'TRAB')+'</th>'+(fund?'<th>P3</th>':'')+(hasR?'<th>REC</th>':'')+'<th>Média</th></tr></thead><tbody>'
   +B.map(({bb,g,r})=>{const a=g.a||[];return `<tr><td><b>${bb}º</b></td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td>${r.any?FM(r.p1):'–'}</td><td>${r.any?FM(r.p2):'–'}</td><td>${r.any?FM(r.e):'–'}</td>${fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${FM(r.p3)}</td>`:''}${hasR?`<td>${r.rn&&r.rec==null?'não fez':FM(r.rec)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.ur&&!s.off?' recm':(r.u3&&!s.off?' p3m':'')}"><b>${r.any?fmt(r.m):'–'}</b>${r.ur&&!s.off?'<small> REC</small>':''}</td></tr>`}).join('')+'</tbody></table></div>'+(B.some(q=>q.g.o)?'<h3>Anotações por bimestre</h3>'+B.filter(q=>q.g.o).map(q=>`<p><b>${q.bb}º:</b> ${esc(q.g.o)}</p>`).join(''):'')+(s.obs?`<h3>Observação</h3><p>${esc(s.obs)}</p>`:'')+(s.off?'<p><b>Aluno não está mais na turma.</b></p>':'')+explic+'</div>';
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
- $('fb').onclick=()=>open_(t);
+ $('fb').onclick=()=>{if(S.cnBack){S.cnBack=false;S.view='c';chips();render()}else open_(t)};
  $('fp').onclick=()=>{$('pr').innerHTML=`<h2>Lab. de Informática · Ficha do aluno · ${esc(s.n)} · ${turmaTitle(t)} · Nº ${nc}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}}
 const recPend=(t,ros,gr)=>ros.filter(s=>{if(s.off)return false;const r=calc(t,gr[s.id]);return r.any&&r.nota<MEDIA_MIN&&r.rec==null&&!r.rn}).length;
 const hasRecT=(ros,gr)=>ros.some(s=>{const g=gr[s.id]||{};return g.r!=null||g.rn});
@@ -637,7 +660,7 @@ function report(kind){const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t),
 function foot(){const all=db.roster[S.t]||[],ros=all.filter(s=>!s.off),gr=G(S.bim,S.t);const rb=$('rcv');if(rb)rb.textContent=(S.recv?'🙈 Ocultar REC':'👁 REC')+' ('+recPend(S.t,ros,gr)+')';const ms=ros.map(s=>calc(S.t,gr[s.id]).m).filter(m=>m!=null);
  const avg=ms.length?ms.reduce((a,b)=>a+b,0)/ms.length:null;
  $('foot').innerHTML=`<span>Na sala: <b>${ros.length}</b></span><span>Saíram: <b>${all.length-ros.length}</b></span><span>Com nota: <b>${ms.length}</b></span><span>Média da turma: <b>${fmt(avg)||'–'}</b></span><span>Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b></span><span>Sem nenhuma nota: <b>${ros.length-ms.length}</b></span>${f1(S.t)?`<span>Podem fazer P3: <b>${ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length}</b></span>`:''}`}
-function setBim(b){S.bim=b;document.documentElement.dataset.bim=b;document.querySelectorAll('.bb').forEach(x=>x.classList.toggle('on',x.dataset.b==b))}
+function setBim(b){S.bim=b;S.cnBack=false;document.documentElement.dataset.bim=b;document.querySelectorAll('.bb').forEach(x=>x.classList.toggle('on',x.dataset.b==b))}
 document.querySelectorAll('.bb').forEach(x=>x.onclick=()=>{setBim(x.dataset.b);S.edit=false;S.unlock=false;chips();render()});
 setBim(CUR);
 function say(m){$('msg').textContent=m}
@@ -655,7 +678,7 @@ theme(th||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
 $('pn').onclick=()=>{S.view=S.view=='p'?null:'p';S.edit=false;chips();render()};
 $('hm').onclick=()=>{S.view='h';S.edit=false;chips();render()};
 $('rt').onclick=()=>{S.view=S.view=='r'?null:'r';S.edit=false;chips();render()};
-$('cn').onclick=()=>{S.view=S.view=='c'?null:'c';S.edit=false;chips();render()};
+$('cn').onclick=()=>{S.view=S.view=='c'?null:'c';if(S.view=='c')S.ct='*';S.edit=false;chips();render()};
 $('th').onclick=()=>theme(document.documentElement.dataset.theme=='dark'?'light':'dark');
 function load(d){if(!d.roster||!d.grades||!d.turmas)throw 0;db=d;save();if(!db.turmas.includes(S.t))S.t=db.turmas[0];chips();render()}
 $('b4').onclick=()=>{try{load(JSON.parse($('ta').value));say('Backup restaurado.')}catch(e){say('Texto inválido. Cole o backup completo.')}};
@@ -698,7 +721,7 @@ function checkVer(){if(!/^https?:/.test(location.protocol))return;fetch(location
 setInterval(checkVer,300000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVer()});setTimeout(checkVer,4000);
 $('nvb').onclick=()=>{try{navigator.serviceWorker&&navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.update()))}catch(e){}location.reload()};
 $('bx').onclick=exportXlsx;
-const VER='1.8.0',BUILD='23/11/2026',CHANGES=[["1.8.0", "23/11/2026", ["Nova área 🎓 Conselho / Fechamento: acompanhamento durante o ano e fechamento anual, com média por bimestre, média anual, situação, REC final, quanto falta para 6, ajuste no 4º bimestre, resgate, ponto fraco, PDF e Excel."]],["1.7.1", "23/11/2026", ["Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.", "Chamada/Frequência removida por enquanto (não será usada agora).", "REC (0 a 10): média final = (média + REC) ÷ 2, com indicação explícita \"REC\" na média e a conta na ficha do aluno.", "Aluno que precisava e não fez a REC (botão NF): mantém a média anterior, com aviso \"sem REC\", e aparece na seção \"Não fez a REC\" do relatório de Atenção."]], ["1.7.0", "19/11/2026", ["Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.", "Busca de aluno pelo nome, na parte de cima, abre a ficha.", "Aviso de nova versão: o app avisa quando há versão nova e atualiza com um toque.", "Exportar o bimestre em planilha Excel (.xlsx), uma aba por turma + resumo (Relatórios e Backup).", "Frequência: chamada por turma e data (botão 📝 Chamada), pendência automática da chamada do dia, relatório Frequência (presença por turma e faltosos com média baixa) e faltas na ficha."]], ["1.6.0", "18/11/2026", ["Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).", "Campo da P1 só com a identificação \"P1\"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.", "Alunos em amarelo (saíram ou mudaram de turma): sem destaques de P3 (campo, borda e contorno da média).", "Relatório de Atenção: recuperação bimestral separada em Fundamental I e Fundamental II."]], ["1.5.0", "17/11/2026", ["Efeito zebra mais marcado no computador (no celular continua igual).", "Ao passar o mouse, a linha fica destacada e as outras esmaecem.", "Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.", "Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50)."]], ["1.4.0", "16/11/2026", ["Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.", "Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).", "P3 feita sem efeito na média fica amarela; \"P3 pendente\" saiu das pendências.", "Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).", "Alunos que não fizeram nada recebem zero."]], ["1.3.0", "nov/2026", ["Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.", "Ficha do aluno com gráfico de evolução.", "Histórico de alterações com desfazer.", "Aba Estatísticas e app instalável (PWA)."]], ["1.2.0", "nov/2026", ["Relatórios: visão geral, comparativo, atenção e turma, com PDF.", "Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).", "Aviso de nota alterada depois de lançada."]], ["1.1.0", "nov/2026", ["Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.", "Coluna P3 escondida com contorno amarelo na média."]], ["1.0.0", "nov/2026", ["Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro."]]];
+const VER='1.8.1',BUILD='23/11/2026',CHANGES=[["1.8.1", "23/11/2026", ["Conselho com identidade visual própria (roxo), sem turma padrão e com Pauta do Conselho no topo: alunos com média abaixo de 6 (soma dos 4 bimestres < 24) para receber pontos na reunião e evitar REC final.", "Gráficos em barras movidos para o final da tela; ao abrir, aparece primeiro a lista de alunos."]],["1.8.0", "23/11/2026", ["Nova área 🎓 Conselho / Fechamento: acompanhamento durante o ano e fechamento anual, com média por bimestre, média anual, situação, REC final, quanto falta para 6, ajuste no 4º bimestre, resgate, ponto fraco, PDF e Excel."]],["1.7.1", "23/11/2026", ["Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.", "Chamada/Frequência removida por enquanto (não será usada agora).", "REC (0 a 10): média final = (média + REC) ÷ 2, com indicação explícita \"REC\" na média e a conta na ficha do aluno.", "Aluno que precisava e não fez a REC (botão NF): mantém a média anterior, com aviso \"sem REC\", e aparece na seção \"Não fez a REC\" do relatório de Atenção."]], ["1.7.0", "19/11/2026", ["Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.", "Busca de aluno pelo nome, na parte de cima, abre a ficha.", "Aviso de nova versão: o app avisa quando há versão nova e atualiza com um toque.", "Exportar o bimestre em planilha Excel (.xlsx), uma aba por turma + resumo (Relatórios e Backup).", "Frequência: chamada por turma e data (botão 📝 Chamada), pendência automática da chamada do dia, relatório Frequência (presença por turma e faltosos com média baixa) e faltas na ficha."]], ["1.6.0", "18/11/2026", ["Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).", "Campo da P1 só com a identificação \"P1\"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.", "Alunos em amarelo (saíram ou mudaram de turma): sem destaques de P3 (campo, borda e contorno da média).", "Relatório de Atenção: recuperação bimestral separada em Fundamental I e Fundamental II."]], ["1.5.0", "17/11/2026", ["Efeito zebra mais marcado no computador (no celular continua igual).", "Ao passar o mouse, a linha fica destacada e as outras esmaecem.", "Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.", "Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50)."]], ["1.4.0", "16/11/2026", ["Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.", "Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).", "P3 feita sem efeito na média fica amarela; \"P3 pendente\" saiu das pendências.", "Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).", "Alunos que não fizeram nada recebem zero."]], ["1.3.0", "nov/2026", ["Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.", "Ficha do aluno com gráfico de evolução.", "Histórico de alterações com desfazer.", "Aba Estatísticas e app instalável (PWA)."]], ["1.2.0", "nov/2026", ["Relatórios: visão geral, comparativo, atenção e turma, com PDF.", "Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).", "Aviso de nota alterada depois de lançada."]], ["1.1.0", "nov/2026", ["Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.", "Coluna P3 escondida com contorno amarelo na média."]], ["1.0.0", "nov/2026", ["Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro."]]];
 $('ver').textContent='Notas · v'+VER+' · build '+BUILD;
 $('ver').onclick=()=>{$('vl').innerHTML=CHANGES.map(c=>`<p><b>v${c[0]}</b> · ${c[1]}</p><ul>${c[2].map(x=>`<li>${x}</li>`).join('')}</ul>`).join('');$('vo').classList.add('on')};
 $('vc').onclick=()=>$('vo').classList.remove('on');
