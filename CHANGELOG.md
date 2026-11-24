@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v1.10.1 · 24/11/2026
+- **Corrigido:** a REC bimestral não podia diminuir a nota. Agora ela **só substitui a média do bimestre se a nota da REC for maior**; se for menor ou igual, a média original permanece (ex.: média 5,0 e REC 4,0 → final 5,0).
+- Quando a REC é digitada mas não entra, a ficha, a lista de recuperação e as dicas na tabela explicam que a média já era maior ou igual.
+
 ## v1.10.0 · 24/11/2026
 - **Arredondamento da média:** a média bimestral e a média final são arredondadas **sempre para cima, de 0,5 em 0,5** (6,8 → 7,0; 8,3 → 8,5; 5,5 permanece 5,5). Vale também para a média anual do Conselho.
 - P1, P2, ENG/TRAB, atividades e a nota digitada da REC **continuam com notas quebradas** — o arredondamento é só na média.
