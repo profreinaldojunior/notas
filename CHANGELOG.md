@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## v1.10.0 · 24/11/2026
+- **Arredondamento da média:** a média bimestral e a média final são arredondadas **sempre para cima, de 0,5 em 0,5** (6,8 → 7,0; 8,3 → 8,5; 5,5 permanece 5,5). Vale também para a média anual do Conselho.
+- P1, P2, ENG/TRAB, atividades e a nota digitada da REC **continuam com notas quebradas** — o arredondamento é só na média.
+- Na **ficha do aluno**, tocar em qualquer linha de **Notas por bimestre** agora abre aquele bimestre na turma do aluno e destaca a linha dele na tabela de notas, pronta para eventuais ajustes.
+
 ## v1.9.0 · 23/11/2026
 - **REC bimestral só para quem precisa:** o campo de nota e o botão **NF** passam a aparecer apenas para alunos com média abaixo de 6 que ainda estão na turma. Quem já tem **6 ou mais** não pode fazer REC e não recebe campo.
 - **A nota da REC substitui a média do bimestre** (antes era `(média + REC) ÷ 2`). A nota final aparece com o aviso **REC** e contorno azul, inclusive na ficha, nos relatórios e no Excel.
