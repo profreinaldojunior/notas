@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v1.12.0 · 25/11/2026
+- **Média anual do Conselho:** quando você escolhe uma turma, a coluna **Turma** não aparece na tabela (ela já está selecionada). Com **Todas as turmas**, a coluna continua aparecendo. As demais listas do Conselho seguem mostrando a turma.
+- **Nomes longos no Conselho:** com **3 sobrenomes**, o **penúltimo** é abreviado; com **4 ou mais**, os **2 últimos** são abreviados. Exemplos: `João dos Santos Oliveira Xavier` → `João dos Santos O. Xavier`; `Lucas Sinclair Borja Amorim de Souza` → `Lucas Sinclair Borja A. S.`. A regra vale para tela, PDF e Excel; a ficha do aluno continua com o nome completo.
+
 ## v1.11.0 · 25/11/2026
 - **Conselho:** todas as listas (Pauta do Conselho, média anual, resgate/REC final e histórico) agora mostram o **nº do aluno** (nº da chamada).
 - A ordem passa a respeitar primeiro a **ordem das turmas** e, dentro de cada turma, a ordem do **nº do aluno** — inclusive no PDF e no Excel.
