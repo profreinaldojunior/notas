@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## v1.14.0 · 25/11/2026
+- **Duplicação de bimestres (nova ferramenta na aba 🛡 Auditoria):** alunos **sem nota no 1º bimestre** recebem as notas do **3º bimestre**; alunos **sem nota no 2º bimestre** recebem as notas do **4º bimestre**. Isso resolve os casos de alunos que chegaram no meio do ano e não tiveram as notas contabilizadas nos bimestres iniciais.
+- São copiados **todos os campos**: Ativ 1–4, P1, P2, ENG/TRAB, P3 e REC (inclusive a marcação "não fez a REC").
+- Cada valor copiado é gravado **na nota normal e também marcado como `aud`**, com o motivo “Duplicado do 3º/4º bimestre · aluno sem nota (chegou no meio do ano)”. Assim fica registrado que essas notas foram digitadas diretamente, e a sigla **aud** aparece na tela, ficha, relatórios, PDF e planilha.
+- Antes de aplicar, a ferramenta mostra **prévia** com turma, nº, aluno, de/qual bimestre e média que passa a valer. Depois de aplicar, há **Desfazer duplicação** por snapshot, além do registro no histórico com desfazer individual.
+- **Correção da rolagem:** ao clicar nas turmas, nos botões ou em qualquer ação que redesenha a tela, a posição da barra de rolagem é preservada. A página não volta mais ao topo durante a navegação/editação.
+
 ## v1.13.0 · 25/11/2026
 - **Mapa de calor turma × bimestre:** nova tela `🔥 Mapa` com a média de cada turma, quantos alunos estão abaixo de 6 e quantos estão com nota. As cores vão do vermelho (abaixo de 6) ao verde (8 ou mais). Toque numa célula para abrir aquela turma e aquele bimestre.
 - **Checklist geral:** nova tela `✅ Checklist` com as pendências de todas as turmas e bimestres (digitar notas, lançar na escola, relançar alterações, P3, REC, ajustes de auditoria e alunos fora da turma). É possível marcar como concluído e ir direto para a turma.
