@@ -78,12 +78,20 @@
 :root{--bg:#f6f7fb;--card:#fff;--tx:#1c2333;--mut:#6b7385;--bd:#dfe3ec;--pri:#3b5bdb;--ok:#2f9e44;--okbg:#d3f0d9;--half:#ffe9b3;--bad:#d6336c;--media:#0b7285;--mediabg:#d0ebff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161c;--card:#1d2029;--tx:#e8eaf0;--mut:#98a0b3;--bd:#2d3240;--pri:#748ffc;--ok:#69db7c;--okbg:#1f4a2c;--half:#5a4712;--bad:#ff8fab;--media:#66d9e8;--mediabg:#12384a;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#14161c;--card:#1d2029;--tx:#e8eaf0;--mut:#98a0b3;--bd:#2d3240;--pri:#748ffc;--ok:#69db7c;--okbg:#1f4a2c;--half:#5a4712;--bad:#ff8fab;--media:#66d9e8;--mediabg:#12384a;color-scheme:dark}
+/* Acessibilidade / layout (v1.13.0) */
+:root{--fs:1}
+html[data-font="s"]{--fs:.9}html[data-font="m"]{--fs:1}html[data-font="l"]{--fs:1.12}html[data-font="xl"]{--fs:1.25}
+:root[data-contrast="1"]{--bg:#fff;--card:#fff;--tx:#000;--mut:#222;--bd:#000;--pri:#0000cc;--ok:#006400;--okbg:#d9ffd9;--half:#fff200;--bad:#a00000;--media:#004f6b;--mediabg:#d5f5ff;--orgbg:#ffb300;--orgtx:#000;--badbg:#ffcccc;--badtx:#900;--zebra:#f0f0f0;--hov:#ffffa6;--yel:#fff200;--yelh:#fff200}
+:root[data-theme="dark"][data-contrast="1"]{--bg:#000;--card:#000;--tx:#fff;--mut:#eee;--bd:#fff;--pri:#ffff66;--ok:#00ff66;--okbg:#003300;--half:#ffff00;--bad:#ff6666;--media:#66ffff;--mediabg:#003344;--orgbg:#ff9900;--orgtx:#000;--badbg:#660000;--badtx:#fff;--zebra:#111;--hov:#333300;--yel:#ffff00;--yelh:#555500}
+html[data-dense="1"] th,html[data-dense="1"] td{padding:2px 4px}
+html[data-dense="1"] .in{width:52px;padding:3px}
+html[data-dense="1"] .a{height:28px}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:var(--bg);color:var(--tx);font:calc(15px * var(--fs))/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .wrap{max-width:900px;margin:0 auto;padding:12px}
-header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-h1{font-size:18px;margin:0;flex:1;min-width:160px}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;position:sticky;top:0;z-index:12;background:var(--bg);padding:6px 0;border-bottom:1px solid var(--bd)}
+h1{font-size:calc(18px * var(--fs));margin:0;flex:1;min-width:160px}
 select,input,button,textarea{font:inherit;color:var(--tx)}
 select,.btn{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 10px;cursor:pointer}
 .btn:hover{border-color:var(--pri)}
@@ -94,10 +102,10 @@ select,.btn{background:var(--card);border:1px solid var(--bd);border-radius:8px;
 .card{background:var(--card);border:3px solid var(--bc,var(--bd));border-radius:12px;overflow:hidden}
 .card h2{margin:0;padding:10px 12px;font-size:17px;background:var(--bc,var(--card));color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .card h2 small{color:var(--mut);font-weight:400}
-.scroll{overflow-x:auto}
+.scroll{overflow-x:auto;max-height:72vh;overflow-y:auto;overscroll-behavior:contain}
 table{border-collapse:collapse;width:100%;min-width:560px}
 th,td{padding:4px 5px;border-bottom:1px solid var(--bd);text-align:center;white-space:nowrap}
-th{font-size:12px;color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}
+th{font-size:calc(12px * var(--fs));color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card);z-index:4}
 th.fill{cursor:pointer;color:var(--pri)}
 td.nm{text-align:left;white-space:normal;min-width:150px;max-width:260px}
 td.n{color:var(--mut);width:28px}
@@ -283,6 +291,42 @@ td.rnf{background:var(--badbg)!important}td.rnf .in{background:transparent}td.rn
 .cn-area{display:inline-block;font-size:10px;letter-spacing:.08em;background:var(--mediabg);color:var(--media);border:1px solid var(--bc);border-radius:99px;padding:2px 8px;margin-right:8px;vertical-align:middle;font-weight:700}
 .rvw td small{display:block;font-size:10px;font-weight:400;color:var(--mut)}
 tr.hl>td{background:var(--half)!important;box-shadow:inset 0 0 0 2px var(--pri)}
+
+/* ---- v1.13.0 --------------------------------------------------------------- */
+.audm{display:block;font-size:9px;font-weight:800;letter-spacing:.06em;color:#8f3bc4;line-height:1.1}
+:root[data-theme="dark"] .audm{color:#e599f7}
+.heat td{border:1px solid var(--bd);font-weight:700}
+.heat td.hm{border-radius:6px;cursor:pointer;min-width:72px}
+.heat td.hm:hover{outline:2px solid var(--pri);outline-offset:-2px}
+.heat td small{display:block;font-weight:500;color:var(--mut);font-size:10px}
+.hmLeg{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--mut);margin:6px 0}
+.hmLeg i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:3px}
+.ckOk{color:var(--ok);font-weight:700}.ckWarn{color:var(--bad);font-weight:700}
+#toast{position:fixed;right:12px;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;flex-direction:column;gap:6px;max-width:min(360px,calc(100vw - 24px))}
+#toast div{background:#1c2333;color:#fff;border-radius:10px;padding:9px 12px;box-shadow:0 6px 20px rgba(0,0,0,.28);font-size:13px;animation:tin .2s ease-out}
+@keyframes tin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tip{position:relative}
+@media (hover:hover){.tip:hover:after{content:attr(data-tip);position:absolute;left:50%;top:110%;transform:translateX(-50%);background:#1c2333;color:#fff;padding:5px 8px;border-radius:7px;font-size:11px;white-space:nowrap;z-index:30;pointer-events:none}}
+.auditGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:8px;margin:8px 0}
+.auditGrid label{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 8px;font-size:12px;color:var(--mut)}
+.auditGrid input{display:block;width:100%;margin-top:3px}
+.auditGrid .diff{font-size:11px;color:var(--mut);margin-top:2px}
+.preview{font-size:12px}.preview th,.preview td{white-space:normal;font-size:11px}
+.execTable td,.execTable th{font-size:11px;padding:2px 4px}
+@media print{#pr.exec{font-size:10.5px}#pr.exec table{font-size:10px}#pr.exec section{break-inside:avoid;page-break-inside:avoid}#pr.exec .kp div{padding:4px 6px}#pr.exec .kp b{font-size:15px}}
+@media(max-width:600px){
+ .scroll{max-height:none}
+ .card table.mcard{min-width:0;width:100%;display:block}
+ .mcard thead{display:none}
+ .mcard tbody,.mcard tr,.mcard td{display:block}
+ .mcard tbody tr{border:1px solid var(--bd);border-radius:10px;margin:8px;padding:6px;background:var(--card)}
+ .mcard td{position:static!important;min-width:0!important;max-width:none!important;width:auto!important;border:0;border-bottom:1px dashed var(--bd);padding:4px 6px;white-space:normal;text-align:left!important;box-shadow:none!important;display:flex;gap:8px;justify-content:space-between;align-items:center}
+ .mcard td:before{content:attr(data-l);flex:0 0 82px;color:var(--mut);font-size:11px;font-weight:600}
+ .mcard td.nm,.mcard td.n{font-size:13px}
+ .mcard tr.off td{background:transparent!important}
+ .mcard .stk th,.mcard .stk td{position:static}
+ header{position:static;border:0}
+}
 </style>
 </head>
 <body>
@@ -290,7 +334,7 @@ tr.hl>td{background:var(--half)!important;box-shadow:inset 0 0 0 2px var(--pri)}
 <header>
 <h1>📚 Notas · Lab. de Informática</h1>
 <div class="bims" id="bims"><button class="bb" data-b="1">1º Bim</button><button class="bb" data-b="2">2º Bim</button><button class="bb" data-b="3">3º Bim</button><button class="bb" data-b="4">4º Bim</button></div>
-<button class="btn" id="hm" title="Início">🏠 Início</button><button class="btn" id="rt">📊 Relatórios</button><button class="btn" id="cn">🎓 Conselho</button><button class="btn" id="pn">📋 Painel</button><button class="btn" id="th" title="Tema claro/escuro">🌙</button><button class="btn" id="bk">Backup / Exportar</button>
+<button class="btn" id="hm" title="Início (H)">🏠 Início</button><button class="btn" id="rt" title="Relatórios (R)">📊 Relatórios</button><button class="btn" id="cn" title="Conselho (C)">🎓 Conselho</button><button class="btn" id="pn" title="Painel (P)">📋 Painel</button><button class="btn tip" id="ht" data-tip="Mapa de calor turma × bimestre (T)">🔥 Mapa</button><button class="btn tip" id="ck" data-tip="Checklist geral de pendências (K)">✅ Checklist</button><button class="btn tip" id="au" data-tip="Ajustar notas somente nesta aba (U)">🛡 Auditoria</button><button class="btn tip" id="ax" data-tip="Fonte, densidade, contraste e glossário (A / ?)">⚙️ Ajustes</button><button class="btn" id="th" title="Tema claro/escuro (D)">🌙</button><button class="btn" id="bk">Backup / Exportar</button>
 </header>
 <div class="srch"><input id="bq" type="search" placeholder="🔍 Buscar aluno pelo nome…" autocomplete="off"><div id="bres"></div></div>
 <div class="chipbar"><div class="chips" id="chips"></div><button class="btn" id="cl" style="display:none" title="Sincronizar agora"></button></div>
@@ -303,7 +347,7 @@ tr.hl>td{background:var(--half)!important;box-shadow:inset 0 0 0 2px var(--pri)}
 <p>Seus dados ficam salvos neste navegador. Copie o backup de vez em quando e guarde em um lugar seguro (e-mail, bloco de notas).</p>
 <div class="row"><button class="btn pri" id="b1">Gerar backup completo</button><button class="btn" id="b2">Notas da turma (colar na planilha)</button><button class="btn" id="bx">⬇ Exportar bimestre (.xlsx)</button></div>
 <textarea id="ta" placeholder="O texto aparece aqui. Para restaurar, cole um backup e toque em Restaurar."></textarea>
-<div class="row"><button class="btn" id="b3">Copiar texto</button><button class="btn" id="b4">Restaurar backup colado</button><button class="btn" id="b6">Baixar arquivo .json</button><label class="btn">Restaurar de arquivo<input type="file" id="fi" accept=".json" hidden></label><label class="btn">Mesclar bimestres (arquivo)<input type="file" id="fm" accept=".json" hidden></label><button class="btn" id="b5">Fechar</button></div>
+<div class="row"><button class="btn" id="b3">Copiar texto</button><button class="btn" id="b4">Restaurar backup colado</button><button class="btn" id="b6">Baixar arquivo .json</button><label class="btn">Restaurar de arquivo<input type="file" id="fi" accept=".json" hidden></label><label class="btn">Mesclar bimestres (arquivo)<input type="file" id="fm" accept=".json" hidden></label><label class="btn" title="Aceita o .xlsx exportado pelo próprio app">⬆ Importar planilha<input type="file" id="ix" accept=".xlsx" hidden></label><button class="btn" id="iu">Desfazer importação</button><button class="btn" id="b5">Fechar</button></div>
 <p id="msg"></p>
 </div></div>
 <div id="nv" style="display:none;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;background:#1c2333;color:#fff;border-radius:10px;padding:10px 12px;align-items:center;gap:10px;justify-content:space-between"><span id="nvt"></span><button class="btn pri" id="nvb">Atualizar</button></div>
@@ -313,6 +357,22 @@ tr.hl>td{background:var(--half)!important;box-shadow:inset 0 0 0 2px var(--pri)}
 <div class="row"><input class="in" style="width:100%;text-align:left" id="em" type="email" placeholder="E-mail" autocomplete="username"></div>
 <div class="row"><input class="in" style="width:100%;text-align:left" id="pw" type="password" placeholder="Senha" autocomplete="current-password"></div>
 <div class="row"><button class="btn pri" id="go">Entrar</button></div><p id="lm"></p></div></div>
+<div class="ov" id="io"><div class="box" style="max-width:820px"><b>Prévia da importação</b><p id="ipInfo"></p><div class="scroll" id="ip"></div><div class="row"><button class="btn pri" id="ia">Aplicar importação</button><button class="btn" id="iu2">Desfazer última importação</button><button class="btn" id="ic">Cancelar</button></div><p id="im"></p></div></div>
+<div class="ov" id="axo"><div class="box"><b>⚙️ Ajustes e glossário</b>
+<p>Preferências guardadas neste navegador.</p>
+<div class="row"><button class="btn" id="az">A−</button><button class="btn" id="azr">A (padrão)</button><button class="btn" id="azm">A+</button><button class="btn" id="azx">A++</button></div>
+<div class="row"><label><input type="checkbox" id="ad"> Modo denso (mais linhas na tela)</label></div>
+<div class="row"><label><input type="checkbox" id="ac"> Alto contraste</label></div>
+<div class="row"><button class="btn" id="acf">Fechar</button></div>
+<details><summary><b>Glossário</b></summary><div class="expl">
+<p><b>P1</b> — prova do bimestre (0 a 8 no Fundamental I; no Fundamental II é a soma das atividades).</p>
+<p><b>P2</b> — soma/presença das atividades (até 8). <b>ENG/TRAB</b> — nota de engajamento/trabalho (até 2).</p>
+<p><b>P3</b> — recuperação da P1 no Fundamental I; substitui a P1 se for maior.</p>
+<p><b>REC</b> — recuperação bimestral (0 a 10). Entra só se for maior que a média; por isso a nota nunca cai.</p>
+<p><b>Média</b> — arredondada para cima, de 0,5 em 0,5. <b>aud</b> — nota ajustada na aba Auditoria; entra no cálculo normal.</p>
+<p><b>Conselho</b> — falta de até 0,5 para 6 (configurável). <b>Saiu da turma</b> — linha amarela: fora das listas de risco/REC, mas mantém o nº e o histórico.</p>
+</div></details></div></div>
+<div id="toast"></div>
 <script>
 const DATA={"turmas":["1A","1D","2A","2D","3A","3D","4A","4D","5A","5D","6A","6B","6D","7A","7B","7D","8A","8B","8D","9A","9B","9D"],"roster":{"1A":[],"1D":[],"2A":[],"2D":[],"3A":[],"3D":[],"4A":[],"4D":[],"5A":[],"5D":[],"6A":[],"6B":[],"6D":[],"7A":[],"7B":[],"7D":[],"8A":[],"8B":[],"8D":[],"9A":[],"9B":[],"9D":[]},"grades":{}};
 const KEY='notas-lab-info-v1';
@@ -332,16 +392,41 @@ const CUR='4',MEDIA_MIN=6,PROVA_MIN=3.5,P3_MAX=4;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const L=(b,t)=>{db.launch=db.launch||{};db.launch[b]=db.launch[b]||{};return db.launch[b][t]=db.launch[b][t]||{}};
 const G=(b,t)=>((db.grades[b]=db.grades[b]||{})[t]=db.grades[b][t]||{});
-const p3pend=(ros,gr)=>ros.filter(s=>{const g=gr[s.id]||{};return !s.off&&g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length;
-function calc(t,g){g=g||{};const a=g.a||[];const vs=a.filter(v=>v!=null);const cnt=vs.length,sum=vs.reduce((s,v)=>s+v,0);let p1,p2,e,p3=null;
- if(f1(t)){p1=g.p1==null?null:g.p1;p3=g.p3==null?null:g.p3;p2=sum;e=cnt/2}else{p1=sum;p2=cnt*2;e=g.e==null?null:g.e}
- const any=cnt>0||g.p1!=null||g.e!=null||p3!=null;
+// ---- Auditoria: ajustes diretos, mantidos fora da edição normal -------------
+const AKEY=(b,t,id,f)=>b+'|'+t+'|'+id+'|'+f;
+const AUD_F=['a1','a2','a3','a4','p1','p2','e','p3','r'];
+const audRaw=(b,t,id,f)=>((db.aud||{})[AKEY(b,t,id,f)]||null);
+function audFields(b,t,id){const pre=b+'|'+t+'|'+id+'|',o=[];Object.keys(db.aud||{}).forEach(k=>{if(k.indexOf(pre)==0)o.push(k.slice(pre.length))});return o.filter(f=>AUD_F.includes(f))}
+function gradeOf(b,t,id){
+ const raw=((db.grades[b]||{})[t]||{})[id]||{},g=Object.assign({},raw);g.a=(raw.a||[]).slice();
+ audFields(b,t,id).forEach(f=>{const v=audRaw(b,t,id,f).v;
+  if(/^a[1-4]$/.test(f))g.a[+f[1]-1]=v;
+  else if(f==='p2')g.ovp2=v;
+  else if(f==='e'){if(f1(t))g.ove=v;else g.e=v}
+  else if(f==='p1'){if(f1(t))g.p1=v;else g.ovp1=v}
+  else if(f==='p3')g.p3=v;
+  else if(f==='r')g.r=v;
+ });
+ return g;
+}
+function audSet(b,t,id,f,v,why){if(v==null)return audClear(b,t,id,f);db.aud=db.aud||{};const k=AKEY(b,t,id,f),old=audRaw(b,t,id,f);lg(b,t,id,'aud '+f,old?old.v:null,v);db.aud[k]={v,why:why||'',at:Date.now()};save()}
+function audClear(b,t,id,f){const k=AKEY(b,t,id,f);if(!db.aud||!db.aud[k])return;lg(b,t,id,'aud '+f,db.aud[k].v,null);delete db.aud[k];save()}
+function audSmall(b,t,id,f){const a=audRaw(b,t,id,f);return a&&a.v!=null?'<small class="audm">aud</small>':''}
+const audFlag=(b,t,id)=>audTem(b,t,id)?'<small class="audm">aud</small>':'';
+function audTem(b,t,id){return audFields(b,t,id).length>0}
+const p3pend=(ros,gr,t,b)=>ros.filter(s=>{const g=gradeOf(b,t,s.id),v=g.p3;return !s.off&&v==null&&(g.p1==null||g.p1<=P3_MAX)}).length;
+function calc(t,g,b,id){
+ if(b&&id)g=gradeOf(b,t,id);else g=g||{};
+ const a=g.a||[],vs=a.filter(v=>v!=null);const cnt=vs.length,sum=vs.reduce((s,v)=>s+v,0);let p1,p2,e,p3=null;
+ if(f1(t)){p1=g.ovp1!=null?g.ovp1:(g.p1==null?null:g.p1);p3=g.p3==null?null:g.p3;p2=g.ovp2!=null?g.ovp2:sum;e=g.ove!=null?g.ove:cnt/2}
+ else{p1=g.ovp1!=null?g.ovp1:sum;p2=g.ovp2!=null?g.ovp2:cnt*2;e=g.ove!=null?g.ove:(g.e==null?null:g.e)}
+ const any=cnt>0||p1!=null||e!=null||p3!=null||g.ovp2!=null;
  let pu=p1,u3=false;if(p3!=null&&(p1==null||p3>p1)){pu=p3;u3=true}
  const nota=any?arredMedia(((pu||0)+p2)/2+(e||0)):null,rec=g.r==null?null:g.r;let m=nota,ur=false;
  // REC bimestral só vale para quem ficou abaixo de 6, e só entra se for MAIOR que a média: a nota final nunca cai.
  if(any&&rec!=null&&nota<MEDIA_MIN&&rec>nota){m=arredMedia(rec);ur=true}
  return{p1,p2,e,p3,cnt,u3,nota,rec,rn:g.rn?1:0,ur,m,any}}
-const recElegivel=(t,s,g)=>{const r=calc(t,g);return !!r.any&&r.nota<MEDIA_MIN&&!s.off};
+const recElegivel=(t,s,g)=>{const r=calc(t,g,S.bim,s.id);return !!r.any&&r.nota<MEDIA_MIN&&!s.off};
 function num(s){s=String(s).trim().replace(',','.');if(s==='')return null;const v=parseFloat(s);return isNaN(v)?null:Math.min(10,Math.max(0,v))}
 function turmaTitle(t){return t[0]+'º ano '+t.slice(1)}
 function chips(){$('chips').innerHTML=db.turmas.map(t=>{const l=(((db.launch||{})[S.bim]||{})[t])||{},n=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<button class="chip ${t===S.t&&!S.view?'on':''}" data-t="${t}" title="Lançado na escola: ${n}/3">${t}${n==3?' ✓':n?' ◐':''}${Object.keys(l.dirty||{}).length?' ⚠':''}</button>`}).join('');
@@ -363,19 +448,22 @@ function render(){
  if(S.view=='f'){ficha();sched();return}
  if(S.view=='r'){relat();sched();return}
  if(S.view=='c'){conselho();sched();return}
+ if(S.view=='ht'){heatmap();sched();return}
+ if(S.view=='ck'){checklist();sched();return}
+ if(S.view=='aud'){auditoria();sched();return}
  if(S.view){painel();sched();return}
  const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t);
- const LL=L(S.bim,t);
- let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> <button class="btn" id="rcv">${S.recv?'🙈 Ocultar REC':'👁 REC'} (${recPend(t,ros,gr)})</button> ${fund?`<button class="btn" id="p3v">${S.p3v?'🙈 Ocultar P3':'👁 P3'} (${p3pend(ros,gr)})</button> <button class="btn" id="p3b">🖨 Lista P3</button> `:''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t',fund?'ENG':'TRAB']].concat(hasRecT(ros,gr)?[['r','REC']]:[]).map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
- h+=`<div class="scroll"><table class="stk"><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1<small>0–8</small></th><th>P2<small>0–8</small></th><th>${fund?'ENG':'TRAB'}<small>0–2</small></th>${fund&&S.p3v?'<th title="Recuperação da P1">P3</th>':''}${S.recv?'<th>Nota</th><th title="Recuperação bimestral">REC<small>0–10</small></th>':''}<th>Média</th></tr></thead><tbody>`;
+ const LL=L(S.bim,t),naud=Object.keys(db.aud||{}).filter(k=>k.indexOf(S.bim+'|'+t+'|')==0).length;
+ let h=`<h2><span>${S.bim}º BIMESTRE / 2026 · ${turmaTitle(t)}</span><span><button class="btn lock ${S.unlock?'open':''}" id="lk">${S.unlock?'✏️ Editando · travar':'🔒 Liberar edição'}</button> <button class="btn" id="rp">🖨 Relatório</button> <button class="btn" id="rcv">${S.recv?'🙈 Ocultar REC':'👁 REC'} (${recPend(t,ros,gr)})</button> ${fund?`<button class="btn" id="p3v">${S.p3v?'🙈 Ocultar P3':'👁 P3'} (${p3pend(ros,gr,t,S.bim)})</button> <button class="btn" id="p3b">🖨 Lista P3</button> `:''}${naud?`<button class="btn" id="aFix" title="Abrir a aba Auditoria com estes ajustes">🛡 Auditoria (${naud})</button>`:''}${S.unlock?`<button class="btn" id="ed">${S.edit?'Concluir edição':'Editar lista'}</button>`:''}</span></h2><div class="lanc"><b>Lançado no sistema da escola:</b>${[['p1','P1'],['p2','P2'],['t',fund?'ENG':'TRAB']].concat(hasRecT(ros,gr,S.bim,t)?[['r','REC']]:[]).map(([k,n])=>`<button class="lb ${LL[k]?'on':''}" data-l="${k}">${LL[k]?'☑':'☐'} ${n}</button>`).join('')}</div><div id="warn"></div>`;
+ h+=`<div class="scroll"><table class="stk mcard"><thead><tr><th>Nº</th><th style="text-align:left">Nome</th>`+[0,1,2,3].map(i=>`<th class="fill" data-f="${i}" title="Marcar todos que estão em branco como entregue">Ativ ${i+1}</th>`).join('')+`<th>P1<small>0–8</small></th><th>P2<small>0–8</small></th><th>${fund?'ENG':'TRAB'}<small>0–2</small></th>${fund&&S.p3v?'<th title="Recuperação da P1">P3</th>':''}${S.recv?'<th>Nota</th><th title="Recuperação bimestral">REC<small>0–10</small></th>':''}<th>Média</th></tr></thead><tbody>`;
  if(!ros.length)h+=`<tr><td colspan="13" class="empty">Nenhum aluno nesta turma.</td></tr>`;
- ros.forEach((s,i)=>{const g=gr[s.id]||{};
-  h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n">${i+1}</td><td class="nm">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label><br><input class="in" style="width:95%;text-align:left;margin-top:4px" data-obs="${s.id}" placeholder="Observação" value="${esc(s.obs||'')}">`:s.n+(s.off?'<span class="tag">saiu</span>':'')+(s.obs?'<div class="obs">'+esc(s.obs)+'</div>':'')}</td>`;
-  for(let k=0;k<4;k++){const v=(g.a||[])[k];h+=`<td><button class="a ${v==2?'v2':v==1?'v1':''}" data-k="${k}">${v==null?'·':fmt(v)}</button></td>`}
-  h+=fund?`<td><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="P1"></td><td class="c" data-c="p2"></td><td class="c" data-c="e"></td>${S.p3v?`<td><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3"></td>`:''}`
-        :`<td class="c" data-c="p1"></td><td class="c" data-c="p2"></td><td><input class="in p" data-f="e" inputmode="decimal" value="${fmt(g.e)}" placeholder="TRAB"></td>`;
+ ros.forEach((s,i)=>{const g=gradeOf(S.bim,t,s.id);
+  h+=`<tr data-id="${s.id}" class="${s.off?'off':''}"><td class="n" data-l="Nº">${i+1}</td><td class="nm" data-l="Nome">${S.edit?`<input class="in" style="width:80%;text-align:left" data-rn="${s.id}" value="${s.n.replace(/"/g,'&quot;')}"> <button class="x" data-del="${s.id}" title="Remover aluno">✕</button><br><label style="font-size:12px"><input type="checkbox" data-off="${s.id}" ${s.off?'checked':''}> Saiu da turma</label><br><input class="in" style="width:95%;text-align:left;margin-top:4px" data-obs="${s.id}" placeholder="Observação" value="${esc(s.obs||'')}">`:s.n+(s.off?'<span class="tag">saiu</span>':'')+(s.obs?'<div class="obs">'+esc(s.obs)+'</div>':'')}</td>`;
+  for(let k=0;k<4;k++){const v=(g.a||[])[k];h+=`<td data-l="Ativ ${k+1}"><button class="a ${v==2?'v2':v==1?'v1':''}" data-k="${k}">${v==null?'·':fmt(v)}</button>${audSmall(S.bim,t,s.id,'a'+(k+1))}</td>`}
+  h+=fund?`<td data-l="P1"><input class="in p" data-f="p1" inputmode="decimal" value="${fmt(g.p1)}" placeholder="P1">${audSmall(S.bim,t,s.id,'p1')}</td><td class="c" data-c="p2" data-l="P2"></td><td class="c" data-c="e" data-l="ENG"></td>${S.p3v?`<td data-l="P3"><input class="in p" data-f="p3" inputmode="decimal" value="${fmt(g.p3)}" placeholder="P3">${audSmall(S.bim,t,s.id,'p3')}</td>`:''}`
+        :`<td class="c" data-c="p1" data-l="P1"></td><td class="c" data-c="p2" data-l="P2"></td><td data-l="TRAB"><input class="in p" data-f="e" inputmode="decimal" value="${fmt(g.e)}" placeholder="TRAB">${audSmall(S.bim,t,s.id,'e')}</td>`;
   const eleg=recElegivel(t,s,g);
-  h+=`${S.recv?`<td class="c" data-c="nota"></td><td class="r-cell" data-rc="${s.id}">${eleg?`<input class="in p" data-f="r" inputmode="decimal" value="${fmt(g.r)}" placeholder="REC"><button class="nfb" data-nf title="O aluno precisava e não fez a REC">NF</button>`:(g.r!=null?`<span class="mi">${fmt(g.r)} <small>REC</small></span>`:(g.rn?'<span class="mi">não fez</span>':'<span class="mi">—</span>'))}</td>`:''}<td class="c m" data-c="m"></td></tr>`});
+  h+=`${S.recv?`<td class="c" data-c="nota" data-l="Nota"></td><td class="r-cell" data-rc="${s.id}" data-l="REC">${eleg?`<input class="in p" data-f="r" inputmode="decimal" value="${fmt(g.r)}" placeholder="REC"><button class="nfb" data-nf title="O aluno precisava e não fez a REC">NF</button>`:(g.r!=null?`<span class="mi">${fmt(g.r)} <small>REC</small></span>`:(g.rn?'<span class="mi">não fez</span>':'<span class="mi">—</span>'))}${audSmall(S.bim,t,s.id,'r')}</td>`:''}<td class="c m" data-c="m" data-l="Média"></td></tr>`});
  h+=`</tbody></table></div><div class="foot" id="foot"></div>`;
  if(S.edit)h+=`<div class="add"><input id="newn" placeholder="Nome do novo aluno"><button class="btn pri" id="addb">Adicionar aluno</button></div>`;
  h+=`<div class="rule">${fund?'Fundamental I: P1 digitada · P2 = soma das atividades · ENG = 0,5 por atividade entregue · Média = (P1 + P2) ÷ 2 + ENG.':'Fundamental II: P1 = soma das atividades · P2 = 2 por atividade entregue · TRAB digitado · Média = (P1 + P2) ÷ 2 + TRAB.'} Toque na atividade: 2 → 1 → em branco. Contorno amarelo na média = a P3 entrou no cálculo. A média do bimestre é arredondada <b>para cima, de 0,5 em 0,5</b> (6,8 → 7,0; 8,3 → 8,5); P1, P2, ENG/TRAB e atividades ficam com as notas quebradas.</div>`;
@@ -383,10 +471,10 @@ function render(){
  ros.forEach(s=>upd(s.id));foot();warn();
  const card=$('card');
  card.querySelectorAll('.a').forEach(b=>b.onclick=()=>{const id=b.closest('tr').dataset.id,k=+b.dataset.k,g=(gr[id]=gr[id]||{a:[null,null,null,null]});g.a=g.a||[null,null,null,null];
-  const c=g.a[k];g.a[k]=c==null?2:c==2?1:null;lg(S.bim,t,id,'a'+(k+1),c,g.a[k]);b.className='a '+(g.a[k]==2?'v2':g.a[k]==1?'v1':'');b.textContent=g.a[k]==null?'·':fmt(g.a[k]);touch(id,'a');save();upd(id);foot()});
+  const c=g.a[k];g.a[k]=c==null?2:c==2?1:null;lg(S.bim,t,id,'a'+(k+1),c,g.a[k]);audClear(S.bim,t,id,'a'+(k+1));b.className='a '+(g.a[k]==2?'v2':g.a[k]==1?'v1':'');b.textContent=g.a[k]==null?'·':fmt(g.a[k]);touch(id,'a');save();upd(id);foot()});
  card.querySelectorAll('th.fill').forEach(th=>th.onclick=()=>{const k=+th.dataset.f;ros.forEach(s=>{const g=(gr[s.id]=gr[s.id]||{a:[null,null,null,null]});g.a=g.a||[null,null,null,null];if(g.a[k]==null){g.a[k]=2;lg(S.bim,t,s.id,'a'+(k+1),null,2);touch(s.id,'a')}});save();render()});
  card.querySelectorAll('input.p').forEach(inp=>{
-  inp.oninput=()=>{const id=inp.closest('tr').dataset.id,g=(gr[id]=gr[id]||{});g[inp.dataset.f]=num(inp.value);if(inp.dataset.f=='r'&&g.r!=null)g.rn=0;touch(id,inp.dataset.f);save();upd(id);foot()};
+  inp.oninput=()=>{const id=inp.closest('tr').dataset.id,g=(gr[id]=gr[id]||{});g[inp.dataset.f]=num(inp.value);if(inp.dataset.f=='r'&&g.r!=null)g.rn=0;audClear(S.bim,t,id,inp.dataset.f);touch(id,inp.dataset.f);save();upd(id);foot()};
   inp.onblur=()=>{const v=num(inp.value);inp.value=fmt(v)};
   inp.onfocus=()=>{inp.select();inp.dataset.old=inp.value};
   inp.onchange=()=>{lg(S.bim,t,inp.closest('tr').dataset.id,inp.dataset.f,num(inp.dataset.old),num(inp.value));inp.dataset.old=inp.value};
@@ -397,9 +485,10 @@ function render(){
  card.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const l=L(S.bim,t),k=b.dataset.l;const o=l[k]?1:0;l[k]=1-o;lg(S.bim,t,'','L'+k,o,1-o);if(l.dirty)Object.keys(l.dirty).forEach(i=>{l.dirty[i]=l.dirty[i].filter(c=>c!=k);if(!l.dirty[i].length)delete l.dirty[i]});save();chips();render()});
  card.querySelectorAll('[data-obs]').forEach(i=>i.onchange=()=>{const s=ros.find(x=>x.id==i.dataset.obs);if(s){s.obs=i.value.trim();save()}});
  $('rp').onclick=()=>report(0);const pb=$('p3b');if(pb)pb.onclick=()=>report(1);
+ const af=$('aFix');if(af)af.onclick=()=>{const k=Object.keys(db.aud||{}).find(x=>x.indexOf(S.bim+'|'+t+'|')==0),id=k&&k.split('|')[2];S.au={t,b:S.bim,id:id||null};S.view='aud';chips();render()};
  card.querySelectorAll('td.nm').forEach(td=>td.onclick=e=>{if(S.edit||e.target.closest('input,button,label'))return;S.fi={t,id:td.closest('tr').dataset.id};S.view='f';render()});
  const ed=$('ed');if(ed)ed.onclick=()=>{S.edit=!S.edit;render()};
- card.querySelectorAll('[data-nf]').forEach(b=>b.onclick=()=>{const id=b.closest('tr').dataset.id,g=(gr[id]=gr[id]||{}),o=g.rn?1:0;g.rn=1-o;if(g.rn)g.r=null;lg(S.bim,t,id,'rn',o,g.rn);touch(id,'rn');save();const ip=b.parentNode.querySelector('input');if(ip&&g.rn)ip.value='';upd(id);foot()});
+ card.querySelectorAll('[data-nf]').forEach(b=>b.onclick=()=>{const id=b.closest('tr').dataset.id,g=(gr[id]=gr[id]||{}),o=g.rn?1:0;g.rn=1-o;if(g.rn)g.r=null;lg(S.bim,t,id,'rn',o,g.rn);audClear(S.bim,t,id,'r');touch(id,'rn');save();const ip=b.parentNode.querySelector('input');if(ip&&g.rn)ip.value='';upd(id);foot()});
  const rv_=$('rcv');if(rv_)rv_.onclick=()=>{S.recv=!S.recv;render()};
  const pv=$('p3v');if(pv)pv.onclick=()=>{S.p3v=!S.p3v;render()};
  $('lk').onclick=async()=>{if(S.unlock){S.unlock=false;S.edit=false;render();poll();return}await poll(true);S.unlock=true;render()};
@@ -407,12 +496,12 @@ function render(){
  card.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(b.dataset.sure){const id=b.dataset.del;db.roster[t]=ros.filter(x=>x.id!=id);Object.keys(db.grades).forEach(bm=>{if(db.grades[bm][t])delete db.grades[bm][t][id]});save();render()}else{b.dataset.sure=1;b.textContent='Remover?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='✕'}},3000)}});
  const ab=$('addb');if(ab){const add=()=>{const v=$('newn').value.trim();if(!v)return;ros.push({id:t+'-'+Date.now(),n:v});db.roster[t]=ros;save();render();const n=$('newn');if(n)n.focus()};ab.onclick=add;$('newn').onkeydown=e=>{if(e.key=='Enter')add()}}}
 function mark(td,c){if(!td)return;td.classList.toggle('red',c=='red');td.classList.toggle('org',c=='org')}
-function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)return;const t=S.t,g=G(S.bim,t)[id]||{},r=calc(t,g),off=tr.classList.contains('off'),f=f1(t);
+function upd(id){const tr=document.querySelector(`tr[data-id="${id}"]`);if(!tr)return;const t=S.t,g=gradeOf(S.bim,t,id),r=calc(t,g,S.bim,id),off=tr.classList.contains('off'),f=f1(t);
  const low=v=>v!=null&&v<=PROVA_MIN?'red':'';const o=c=>c=='org'&&off?'':c;
  tr.querySelectorAll('[data-c]').forEach(td=>{const k=td.dataset.c,v=r[k];let c;
   if(k=='nota'){td.textContent=r.any?fmt(r.nota):'';c=r.any&&r.nota<MEDIA_MIN?'red':''}
-  else if(k=='m'){td.innerHTML=r.any?fmt(v)+(r.ur&&!off?'<small class="rcb">REC</small>':(r.rn&&r.nota<MEDIA_MIN&&!off?'<small class="rcb nf">sem REC</small>':'')):'';td.classList.toggle('p3m',!!r.u3&&!off&&!r.ur);td.classList.toggle('recm',!!r.ur&&!off);td.title=r.ur&&!off?`Nota final substituída pela REC: ${fmt(r.rec)} (antes: ${fmt(r.nota)})`:(r.any&&r.rec!=null&&!r.ur&&!off?'REC não entrou: a média do bimestre já era maior ou igual':(r.rn&&!off?'Não fez a REC: permanece a média anterior':(r.u3&&!off?'Média com a nota da P3':'')));c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
-  else{td.textContent=fmt(v);c=r.cnt==0?'org':(k=='e'?'':low(v))}
+  else if(k=='m'){let x=r.any?fmt(v)+(r.ur&&!off?'<small class="rcb">REC</small>':(r.rn&&r.nota<MEDIA_MIN&&!off?'<small class="rcb nf">sem REC</small>':'')):'';if(audTem(S.bim,t,id))x+='<small class="audm">aud</small>';td.innerHTML=x;td.classList.toggle('p3m',!!r.u3&&!off&&!r.ur);td.classList.toggle('recm',!!r.ur&&!off);td.title=r.ur&&!off?`Nota final substituída pela REC: ${fmt(r.rec)} (antes: ${fmt(r.nota)})`:(r.any&&r.rec!=null&&!r.ur&&!off?'REC não entrou: a média do bimestre já era maior ou igual':(r.rn&&!off?'Não fez a REC: permanece a média anterior':(r.u3&&!off?'Média com a nota da P3':'')));c=!r.any?'org':(v<MEDIA_MIN?'red':'')}
+  else{td.innerHTML=fmt(v)+audSmall(S.bim,t,id,k);c=r.cnt==0?'org':(k=='e'?'':low(v))}
   mark(td,o(c))});
  const cell=n=>{const i=tr.querySelector('input.p[data-f="'+n+'"]');return i&&i.parentNode};
  if(f){mark(cell('p1'),o(g.p1==null?'org':low(g.p1)));const c3=cell('p3');if(c3){c3.classList.toggle('elig',!off&&g.p3==null&&(g.p1==null||g.p1<=P3_MAX));c3.classList.toggle('used',!off&&!!r.u3);c3.classList.toggle('p3n',!off&&g.p3!=null&&!r.u3)}}
@@ -432,7 +521,7 @@ const bc=v=>v==null?'':v<MEDIA_MIN?'bd':v<8?'bm':'bo';
 const col=v=>v==null?'transparent':v<MEDIA_MIN?'var(--bad)':v<8?'#e0a800':'var(--ok)';
 const FX=[['0–3,4',0,3.5],['3,5–5,9',3.5,6],['6–7,9',6,8],['8–9,4',8,9.5],['9,5–10',9.5,99]];
 function stat(t,b){const ros=(db.roster[t]||[]).filter(s=>!s.off),gr=((db.grades[b]||{})[t])||{};
- const rs=ros.map(s=>{const g=gr[s.id]||{};return{s,g,r:calc(t,g)}}),ms=rs.filter(x=>x.r.any).map(x=>x.r.m);
+ const rs=ros.map(s=>{const g=gr[s.id]||{};return{s,g,r:calc(t,g,b,s.id)}}),ms=rs.filter(x=>x.r.any).map(x=>x.r.m);
  return{t,rs,ms,n:ros.length,avg:avgOf(ms),low:ms.filter(m=>m<MEDIA_MIN).length,sem:ros.length-ms.length}}
 const bars=(it,mx)=>it.map(([l,v,c,x])=>`<div class="br"><em>${l}</em><span class="tk"><i style="width:${v==null?0:Math.min(100,v/mx*100)}%;background:${c}"></i></span><u>${x}</u></div>`).join('');
 const kp=a=>'<div class="kp">'+a.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('')+'</div>';
@@ -458,8 +547,8 @@ a(){const b=S.bim,pb=String(+b-1),all=db.turmas.map(x=>stat(x,b)),oi=x=>db.turma
  fl=f=>all.flatMap(x=>x.rs.filter(y=>f(x,y)).map(y=>[x,y])).sort((p,q)=>oi(p[0].t)-oi(q[0].t)||cmpN(p[1].s.n,q[1].s.n));
  const row=([x,y])=>`<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}${(y.s.obs||y.g.o)?`<div class="mi">${esc([y.s.obs,y.g.o].filter(Boolean).join(' · '))}</div>`:''}</td><td>${y.r.cnt}/4</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td class="${y.r.p3!=null&&!y.r.u3?'p3n':''}">${f1(x.t)?FM(y.r.p3):'–'}</td><td class="${bc(y.r.nota)}">${FM(y.r.nota)}</td><td>${y.r.rn&&y.r.rec==null?'<b style="color:var(--bad)">não fez</b>':FM(y.r.rec)}</td><td class="${bc(y.r.any?y.r.m:null)}">${y.r.any?fmt(y.r.m):'–'}</td></tr>`;
  const sec=(tt,l,nt)=>`<h3>${tt} (${l.length})</h3>`+(nt?`<p class="mi">${nt}</p>`:'')+(l.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>Ativ.</th><th>P1</th><th>P2</th><th>ENG/TRAB</th><th>P3</th><th>Nota</th><th>REC</th><th>Média</th></tr></thead><tbody>${l.map(row).join('')}</tbody></table></div>`:'<p class="mi">Nenhum aluno.</p>');
- const qd=+b>1?fl((x,y)=>{const g=((db.grades[pb]||{})[x.t]||{})[y.s.id],r0=g&&calc(x.t,g);return y.r.any&&r0&&r0.any&&r0.m-y.r.m>=1}):[];
- const qh=+b>1?`<h3>Queda de média de 1,0 ou mais em relação ao ${pb}º bimestre (${qd.length})</h3>`+(qd.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>${pb}º</th><th>${b}º</th><th>Variação</th></tr></thead><tbody>${qd.map(([x,y])=>{const q=calc(x.t,((db.grades[pb]||{})[x.t]||{})[y.s.id]).m;return `<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}</td><td>${fmt(q)}</td><td class="bd">${fmt(y.r.m)}</td><td>▼ ${fmt(y.r.m-q)}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="mi">Nenhum aluno.</p>'):'';
+ const qd=+b>1?fl((x,y)=>{const g=((db.grades[pb]||{})[x.t]||{})[y.s.id],r0=g&&calc(x.t,g,pb,y.s.id);return y.r.any&&r0&&r0.any&&r0.m-y.r.m>=1}):[];
+ const qh=+b>1?`<h3>Queda de média de 1,0 ou mais em relação ao ${pb}º bimestre (${qd.length})</h3>`+(qd.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th style="text-align:left">Aluno</th><th>${pb}º</th><th>${b}º</th><th>Variação</th></tr></thead><tbody>${qd.map(([x,y])=>{const q=calc(x.t,null,pb,y.s.id).m;return `<tr class="go" data-t="${x.t}"><td><b>${x.t}</b></td><td style="text-align:left">${esc(y.s.n)}</td><td>${fmt(q)}</td><td class="bd">${fmt(y.r.m)}</td><td>▼ ${fmt(y.r.m-q)}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="mi">Nenhum aluno.</p>'):'';
  return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" id="rcF1">📤 Lista para as professoras (Fund. I)</button><button class="btn" id="rcF2">🖨 PDF da lista Fund. I</button></div>'
   +sec('Recuperação bimestral · Fundamental I (1º ao 5º ano)',fl((x,y)=>f1(x.t)&&y.r.any&&y.r.nota<MEDIA_MIN),'Média abaixo de '+MEDIA_MIN+'. Ordem: turma e, dentro da turma, ordem alfabética.')+'<hr class="sepc">'+sec('Recuperação bimestral · Fundamental II (6º ao 9º ano)',fl((x,y)=>!f1(x.t)&&y.r.any&&y.r.nota<MEDIA_MIN),'Média abaixo de '+MEDIA_MIN+'. Ordem: turma e, dentro da turma, ordem alfabética.')+'<hr class="sepc">'
   +sec('Não fez a REC (a média permanece a anterior)',fl((x,y)=>y.r.any&&y.r.nota<MEDIA_MIN&&y.r.rn&&y.r.rec==null),'Alunos que precisavam fazer a recuperação e não fizeram: não entra o cálculo com zero, continua a média que estava.')
@@ -474,32 +563,44 @@ t(){const t=S.rtt||S.t,b=S.bim,x=stat(t,b),ms=x.ms.slice().sort((p,q)=>p-q),fund
  h+='<h3>Distribuição das médias</h3>'+bars(FX.map((f,i)=>[f[0],cn[i],i<2?'var(--bad)':i==2?'#e0a800':'var(--ok)',cn[i]+' aluno(s)']),Math.max(1,...cn));
  h+='<h3>Entrega das atividades</h3>'+bars([0,1,2,3].map(k=>{const d=x.rs.filter(y=>(y.g.a||[])[k]!=null).length,p=x.n?d/x.n*100:0;return['Ativ '+(k+1),p,'var(--ok)',d+'/'+x.n+' ('+Math.round(p)+'%)']}),100);
  h+=`<h3>Alunos e evolução</h3><div class="scroll"><table class="stk"><thead><tr><th>Nº</th><th style="text-align:left">Nome</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>${fund?'ENG':'TRAB'}</th>${fund?'<th>P3</th>':''}<th>Média</th><th>1º</th><th>2º</th><th>3º</th><th>4º</th></tr></thead><tbody>`;
- (db.roster[t]||[]).forEach((s,i)=>{const g=((db.grades[b]||{})[t]||{})[s.id]||{},r=calc(t,g),a=g.a||[];
-  h+=`<tr class="${s.off?'off':''}" data-fi="${s.id}" data-t="${t}"><td>${i+1}</td><td style="text-align:left">${esc(s.n)}${s.off?' (saiu)':''}</td>${[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')}<td>${FM(r.p1)}</td><td>${FM(r.p2)}</td><td>${FM(r.e)}</td>${fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3&&!s.off?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td>`+['1','2','3','4'].map(bb=>{const rr=calc(t,((db.grades[bb]||{})[t]||{})[s.id]);return `<td>${rr.any?fmt(rr.m):'–'}</td>`}).join('')+'</tr>'});
+ (db.roster[t]||[]).forEach((s,i)=>{const g=gradeOf(b,t,s.id),r=calc(t,g,b,s.id),a=g.a||[];
+  h+=`<tr class="${s.off?'off':''}" data-fi="${s.id}" data-t="${t}"><td>${i+1}</td><td style="text-align:left">${esc(s.n)}${s.off?' (saiu)':''}</td>${[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')}<td>${FM(r.p1)}</td><td>${FM(r.p2)}</td><td>${FM(r.e)}</td>${fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${FM(r.p3)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.u3&&!s.off?' p3m':''}"><b>${r.any?fmt(r.m):'–'}</b></td>`+['1','2','3','4'].map(bb=>{const rr=calc(t,null,bb,s.id);return `<td>${rr.any?fmt(rr.m):'–'}</td>`}).join('')+'</tr>'});
  return h+'</tbody></table></div>'},
 s(){const b=S.bim,all=db.turmas.map(t=>stat(t,b)),sd=a=>{if(a.length<2)return null;const m=avgOf(a);return Math.sqrt(avgOf(a.map(x=>(x-m)**2)))};
  const pc=p=>p==null?'':p<60?'bd':p<85?'bm':'bo',th=l=>'<thead><tr><th style="text-align:left">Turma</th>'+l.map(x=>`<th>${x}</th>`).join('')+'</tr></thead>';
  let h='<h3>Entrega de atividades por turma</h3><div class="scroll"><table>'+th(['A1','A2','A3','A4'])+'<tbody>'+all.map(x=>`<tr><td style="text-align:left"><b>${x.t}</b></td>`+[0,1,2,3].map(k=>{const p=x.n?Math.round(x.rs.filter(y=>(y.g.a||[])[k]!=null).length/x.n*100):null;return `<td class="${pc(p)}">${p==null?'–':p+'%'}</td>`}).join('')+'</tr>').join('')+'</tbody></table></div>';
  h+='<h3>Dispersão das médias</h3><div class="scroll"><table>'+th(['Média','Desvio','Mín','Máx'])+'<tbody>'+all.map(x=>`<tr><td style="text-align:left"><b>${x.t}</b></td><td class="${bc(x.avg)}">${FM(x.avg)}</td><td>${FM(sd(x.ms))}</td><td>${FM(x.ms.length?Math.min(...x.ms):null)}</td><td>${FM(x.ms.length?Math.max(...x.ms):null)}</td></tr>`).join('')+'</tbody></table></div>';
  h+='<h3>Engajamento (ENG/TRAB médio, máx 2,0)</h3>'+bars(all.map(x=>{const e=avgOf(x.rs.filter(y=>y.r.any&&y.r.e!=null).map(y=>y.r.e));return[x.t,e,'var(--ok)',FM(e)]}),2);
- const us=all.filter(x=>f1(x.t)).flatMap(x=>x.rs.filter(y=>y.r.u3).map(y=>y.r.m-calc(x.t,{...y.g,p3:null}).m));
+ const us=all.filter(x=>f1(x.t)).flatMap(x=>x.rs.filter(y=>y.r.u3).map(y=>y.r.m-calc(x.t,Object.assign({},gradeOf(b,x.t,y.s.id),{p3:null})).m));
  h+='<h3>Efeito da P3 (Fundamental I)</h3>'+kp([[us.length,'alunos com P3 usada'],[FM(avgOf(us)),'ganho médio na média'],[FM(us.length?Math.max(...us):null),'maior ganho']]);
  const gp=f=>{const a=all.filter(x=>f(x.t)),m=a.flatMap(x=>x.ms);return[FM(avgOf(m)),m.length?Math.round(m.filter(v=>v<MEDIA_MIN).length/m.length*100)+'%':'–',a.reduce((s,x)=>s+x.n,0)]};
  h+='<h3>Fundamental I × Fundamental II</h3><div class="scroll"><table><thead><tr><th></th><th>Média</th><th>% abaixo de '+MEDIA_MIN+'</th><th>Alunos</th></tr></thead><tbody><tr><td style="text-align:left"><b>1º ao 5º</b></td>'+gp(f1).map(v=>`<td>${v}</td>`).join('')+'</tr><tr><td style="text-align:left"><b>6º ao 9º</b></td>'+gp(t=>!f1(t)).map(v=>`<td>${v}</td>`).join('')+'</tr></tbody></table></div>';
  return h},
+x(){const b=S.bim,all=db.turmas.map(t=>stat(t,b)),ms=all.flatMap(x=>x.ms),n=all.reduce((a,x)=>a+x.n,0),lan=db.turmas.filter(t=>{const l=LR(b,t);return l.p1&&l.p2&&l.t}).length,
+   risco=all.map(x=>({t:x.t,avg:x.avg,sem:x.sem,low:x.low,n:x.n,lan:LR(b,x.t)})).sort((p,q)=>db.turmas.indexOf(p.t)-db.turmas.indexOf(q.t)),
+   atencao=all.flatMap(x=>x.rs.filter(y=>y.r.any&&y.r.m<MEDIA_MIN).map(y=>({t:x.t,i:(db.roster[x.t]||[]).indexOf(y.s)+1,nome:y.s.n,m:y.r.m,obs:y.s.obs||''}))).sort((p,q)=>db.turmas.indexOf(p.t)-db.turmas.indexOf(q.t)||p.i-q.i),
+   audN=Object.keys(db.aud||{}).filter(k=>k[0]==b).length;
+  let h=`<div class="exec"><h3>Relatório executivo · ${b}º bimestre / 2026 · 1 página</h3>`+kp([[n,'alunos na sala'],[FM(avgOf(ms)),'média geral'],[ms.filter(m=>m<MEDIA_MIN).length,'abaixo de '+MEDIA_MIN],[n-ms.length,'sem nota'],[lan+'/'+db.turmas.length,'turmas lançadas'],[audN,'ajustes de auditoria']]);
+  h+='<h3>Por turma (ordem: turma)</h3><div class="scroll"><table class="execTable"><thead><tr><th style="text-align:left">Turma</th><th>Média</th><th>Abaixo de 6</th><th>Sem nota</th><th>Lançado</th></tr></thead><tbody>'+risco.map(x=>{const l=x.lan,lc=(l.p1?1:0)+(l.p2?1:0)+(l.t?1:0);return `<tr><td style="text-align:left"><b>${x.t}</b></td><td class="${bc(x.avg)}">${FM(x.avg)}</td><td class="${x.low?'bd':''}">${x.low}</td><td class="${x.sem?'bm':''}">${x.sem}</td><td>${lc}/3</td></tr>`}).join('')+'</tbody></table></div>';
+  h+=`<h3>Alunos em atenção (${atencao.length}) · ordem: turma e nº</h3>`+(atencao.length?'<div class="scroll"><table class="execTable"><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th><th>Média</th><th style="text-align:left">Obs</th></tr></thead><tbody>'+atencao.slice(0,14).map(x=>`<tr><td>${x.t}</td><td>${x.i}</td><td style="text-align:left">${esc(nomeCurto(x.nome))}</td><td class="bd">${fmt(x.m)}</td><td style="text-align:left">${esc(x.obs)}</td></tr>`).join('')+'</tbody></table></div>'+(atencao.length>14?`<p class="mi">Mostrando os 14 primeiros em ordem de turma e nº. A lista completa está na aba Atenção.</p>`:''):'<p class="mi">Nenhum aluno abaixo de 6.</p>');
+  h+='<p class="mi">Resumo impresso em uma página. Médias arredondadas para cima, de 0,5 em 0,5. Notas com <b>aud</b> foram ajustadas na aba Auditoria e já estão incluídas.</p></div>';
+  return h},
 h(){const L0=db.log||[];if(!L0.length)return '<p>Nenhuma alteração registrada ainda. A partir de agora, cada nota alterada aparece aqui, com opção de desfazer.</p>';
- const LB={p1:'P1',p3:'P3',e:'ENG/TRAB',a1:'Ativ 1',a2:'Ativ 2',a3:'Ativ 3',a4:'Ativ 4',Lp1:'Lançado P1',Lp2:'Lançado P2',Lt:'Lançado ENG/TRAB',r:'REC',rn:'REC (não fez)',Lr:'Lançado REC'},vv=(f,v)=>f[0]=='L'?(v?'✓':'☐'):FM(v);
- return `<p class="mi" id="lgm">Últimas ${Math.min(120,L0.length)} alterações (guardo até 400). Toque em ↩ duas vezes para desfazer.</p><div class="scroll"><table><thead><tr><th>Quando</th><th>Bim</th><th>Turma</th><th style="text-align:left">Aluno</th><th>Campo</th><th>De</th><th>Para</th><th></th></tr></thead><tbody>`+L0.map((e,i)=>[e,i]).reverse().slice(0,120).map(([e,i])=>{const s=(db.roster[e[2]]||[]).find(x=>x.id==e[3]);return `<tr><td>${new Date(e[0]).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</td><td>${e[1]}º</td><td>${e[2]}</td><td style="text-align:left">${s?esc(s.n):'—'}</td><td>${LB[e[4]]||e[4]}</td><td>${vv(e[4],e[5])}</td><td>${vv(e[4],e[6])}</td><td><button class="btn" data-u="${i}">↩</button></td></tr>`}).join('')+'</tbody></table></div>'}};
+ const LB={p1:'P1',p2:'P2',p3:'P3',e:'ENG/TRAB',a1:'Ativ 1',a2:'Ativ 2',a3:'Ativ 3',a4:'Ativ 4',Lp1:'Lançado P1',Lp2:'Lançado P2',Lt:'Lançado ENG/TRAB',r:'REC',rn:'REC (não fez)',Lr:'Lançado REC'},vv=(f,v)=>f[0]=='L'?(v?'✓':'☐'):FM(v);
+ const rot=f=>f.slice(0,4)=='aud '?'Auditoria · '+(LB[f.slice(4)]||f.slice(4)):(LB[f]||f);
+ return `<p class="mi" id="lgm">Últimas ${Math.min(120,L0.length)} alterações (guardo até 400). Toque em ↩ duas vezes para desfazer.</p><div class="scroll"><table><thead><tr><th>Quando</th><th>Bim</th><th>Turma</th><th style="text-align:left">Aluno</th><th>Campo</th><th>De</th><th>Para</th><th></th></tr></thead><tbody>`+L0.map((e,i)=>[e,i]).reverse().slice(0,120).map(([e,i])=>{const s=(db.roster[e[2]]||[]).find(x=>x.id==e[3]);return `<tr><td>${new Date(e[0]).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</td><td>${e[1]}º</td><td>${e[2]}</td><td style="text-align:left">${s?esc(s.n):'—'}</td><td>${rot(e[4])}</td><td>${vv(e[4],e[5])}</td><td>${vv(e[4],e[6])}</td><td><button class="btn" data-u="${i}">↩</button></td></tr>`}).join('')+'</tbody></table></div>'}};
 const cmpN=(a,b)=>a.localeCompare(b,'pt-BR');
 function recList(fn){return db.turmas.filter(fn).map(x=>[x,stat(x,S.bim).rs.filter(y=>y.r.any&&y.r.nota<MEDIA_MIN).sort((p,q)=>cmpN(p.s.n,q.s.n))]).filter(z=>z[1].length)}
 function recText(){const L=recList(f1);return `Recuperação bimestral · ${S.bim}º bimestre/2026 · Fundamental I (1º ao 5º ano)\n\n`+(L.length?L.map(([x,l])=>turmaNome(x)+' · '+l.length+' aluno(s)\n'+l.map(y=>'• '+y.s.n+' — média '+fmt(y.r.nota)+(y.r.rec!=null?(y.r.ur?' · REC '+fmt(y.r.rec)+' → nota final '+fmt(y.r.m):' · REC '+fmt(y.r.rec)+' (não entrou; média '+fmt(y.r.nota)+' permaneceu)'):(y.r.rn?' · NÃO FEZ A REC':''))+(y.g.p1==null?' (P1 não feita)':'')).join('\n')).join('\n\n'):'Nenhum aluno.')}
-function recPdf(){const L=recList(f1);$('pr').innerHTML=`<h2>Lab. de Informática · Recuperação bimestral · ${S.bim}º BIMESTRE / 2026 · Fundamental I</h2>`+(L.length?L.map(([x,l])=>`<h3>${turmaNome(x)} (${l.length})</h3><table><thead><tr><th>Nº</th><th>Aluno</th><th>P1</th><th>P2</th><th>ENG</th><th>P3</th><th>Média</th><th>REC</th></tr></thead><tbody>${l.map(y=>`<tr><td>${(db.roster[x]||[]).indexOf(y.s)+1}</td><td>${esc(y.s.n)}</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td>${FM(y.r.p3)}</td><td class="bd">${fmt(y.r.nota)}</td><td style="width:60px">${y.r.rec!=null?fmt(y.r.rec):(y.r.rn?'não fez':'&nbsp;')}</td></tr>`).join('')}</tbody></table>`).join(''):'<p>Nenhum aluno.</p>')+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}
+function recPdf(){const L=recList(f1);const pr=$('pr');pr.className='';pr.innerHTML=`<h2>Lab. de Informática · Recuperação bimestral · ${S.bim}º BIMESTRE / 2026 · Fundamental I</h2>`+(L.length?L.map(([x,l])=>`<h3>${turmaNome(x)} (${l.length})</h3><table><thead><tr><th>Nº</th><th>Aluno</th><th>P1</th><th>P2</th><th>ENG</th><th>P3</th><th>Média</th><th>REC</th></tr></thead><tbody>${l.map(y=>`<tr><td>${(db.roster[x]||[]).indexOf(y.s)+1}</td><td>${esc(y.s.n)}</td><td>${FM(y.r.p1)}</td><td>${FM(y.r.p2)}</td><td>${FM(y.r.e)}</td><td>${FM(y.r.p3)}</td><td class="bd">${fmt(y.r.nota)}</td><td style="width:60px">${y.r.rec!=null?fmt(y.r.rec):(y.r.rn?'não fez':'&nbsp;')}</td></tr>`).join('')}</tbody></table>`).join(''):'<p>Nenhum aluno.</p>')+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}
 function undo(i){const e=(db.log||[])[i];if(!e)return 'Registro não encontrado.';const[,b,t,id,f,o,n]=e;
- if(f[0]=='L'){const l=L(b,t),k=f.slice(1);if((l[k]?1:0)!==n)return 'O valor já mudou depois dessa alteração.';l[k]=o}
+ if(f.slice(0,4)=='aud '){const ff=f.slice(4),k=AKEY(b,t,id,ff),cur=audRaw(b,t,id,ff);if((cur?cur.v:null)!==n)return 'O valor já mudou depois dessa alteração.';
+  if(o==null){if(db.aud)delete db.aud[k]}else{db.aud=db.aud||{};db.aud[k]={v:o,why:(cur&&cur.why)||'',at:Date.now()}}}
+ else if(f[0]=='L'){const l=L(b,t),k=f.slice(1);if((l[k]?1:0)!==n)return 'O valor já mudou depois dessa alteração.';l[k]=o}
  else{const gb=G(b,t),g=(gb[id]=gb[id]||{}),cur=f[0]=='a'?(g.a||[])[+f[1]-1]:g[f];if((cur==null?null:cur)!==n)return 'O valor já mudou depois dessa alteração.';
   if(f[0]=='a'){g.a=g.a||[null,null,null,null];g.a[+f[1]-1]=o}else g[f]=o}
  lg(b,t,id,f,n,o);save();return ''}
-function relat(){const b=S.bim,k=S.rt||'g',tabs=[['g','Visão geral'],['c','Comparativo'],['a','Atenção'],['s','Estatísticas'],['t','Turma'],['h','Histórico']];
+function relat(){const b=S.bim,k=S.rt||'g',tabs=[['x','📄 Executivo (1 pág)'],['g','Visão geral'],['c','Comparativo'],['a','Atenção'],['s','Estatísticas'],['t','Turma'],['h','Histórico']];
  const h=`<h2><span>${b}º BIMESTRE / 2026 · Relatórios</span><span><button class="btn" id="rxl">⬇ Excel</button> <button class="btn" id="rpf">🖨 Gerar PDF</button> <button class="btn" id="rvb">Voltar</button></span></h2><div class="lanc">${tabs.map(([i,n])=>`<button class="tb ${k==i?'on':''}" data-rt="${i}">${n}</button>`).join('')}${k=='t'?`<select id="rtt">${db.turmas.map(t=>`<option ${t==(S.rtt||S.t)?'selected':''}>${t}</option>`).join('')}</select>`:''}</div><div class="rvw" id="rv">${RV[k]()}</div>`;
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
  c.querySelectorAll('.tb').forEach(x=>x.onclick=()=>{S.rt=x.dataset.rt;relat()});
@@ -507,7 +608,7 @@ function relat(){const b=S.bim,k=S.rt||'g',tabs=[['g','Visão geral'],['c','Comp
  $('rvb').onclick=()=>{S.view=null;render()};
  $('rxl').onclick=exportXlsx;
  const r1=$('rcF1');if(r1){r1.onclick=()=>{$('ta').value=recText();$('ov').classList.add('on');say('Lista pronta: toque em “Copiar texto” e envie às professoras.')};$('rcF2').onclick=recPdf}
- $('rpf').onclick=()=>{const nm={g:'Visão geral',c:'Comparativo entre bimestres',a:'Alunos em atenção',s:'Estatísticas',h:'Histórico de alterações',t:'Turma '+(S.rtt||S.t)}[k];$('pr').innerHTML=`<h2>Lab. de Informática · ${k=='c'?'':b+'º BIMESTRE / 2026 · '}${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
+ $('rpf').onclick=()=>{const nm={x:'Relatório executivo (1 página)',g:'Visão geral',c:'Comparativo entre bimestres',a:'Alunos em atenção',s:'Estatísticas',h:'Histórico de alterações',t:'Turma '+(S.rtt||S.t)}[k];const pr=$('pr');pr.className=k=='x'?'exec':'';pr.innerHTML=`<h2>Lab. de Informática · ${k=='c'?'':b+'º BIMESTRE / 2026 · '}${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
  c.querySelectorAll('tr[data-fi]').forEach(r=>r.onclick=()=>{S.fi={t:r.dataset.t,id:r.dataset.fi};S.view='f';render()});
  c.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{if(!b.dataset.sure){b.dataset.sure=1;b.textContent='Confirmar?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='↩'}},3000);return}const m=undo(+b.dataset.u);if(m)$('lgm').textContent=m;else relat()});
  c.querySelectorAll('tr.go').forEach(r=>r.onclick=()=>{S.t=r.dataset.t;S.unlock=false;S.view=null;chips();render()})}
@@ -536,7 +637,7 @@ function pontoFraco(t,b,g,r){
 function conselhoRows(ate){
  const fx=faixaConselho(),out=[];
  db.turmas.forEach(t=>(db.roster[t]||[]).forEach((s,i)=>{
-  const detalhe=BIMS.map(b=>{const g=((db.grades[b]||{})[t]||{})[s.id]||{};return{g,r:calc(t,g)}});
+  const detalhe=BIMS.map(b=>{const g=gradeOf(b,t,s.id);return{g,r:calc(t,g,b,s.id)}});
   const bms=detalhe.map(d=>d.r.any?d.r.m:null);
   const usados=bms.slice(0,ate).filter(v=>v!=null),n=usados.length,soma=usados.reduce((a,v)=>a+v,0);
   const media=n?arredMedia(soma/n):null,falta=media==null?null:Math.max(0,MEDIA_MIN-media),restantes=4-n;
@@ -562,7 +663,7 @@ function conselhoCorpo(rows,ate,fx,modo){
  const pauta=at.filter(r=>r.media!=null&&(r.n===4?r.soma<24:r.media<MEDIA_MIN)).sort(ordemConselho);
  const somaTag=r=>`${fmt(r.soma)}${r.n<4?`<small>${r.n}/4</small>`:''}`;
  h+=`<div class="cn-prio"><h3>🎯 Pauta do Conselho · ${pauta.length} aluno(s)</h3><p class="cn-hint">${ate==4?'Alunos com <b>soma dos 4 bimestres abaixo de 24 pontos</b> (média geral &lt; 6).':'Alunos com <b>média abaixo de 6 até o '+ate+'º bimestre</b> (ainda não garantiram passagem direta).'} São os casos a discutir com os outros professores: na reunião, pode ser dado 1 ponto ou mais para não precisar de REC final e passar direto. Ordem: primeiro pela turma e, dentro da turma, pelo nº do aluno (nº da chamada). Quem ainda não tem os 4 bimestres aparece com a soma parcial marcada.</p>`;
- h+=pauta.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th>`+BIMS.map(b=>`<th>${b}º</th>`).join('')+`<th>Soma</th><th>Média</th><th>Falta p/ 6</th><th>Pontos p/ 24</th><th>Situação</th></tr></thead><tbody>`+pauta.map(r=>`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}"><td><b>${r.t}</b></td><td>${r.i}</td><td style="text-align:left">${esc(nomeCurto(r.s.n))}</td>`+r.bms.map(v=>`<td class="${bc(v)}">${FM(v)}</td>`).join('')+`<td>${somaTag(r)}</td><td class="${bc(r.media)}"><b>${FM(r.media)}</b></td><td>${FM(r.falta)}</td><td>${r.n===4?fmt(Math.max(0,24-r.soma)):'–'}</td><td class="${({'Aprovado':'bo','Conselho':'bm','REC final':'bd'})[r.sit]||''}">${r.sit}</td></tr>`).join('')+'</tbody></table></div>':'<p class="mi">Nenhum aluno nesta pauta.</p>';
+ h+=pauta.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th>`+BIMS.map(b=>`<th>${b}º</th>`).join('')+`<th>Soma</th><th>Média</th><th>Falta p/ 6</th><th>Pontos p/ 24</th><th>Situação</th></tr></thead><tbody>`+pauta.map(r=>`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}"><td><b>${r.t}</b></td><td>${r.i}</td><td style="text-align:left">${esc(nomeCurto(r.s.n))}</td>`+r.bms.map((v,k)=>`<td class="${bc(v)}">${FM(v)}${audTem(BIMS[k],r.t,r.s.id)?'<small class="audm">aud</small>':''}</td>`).join('')+`<td>${somaTag(r)}</td><td class="${bc(r.media)}"><b>${FM(r.media)}</b></td><td>${FM(r.falta)}</td><td>${r.n===4?fmt(Math.max(0,24-r.soma)):'–'}</td><td class="${({'Aprovado':'bo','Conselho':'bm','REC final':'bd'})[r.sit]||''}">${r.sit}</td></tr>`).join('')+'</tbody></table></div>':'<p class="mi">Nenhum aluno nesta pauta.</p>';
  h+='</div>';
  h+=`<h3>${alvo}</h3><div class="lanc"><label style="text-align:left">Turma: <select id="cnTurma"><option value="*" ${S.ct=='*'?'selected':''}>Todas as turmas</option>${db.turmas.map(t=>`<option value="${t}" ${S.ct==t?'selected':''}>${t}</option>`).join('')}</select></label><span class="mi">Ao entrar, mostra a 1A (menor turma); escolha <b>Todas as turmas</b> se precisar ver todas. Com uma turma escolhida, a coluna <b>Turma</b> sai da tabela (ela já está selecionada). A pauta acima sempre mostra todas. Toque no nome para abrir a ficha. Nomes longos são abreviados: com 3 sobrenomes, o penúltimo; com 4 ou mais, os 2 últimos.</span></div>`;
  const lista=at.filter(r=>S.ct=='*'||r.t==S.ct).sort(ordemConselho);
@@ -572,7 +673,7 @@ function conselhoCorpo(rows,ate,fx,modo){
  const motivos=r=>{const a=[];if(r.media!=null&&r.media<MEDIA_MIN)a.push(`<span class="cn-tag r">faltam ${fmt(r.falta)}</span>`);if(r.queda!=null&&r.queda<=-1)a.push(`<span class="cn-tag y">queda ${fmt(r.queda)} no ${r.quedaBim}º</span>`);if(r.critico)a.push('<span class="cn-tag r">crítico</span>');if(r.fraco)a.push(`<span class="cn-tag">${esc(r.fraco)}</span>`);return a.join('')||'<span class="mi">–</span>'};
  const colTurma=mostraTurma?'<th>Turma</th>':'';
  h+=`<div class="scroll"><table class="stk"><thead><tr>${colTurma}<th>Nº</th><th style="text-align:left">Aluno</th>`+BIMS.map(b=>`<th>${b}º bim</th>`).join('')+`<th>${alvo}</th><th>Situação</th><th>Falta p/ 6</th><th>${adj}</th><th style="text-align:left">Ponto fraco / risco</th></tr></thead><tbody>`;
- lista.forEach(r=>{h+=`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}">${mostraTurma?`<td><b>${r.t}</b></td>`:''}<td>${r.i}</td><td style="text-align:left"><b>${esc(nomeCurto(r.s.n))}</b></td>`+r.bms.map(v=>`<td class="${bc(v)}">${FM(v)}</td>`).join('')+`<td class="${bc(r.media)}"><b>${FM(r.media)}</b>${r.n<ate?`<small>${r.n}/${ate}</small>`:''}</td><td class="${sitCls(r.sit)}">${r.sit}</td><td>${FM(r.falta)}</td><td>${ajuste(r)}</td><td style="text-align:left">${motivos(r)}</td></tr>`});
+ lista.forEach(r=>{h+=`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}">${mostraTurma?`<td><b>${r.t}</b></td>`:''}<td>${r.i}</td><td style="text-align:left"><b>${esc(nomeCurto(r.s.n))}</b></td>`+r.bms.map((v,k)=>`<td class="${bc(v)}">${FM(v)}${audTem(BIMS[k],r.t,r.s.id)?'<small class="audm">aud</small>':''}</td>`).join('')+`<td class="${bc(r.media)}"><b>${FM(r.media)}</b>${r.n<ate?`<small>${r.n}/${ate}</small>`:''}</td><td class="${sitCls(r.sit)}">${r.sit}</td><td>${FM(r.falta)}</td><td>${ajuste(r)}</td><td style="text-align:left">${motivos(r)}</td></tr>`});
  h+='</tbody></table></div>';
  const alvoLista=at.filter(modo=='f'?r=>r.sit=='REC final':r=>r.risco).sort(ordemConselho);
  const sec=(tt,l)=>`<h3>${tt} (${l.length})</h3>`+(l.length?`<div class="scroll"><table class="stk"><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th><th>Média</th><th>Falta</th><th>${adj}</th><th style="text-align:left">Motivo</th></tr></thead><tbody>`+l.map(r=>`<tr class="go" data-fi="${r.s.id}" data-t="${r.t}"><td><b>${r.t}</b></td><td>${r.i}</td><td style="text-align:left">${esc(nomeCurto(r.s.n))}</td><td class="${bc(r.media)}">${FM(r.media)}</td><td>${FM(r.falta)}</td><td>${ajuste(r)}</td><td style="text-align:left">${motivos(r)}</td></tr>`).join('')+'</tbody></table></div>':'<p class="mi">Nenhum aluno.</p>');
@@ -590,7 +691,7 @@ function conselhoCorpo(rows,ate,fx,modo){
  return h}
 function conselhoXlsx(){
  const ate=S.cm=='f'?4:+S.bim,rows=conselhoRows(ate).filter(r=>!r.off),fx=faixaConselho(),R=v=>v==null?'':Math.round(v*100)/100;
- const just=r=>[r.queda!=null&&r.queda<=-1?'queda '+fmt(r.queda)+' no '+r.quedaBim+'º':'',r.critico?'crítico':'',r.fraco].filter(Boolean).join(' · ');
+ const just=r=>[r.queda!=null&&r.queda<=-1?'queda '+fmt(r.queda)+' no '+r.quedaBim+'º':'',r.critico?'crítico':'',r.fraco,BIMS.flatMap(b=>audFields(b,r.t,r.s.id).map(f=>`aud ${b}º ${AUD_LABEL[f]||f}: ${fmt(audRaw(b,r.t,r.s.id,f).v)}`)).join(' · ')||''].filter(Boolean).join(' · ');
  const linha=r=>[r.i,nomeCurto(r.s.n),r.sit,...r.bms.map(R),R(r.media),r.n,R(r.falta),r.alvo4==null?'':(!r.atinge4?'não alcança com 10':(r.bms[3]==null?'tirar '+fmt(r.alvo4):'4º → '+fmt(r.alvo4))),just(r),r.obs];
  exportXlsxNamed(`Conselho-${S.cm=='f'?'anual-2026':ate+'bim-2026'}.xlsx`,()=>{
   const sheets=[{name:'Resumo',rows:[['Conselho / Fechamento · 2026'],['Modo',S.cm=='f'?'Fechamento':'Acompanhamento até '+ate+'º'],['Faixa de conselho',fmt(fx)],['Alunos na sala',rows.length],['Aprovados',rows.filter(r=>r.sit=='Aprovado').length],['Conselho',rows.filter(r=>r.sit=='Conselho').length],['REC final',rows.filter(r=>r.sit=='REC final').length],['Em risco',rows.filter(r=>r.risco).length]]}];
@@ -611,7 +712,7 @@ function conselho(){
  $('cnFx').onchange=e=>{const v=num(e.target.value);db.cf=db.cf||{};db.cf.conselho=v==null||v<0||v>=MEDIA_MIN?0.5:v;save();conselho()};
  $('cnVoltar').onclick=()=>{S.cnBack=false;S.view=null;render()};
  $('cnXls').onclick=conselhoXlsx;
- $('cnPdf').onclick=()=>{const nm=modo=='f'?'Fechamento anual 2026':`Acompanhamento até ${ate}º bimestre`;$('pr').innerHTML=`<h2>Lab. de Informática · Conselho / Fechamento · ${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
+ $('cnPdf').onclick=()=>{const nm=modo=='f'?'Fechamento anual 2026':`Acompanhamento até ${ate}º bimestre`;const pr=$('pr');pr.className='';pr.innerHTML=`<h2>Lab. de Informática · Conselho / Fechamento · ${nm}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
  const sel=$('cnTurma');if(sel)sel.onchange=()=>{S.ct=sel.value;conselho()};
  c.querySelectorAll('tr[data-fi]').forEach(r=>r.onclick=e=>{if(e.target.closest('select,input,button'))return;S.fi={t:r.dataset.t,id:r.dataset.fi};S.cnBack=true;S.view='f';render()});
 }
@@ -652,39 +753,214 @@ function home(){const d=new Date(),dow=d.getDay(),hh=d.toTimeString().slice(0,5)
  c.querySelectorAll('[data-tx]').forEach(i=>i.onclick=()=>{db.tasks=tasks().filter(x=>x.id!=i.dataset.tx);save();home()});
  $('hr').onclick=()=>{S.view='r';render()}}
 function ficha(){const{t,id}=S.fi,b=S.bim,s=(db.roster[t]||[]).find(x=>x.id==id);if(!s){S.view=null;render();return}
- const nc=(db.roster[t]||[]).indexOf(s)+1,fund=f1(t),B=['1','2','3','4'].map(bb=>{const g=((db.grades[bb]||{})[t]||{})[id]||{};return{bb,g,r:calc(t,g)}}),cur=B.find(x=>x.bb==b),x=stat(t,b),hasR=B.some(q=>q.g.r!=null||q.g.rn);
+ const nc=(db.roster[t]||[]).indexOf(s)+1,fund=f1(t),B=['1','2','3','4'].map(bb=>{const g=gradeOf(bb,t,id);return{bb,g,r:calc(t,g,bb,id)}}),cur=B.find(x=>x.bb==b),x=stat(t,b),hasR=B.some(q=>q.g.r!=null||q.g.rn);
  const rank=cur.r.any?x.rs.filter(y=>y.r.any&&y.r.m>cur.r.m).length+1:null,tm=B.map(q=>stat(t,q.bb).avg);
+ const fx=faixaConselho(),msAno=B.map(q=>q.r.any?q.r.m:null).filter(v=>v!=null),somaAno=msAno.reduce((a,v)=>a+v,0),nAno=msAno.length,mediaAno=nAno?arredMedia(somaAno/nAno):null,faltaAno=mediaAno==null?null:Math.max(0,MEDIA_MIN-mediaAno);
+ const sitAno=mediaAno==null?'Sem nota':(mediaAno>=MEDIA_MIN?'Aprovado':(faltaAno<=fx?'Atenção':'Recuperação final'));
+ const todosAno=conselhoRows(4).filter(r=>!r.off&&r.media!=null),posAno=mediaAno==null?null:todosAno.filter(r=>r.media>mediaAno).length+1;
+ const auds=Object.keys(db.aud||{}).filter(k=>{const q=k.split('|');return q[1]==t&&q[2]==id}).map(k=>{const q=k.split('|'),a=db.aud[k];return{b:q[0],f:q[3],v:a.v,why:a.why||''}}).filter(a=>a.v!=null).sort((a,b)=>+a.b-+b.b||AUD_F.indexOf(a.f)-AUD_F.indexOf(b.f));
  const W=320,H=130,px=i=>30+i*(W-50)/3,py=v=>H-20-v/10*(H-40);
  const ln=(arr,c,dash)=>{const pt=arr.map((v,i)=>v==null?null:[px(i),py(v)]).filter(Boolean);return(pt.length>1?`<polyline fill="none" stroke="${c}" stroke-width="2" ${dash?'stroke-dasharray="4 3"':''} points="${pt.map(q=>q.join(',')).join(' ')}"/>`:'')+pt.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="${c}"/>`).join('')};
  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px">`+[0,5,10].map(v=>`<line x1="30" x2="${W-20}" y1="${py(v)}" y2="${py(v)}" stroke="#999" stroke-opacity=".35"/><text x="4" y="${py(v)+4}" font-size="10" fill="#888">${v}</text>`).join('')+[0,1,2,3].map(i=>`<text x="${px(i)}" y="${H-4}" font-size="10" text-anchor="middle" fill="#888">${i+1}º bim</text>`).join('')+ln(tm,'#999',1)+ln(B.map(q=>q.r.any?q.r.m:null),'#3b5bdb')+'</svg>';
  const E=fund?'ENG':'TRAB',pl=cur.r.u3?'P3':'P1',pu=cur.r.u3?cur.r.p3:(cur.r.p1||0);
  const conta=cur.r.any?`<p><b>Conta deste aluno (${b}º bimestre):</b> (${pl} ${fmt(pu)} + P2 ${fmt(cur.r.p2)}) ÷ 2 + ${E} ${fmt(cur.r.e||0)} = <b>${fmt(cur.r.nota)}</b>${cur.r.u3?` — a P3 (${fmt(cur.r.p3)}) substituiu a P1 (${cur.r.p1==null?'em branco':fmt(cur.r.p1)}).`:''} A média foi arredondada para cima, de 0,5 em 0,5.</p>`:'<p>Ainda não há notas neste bimestre.</p>';
  const recTxt=`<p><b>REC (recuperação bimestral, nota de 0 a 10):</b> é só para quem fica com média abaixo de ${MEDIA_MIN}. A nota da REC <b>só entra se for maior que a média do bimestre</b> — assim a nota final nunca diminui. Quando entra, aparece marcada como REC. Quem já tem ${MEDIA_MIN} ou mais não faz REC. Se o aluno precisava e não fez, a média continua a mesma e fica registrado "não fez a REC" (não entra cálculo com zero).</p>`,
-  recLine=cur.r.ur?`<p><b>Nota final com REC:</b> ${fmt(cur.r.rec)} — substituiu a média ${fmt(cur.r.nota)} do bimestre porque foi maior. Por isso a nota final aparece com o aviso “REC”.</p>`:(cur.r.rn&&cur.r.any?`<p><b>REC:</b> o aluno precisava fazer a recuperação e <b>não fez</b>. Permanece a média ${fmt(cur.r.nota)}.</p>`:(cur.r.any&&cur.r.rec!=null?`<p><b>REC:</b> a nota ${fmt(cur.r.rec)} não entrou no cálculo porque não superou a média ${fmt(cur.r.nota)}. A nota final permanece ${fmt(cur.r.m)}.</p>`:''));
- const explic='<h3>Como a média é calculada</h3><div class="expl">'+(fund?`<p><b>Fundamental I (1º ao 5º ano)</b></p><ul><li><b>P1:</b> prova digitada, de 0 a 8,0.</li><li><b>P2:</b> soma das atividades; cada atividade entregue vale até 2,0 (4 atividades = até 8,0).</li><li><b>ENG:</b> 0,5 ponto por atividade entregue (até 2,0).</li><li><b>Média:</b> (P1 + P2) ÷ 2 + ENG.</li><li><b>P3 (só no Fundamental I):</b> recuperação da P1, para quem não fez a P1 ou tirou ${fmt(P3_MAX)} ou menos. Se a P3 for maior que a P1, ou se a P1 estiver em branco, a P3 substitui a P1 no cálculo da média.</li></ul>`:`<p><b>Fundamental II (6º ao 9º ano)</b></p><ul><li><b>P1:</b> soma das notas das atividades (até 8,0).</li><li><b>P2:</b> 2,0 por atividade entregue (até 8,0).</li><li><b>TRAB:</b> nota de trabalho digitada, de 0 a 2,0.</li><li><b>Média:</b> (P1 + P2) ÷ 2 + TRAB.</li><li><b>P3:</b> não existe no Fundamental II; quem fica com média abaixo de ${MEDIA_MIN} faz a recuperação bimestral.</li></ul>`)+recTxt+conta+recLine+'</div>';
- let h=`<h2><span>📄 ${esc(s.n)} · ${turmaNome(t)} · Nº ${nc}</span><span><button class="btn" id="fp">🖨 Gerar PDF</button> <button class="btn" id="fb">Voltar</button></span></h2><div class="rvw" id="rv">`+kp([[nc,'nº da chamada'],[cur.r.any?fmt(cur.r.m):'–',b+'º bim · média'],[rank?rank+'º de '+x.ms.length:'–','posição na turma'],[FM(x.avg),'média da turma'],[cur.r.cnt+'/4','atividades entregues']])+'<h3>Evolução da média</h3>'+svg+'<div class="mi"><span style="color:#3b5bdb">●</span> aluno · <span style="color:#999">●</span> média da turma (tracejado)</div><h3>Notas por bimestre</h3><p class="mi">Toque em uma linha para abrir aquele bimestre na turma do aluno.</p><div class="scroll"><table><thead><tr><th>Bim</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>'+(fund?'ENG':'TRAB')+'</th>'+(fund?'<th>P3</th>':'')+(hasR?'<th>REC</th>':'')+'<th>Média</th></tr></thead><tbody>'
-  +B.map(({bb,g,r})=>{const a=g.a||[];return `<tr class="go" data-bim="${bb}" title="Abrir ${bb}º bimestre de ${esc(s.n)}"><td><b>${bb}º</b></td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td>${r.any?FM(r.p1):'–'}</td><td>${r.any?FM(r.p2):'–'}</td><td>${r.any?FM(r.e):'–'}</td>${fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${FM(r.p3)}</td>`:''}${hasR?`<td>${r.rn&&r.rec==null?'não fez':FM(r.rec)}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.ur&&!s.off?' recm':(r.u3&&!s.off?' p3m':'')}"><b>${r.any?fmt(r.m):'–'}</b>${r.ur&&!s.off?'<small> REC</small>':''}</td></tr>`}).join('')+'</tbody></table></div>'+(B.some(q=>q.g.o)?'<h3>Anotações por bimestre</h3>'+B.filter(q=>q.g.o).map(q=>`<p><b>${q.bb}º:</b> ${esc(q.g.o)}</p>`).join(''):'')+(s.obs?`<h3>Observação</h3><p>${esc(s.obs)}</p>`:'')+(s.off?'<p><b>Aluno não está mais na turma.</b></p>':'')+explic+'</div>';
+   recLine=cur.r.ur?`<p><b>Nota final com REC:</b> ${fmt(cur.r.rec)} — substituiu a média ${fmt(cur.r.nota)} do bimestre porque foi maior. Por isso a nota final aparece com o aviso “REC”.</p>`:(cur.r.rn&&cur.r.any?`<p><b>REC:</b> o aluno precisava fazer a recuperação e <b>não fez</b>. Permanece a média ${fmt(cur.r.nota)}.</p>`:(cur.r.any&&cur.r.rec!=null?`<p><b>REC:</b> a nota ${fmt(cur.r.rec)} não entrou no cálculo porque não superou a média ${fmt(cur.r.nota)}. A nota final permanece ${fmt(cur.r.m)}.</p>`:''));
+ const explic='<h3>Como a média é calculada</h3><div class="expl">'+(fund?`<p><b>Fundamental I (1º ao 5º ano)</b></p><ul><li><b>P1:</b> prova digitada, de 0 a 8,0.</li><li><b>P2:</b> soma das atividades; cada atividade entregue vale até 2,0 (4 atividades = até 8,0).</li><li><b>ENG:</b> 0,5 ponto por atividade entregue (até 2,0).</li><li><b>Média:</b> (P1 + P2) ÷ 2 + ENG.</li><li><b>P3 (só no Fundamental I):</b> recuperação da P1, para quem não fez a P1 ou tirou ${fmt(P3_MAX)} ou menos. Se a P3 for maior que a P1, ou se a P1 estiver em branco, a P3 substitui a P1 no cálculo da média.</li></ul>`:`<p><b>Fundamental II (6º ao 9º ano)</b></p><ul><li><b>P1:</b> soma das notas das atividades (até 8,0).</li><li><b>P2:</b> 2,0 por atividade entregue (até 8,0).</li><li><b>TRAB:</b> nota de trabalho digitada, de 0 a 2,0.</li><li><b>Média:</b> (P1 + P2) ÷ 2 + TRAB.</li><li><b>P3:</b> não existe no Fundamental II; quem fica com média abaixo de ${MEDIA_MIN} faz a recuperação bimestral.</li></ul>`)+recTxt+conta+recLine+(auds.length?'<p><b>Auditoria:</b> notas marcadas com <b>aud</b> foram ajustadas na aba Auditoria e entram normalmente no cálculo; a edição comum limpa o ajuste.</p>':'')+'</div>';
+ const af=(bb,f)=>audSmall(bb,t,id,f),flag=bb=>audFlag(bb,t,id);
+ const anual=`<h3>Resumo anual · 2026</h3>`+kp([[nAno+'/4','bimestres com nota'],[FM(mediaAno),'média anual'],[FM(faltaAno),'falta para 6'],[posAno?posAno+'º de '+todosAno.length:'–','posição anual'],[sitAno,'situação']])+`<p class="mi">Soma dos bimestres com nota: <b>${fmt(somaAno)}</b> pontos. Média anual = soma ÷ quantidade de bimestres com nota, arredondada para cima de 0,5 em 0,5. Faixa de atenção: até ${fmt(fx)} ponto(s) abaixo de ${MEDIA_MIN}.</p>`;
+ const linhaAno=B.map(q=>{const v=q.r.any?q.r.m:null,f=v==null?null:Math.max(0,MEDIA_MIN-v),sit=v==null?'Sem nota':(v>=MEDIA_MIN?'Aprovado':(f<=fx?'Atenção':'Recuperação final'));return `<tr><td><b>${q.bb}º</b></td><td class="${bc(v)}">${FM(v)}${flag(q.bb)}</td><td>${FM(f)}</td><td>${sit}</td></tr>`}).join('');
+ const tabelaAno='<div class="scroll"><table><thead><tr><th>Bimestre</th><th>Média final</th><th>Falta p/ 6</th><th>Situação</th></tr></thead><tbody>'+linhaAno+'</tbody></table></div>';
+ const enc=mediaAno==null?'Aguardando as notas dos bimestres.':mediaAno>=MEDIA_MIN?'Passagem direta (média anual igual ou acima de 6).':(faltaAno<=fx?`Dentro da faixa de atenção (faltam ${fmt(faltaAno)} para 6); pode receber pontos no fechamento.`:'Encaminhar para recuperação final.');
+ const encSec=`<h3>Encaminhamento</h3><div class="rvw" style="padding:0"><p>${esc(enc)} ${s.off?'<b>Aluno não está mais na turma:</b> o nº e o histórico foram preservados.':''}</p></div>`;
+ const audSec=auds.length?`<h3>🔍 Ajustes de auditoria (${auds.length})</h3><p class="mi">Valores ajustados na aba Auditoria; aparecem com <b>aud</b> na nota e entram na média. <button class="btn" id="fAud">Abrir aba Auditoria</button></p><div class="scroll"><table><thead><tr><th>Bim</th><th>Campo</th><th>Valor</th><th style="text-align:left">Motivo</th></tr></thead><tbody>`+auds.map(a=>`<tr><td>${a.b}º</td><td>${AUD_LABEL[a.f]||a.f}</td><td><b>${fmt(a.v)}</b> <small class="audm">aud</small></td><td style="text-align:left">${esc(a.why)}</td></tr>`).join('')+'</tbody></table></div>':'';
+ let h=`<h2><span>📄 ${esc(s.n)} · ${turmaNome(t)} · Nº ${nc}</span><span><button class="btn" id="fp">🖨 Gerar PDF</button> <button class="btn" id="fb">Voltar</button></span></h2><div class="rvw" id="rv">`+kp([[nc,'nº da chamada'],[cur.r.any?fmt(cur.r.m):'–',b+'º bim · média'],[rank?rank+'º de '+x.ms.length:'–','posição na turma'],[FM(x.avg),'média da turma'],[cur.r.cnt+'/4','atividades entregues']])+anual+tabelaAno+encSec+'<h3>Evolução da média</h3>'+svg+'<div class="mi"><span style="color:#3b5bdb">●</span> aluno · <span style="color:#999">●</span> média da turma (tracejado)</div><h3>Notas por bimestre</h3><p class="mi">Toque em uma linha para abrir aquele bimestre na turma do aluno.</p><div class="scroll"><table><thead><tr><th>Bim</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>P1</th><th>P2</th><th>'+(fund?'ENG':'TRAB')+'</th>'+(fund?'<th>P3</th>':'')+(hasR?'<th>REC</th>':'')+'<th>Média</th></tr></thead><tbody>'
+   +B.map(({bb,g,r})=>{const a=g.a||[];return `<tr class="go" data-bim="${bb}" title="Abrir ${bb}º bimestre de ${esc(s.n)}"><td><b>${bb}º</b></td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}${af(bb,'a'+(k+1))}</td>`).join('')+`<td>${r.any?FM(r.p1):'–'}${af(bb,'p1')}</td><td>${r.any?FM(r.p2):'–'}${af(bb,'p2')}</td><td>${r.any?FM(r.e):'–'}${af(bb,'e')}</td>${fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${FM(r.p3)}${af(bb,'p3')}</td>`:''}${hasR?`<td>${r.rn&&r.rec==null?'não fez':FM(r.rec)}${af(bb,'r')}</td>`:''}<td class="${bc(r.any?r.m:null)}${r.ur&&!s.off?' recm':(r.u3&&!s.off?' p3m':'')}"><b>${r.any?fmt(r.m):'–'}</b>${r.ur&&!s.off?'<small> REC</small>':''}${flag(bb)}</td></tr>`}).join('')+'</tbody></table></div>'+(B.some(q=>q.g.o)?'<h3>Anotações por bimestre</h3>'+B.filter(q=>q.g.o).map(q=>`<p><b>${q.bb}º:</b> ${esc(q.g.o)}</p>`).join(''):'')+(s.obs?`<h3>Observação</h3><p>${esc(s.obs)}</p>`:'')+audSec+explic+'</div>';
  const c=$('card');c.classList.remove('locked');c.innerHTML=h;
  $('fb').onclick=()=>{if(S.cnBack){S.cnBack=false;S.view='c';chips();render()}else open_(t)};
  c.querySelectorAll('tr[data-bim]').forEach(r=>r.onclick=()=>{
   setBim(r.dataset.bim);S.t=t;S.view=null;S.cnBack=false;S.edit=false;chips();render();
   const alvo=document.querySelector(`tr[data-id="${id}"]`);if(alvo){alvo.classList.add('hl');alvo.scrollIntoView({block:'center',inline:'nearest'});setTimeout(()=>alvo.classList.remove('hl'),2500)}
  });
- $('fp').onclick=()=>{$('pr').innerHTML=`<h2>Lab. de Informática · Ficha do aluno · ${esc(s.n)} · ${turmaTitle(t)} · Nº ${nc}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}}
-const recPend=(t,ros,gr)=>ros.filter(s=>{if(s.off)return false;const r=calc(t,gr[s.id]);return r.any&&r.nota<MEDIA_MIN&&r.rec==null&&!r.rn}).length;
-const hasRecT=(ros,gr)=>ros.some(s=>{const g=gr[s.id]||{};return g.r!=null||g.rn});
+ const fa=$('fAud');if(fa)fa.onclick=()=>{S.au={t,b:S.bim,id};S.view='aud';chips();render()};
+ $('fp').onclick=()=>{const pr=$('pr');pr.className='';pr.innerHTML=`<h2>Lab. de Informática · Ficha individual ampliada · ${esc(s.n)} · ${turmaTitle(t)} · Nº ${nc}</h2>`+$('rv').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()}}
+const recPend=(t,ros,gr)=>ros.filter(s=>{if(s.off)return false;const r=calc(t,gr[s.id],S.bim,s.id);return r.any&&r.nota<MEDIA_MIN&&r.rec==null&&!r.rn}).length;
+const hasRecT=(ros,gr,b,t)=>ros.some(s=>{const g=gradeOf(b,t,s.id);return g.r!=null||g.rn});
 function exportXlsxNamed(name,sheets){
  const run=()=>{const wb=XLSX.utils.book_new();sheets().forEach(s=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(s.rows),s.name));XLSX.writeFile(wb,name)};
  if(window.XLSX)return run();const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';sc.onload=run;sc.onerror=()=>{$('ov').classList.add('on');say('Não consegui carregar a biblioteca de planilha (precisa de internet).')};document.head.appendChild(sc)}
 function exportXlsx(){exportXlsxNamed(`Notas-${S.bim}bim-2026.xlsx`,()=>buildSheets(S.bim))}
 function buildSheets(b){const fn=['Nº','Nome','Situação','Ativ 1','Ativ 2','Ativ 3','Ativ 4','P1','P2','ENG/TRAB','P3','Nota (antes da REC)','REC','Média final','Obs'],R=v=>v==null?'':Math.round(v*100)/100,S2=[];
- db.turmas.forEach(t=>{const gr=(db.grades[b]||{})[t]||{},rows=[fn];(db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g),a=g.a||[];rows.push([i+1,s.n,s.off?'Saiu da turma':'',R(a[0]),R(a[1]),R(a[2]),R(a[3]),R(r.p1),R(r.p2),R(r.e),R(r.p3),r.any?R(r.nota):'',r.rn&&r.rec==null?'NÃO FEZ':R(r.rec),r.any?R(r.m):'',[s.off&&'',s.obs,g.o].filter(Boolean).join(' · ')])});S2.push({name:t,rows})});
+ db.turmas.forEach(t=>{const gr=(db.grades[b]||{})[t]||{},rows=[fn];(db.roster[t]||[]).forEach((s,i)=>{const g=gradeOf(b,t,s.id),r=calc(t,g,b,s.id),a=g.a||[],aj=audFields(b,t,s.id).map(f=>`${AUD_LABEL[f]||f}: ${fmt(audRaw(b,t,s.id,f).v)}`).join(' · ');rows.push([i+1,s.n,s.off?'Saiu da turma':'',R(a[0]),R(a[1]),R(a[2]),R(a[3]),R(r.p1),R(r.p2),R(r.e),R(r.p3),r.any?R(r.nota):'',r.rn&&r.rec==null?'NÃO FEZ':R(r.rec),r.any?R(r.m):'',[s.off&&'',s.obs,g.o,aj?'aud · '+aj:''].filter(Boolean).join(' · ')])});S2.push({name:t,rows})});
  const res=[['Turma','Alunos na sala','Com nota','Média','Abaixo de '+MEDIA_MIN,'Sem nota','Lançado P1','Lançado P2','Lançado ENG/TRAB']];
  db.turmas.forEach(t=>{const x=stat(t,b),l=LR(b,t);res.push([t,x.n,x.ms.length,R(x.avg),x.low,x.sem,l.p1?'Sim':'Não',l.p2?'Sim':'Não',l.t?'Sim':'Não'])});
  return[{name:'Resumo',rows:res},...S2]}
+/* ---- Mapa de calor turma × bimestre --------------------------------------- */
+const audCell=(b,t,id,v)=>`${FM(v)}${audFlag(b,t,id)}`;
+function heatmap(){
+ let h=`<h2><span>🔥 Mapa de calor · turma × bimestre</span><span><button class="btn" id="hmV">Voltar</button></span></h2><div class="rvw"><p class="cn-hint">Cor da <b>média da turma</b>: vermelho abaixo de ${MEDIA_MIN}, amarelo até 8, verde acima. O número de baixo mostra <b>notas lançadas / alunos na sala</b> e quantos estão abaixo de ${MEDIA_MIN}. Toque numa célula para abrir aquela turma e aquele bimestre.</p>`;
+ h+='<div class="scroll"><table class="heat"><thead><tr><th style="text-align:left">Turma</th>'+BIMS.map(b=>`<th>${b}º bim</th>`).join('')+'<th>Ano</th></tr></thead><tbody>';
+ db.turmas.forEach(t=>{
+  const ss=BIMS.map(b=>stat(t,b)),ano=avgOf(ss.flatMap(x=>x.ms));
+  h+=`<tr><td style="text-align:left"><b>${t}</b></td>`+ss.map((x,k)=>{const cls=x.ms.length?bc(x.avg):'';return `<td class="hm ${cls}" data-t="${t}" data-b="${BIMS[k]}" title="${t} · ${BIMS[k]}º bimestre: média ${FM(x.avg)}, ${x.ms.length}/${x.n} com nota, ${x.low} abaixo de ${MEDIA_MIN}"><b>${FM(x.avg)}</b><small>${x.ms.length}/${x.n} · ${x.low} &lt; ${MEDIA_MIN}</small></td>`}).join('')+`<td class="${bc(ano)}"><b>${FM(ano)}</b></td></tr>`;
+ });
+ const tot=BIMS.map(b=>avgOf(db.turmas.flatMap(t=>stat(t,b).ms)));
+ h+='<tr><td style="text-align:left"><b>Geral</b></td>'+tot.map((v,k)=>`<td class="${bc(v)}"><b>${FM(v)}</b></td>`).join('')+`<td class="${bc(avgOf(db.turmas.flatMap(t=>BIMS.flatMap(b=>stat(t,b).ms))))}"><b>${FM(avgOf(db.turmas.flatMap(t=>BIMS.flatMap(b=>stat(t,b).ms))))}</b></td></tr></tbody></table></div>`;
+ h+='<div class="hmLeg"><span><i class="bd"></i> abaixo de 6</span><span><i class="bm"></i> 6 a 7,9</span><span><i class="bo"></i> 8 ou mais</span><span><i style="background:var(--bg);border:1px solid var(--bd)"></i> sem nota</span></div></div>';
+ const c=$('card');c.classList.remove('locked');c.innerHTML=h;
+ $('hmV').onclick=()=>{S.view=null;render()};
+ c.querySelectorAll('td.hm').forEach(td=>td.onclick=()=>{setBim(td.dataset.b);S.t=td.dataset.t;S.view=null;S.unlock=false;chips();render()});
+}
+/* ---- Checklist geral ------------------------------------------------------ */
+function checklist(){
+ const done=k=>!!((db.ck||{})[k]),out=[];
+ db.turmas.forEach(t=>{
+  const ros=(db.roster[t]||[]).filter(s=>!s.off);
+  BIMS.forEach(b=>{
+   const x=stat(t,b),l=LR(b,t),pre=b+'|'+t+'|';
+   if(x.sem&&x.n)out.push({k:pre+'notas',b,t,txt:`Digitar notas · ${x.sem} aluno(s) sem nota`,lvl:'alta'});
+   if(x.ms.length){const f=[['p1','P1'],['p2','P2'],['ll',f1(t)?'ENG':'TRAB']].filter(([k])=>!l[k==='ll'?'t':k]).map(q=>q[1]);if(f.length)out.push({k:pre+'lanc',b,t,txt:'Lançar na escola · '+f.join(', '),lvl:'alta'})}
+   const dd=Object.keys(l.dirty||{}).length;if(dd)out.push({k:pre+'re',b,t,txt:`⚠ Relançar alterações · ${dd} aluno(s)`,lvl:'alta'});
+   const p3=f1(t)?p3pend(ros,(db.grades[b]||{})[t]||{},t,b):0;if(p3)out.push({k:pre+'p3',b,t,txt:`P3 pendente · ${p3} aluno(s) podem fazer`,lvl:'media'});
+   const rc=ros.filter(s=>{const r=calc(t,null,b,s.id);return r.any&&r.nota<MEDIA_MIN&&r.rec==null&&!r.rn}).length;if(rc)out.push({k:pre+'rec',b,t,txt:`REC bimestral pendente · ${rc} aluno(s)`,lvl:'media'});
+   const na=Object.keys(db.aud||{}).filter(key=>key.indexOf(pre)==0).length;if(na)out.push({k:pre+'aud',b,t,txt:`🛡 Ajustes de auditoria · ${na} nota(s) para conferir`,lvl:'media'});
+  });
+  const off=(db.roster[t]||[]).filter(s=>s.off).length;if(off)out.push({k:'off|'+t,b:S.bim,t,txt:`${off} aluno(s) fora da turma (nº preservado)`,lvl:'baixa'});
+ });
+ tasks().filter(x=>!x.ok).forEach(x=>out.push({k:'task|'+x.id,b:S.bim,t:S.t,txt:'📝 '+x.x,lvl:'baixa'}));
+ const visible=S.ckAll?out:out.filter(x=>!done(x.k)),hi=visible.filter(x=>x.lvl=='alta').length;
+ let h=`<h2><span>✅ Checklist geral · pendências</span><span><button class="btn" id="ckAll">${S.ckAll?'Ocultar concluídos':'Mostrar concluídos'}</button> <button class="btn" id="ckV">Voltar</button></span></h2>`;
+ h+=`<div class="rvw">${kp([[visible.length,'pendências visíveis'],[hi,'prioridade alta'],[out.length-visible.length,'concluídas'],[db.turmas.length,'turmas']])}`;
+ h+='<p class="cn-hint">A ordem é sempre por turma e, dentro dela, pelo bimestre. “Concluir” apenas esconde o item deste aparelho; ele volta a aparecer se a pendência continuar no sistema. Toque em <b>Ir</b> para abrir a turma/bimestre.</p>';
+ h+='<div class="scroll"><table><thead><tr><th style="text-align:left">Turma</th><th>Bim</th><th>Prioridade</th><th style="text-align:left">Pendência</th><th></th><th></th></tr></thead><tbody>';
+ const PRIO={alta:0,media:1,baixa:2};
+ visible.sort((a,b)=>PRIO[a.lvl]-PRIO[b.lvl]||db.turmas.indexOf(a.t)-db.turmas.indexOf(b.t)||+a.b-+b.b).forEach(x=>{
+  h+=`<tr><td><b>${esc(x.t)}</b></td><td>${x.b}º</td><td class="${x.lvl=='alta'?'red':x.lvl=='media'?'org':''}">${x.lvl}</td><td style="text-align:left">${esc(x.txt)}</td><td><button class="btn" data-ckgo="${esc(x.k)}" data-t="${esc(x.t)}" data-b="${x.b}">Ir</button></td><td><button class="btn" data-ckok="${esc(x.k)}">✓</button></td></tr>`;
+ });
+ h+='</tbody></table></div></div>';
+ const c=$('card');c.classList.remove('locked');c.innerHTML=h;
+ $('ckV').onclick=()=>{S.view=null;render()};$('ckAll').onclick=()=>{S.ckAll=!S.ckAll;checklist()};
+ c.querySelectorAll('[data-ckok]').forEach(b=>b.onclick=()=>{db.ck=db.ck||{};db.ck[b.dataset.ckok]=1;save();checklist()});
+ c.querySelectorAll('[data-ckgo]').forEach(b=>b.onclick=()=>{const k=b.dataset.ckgo;if(k.slice(0,4)=='aud|'){S.au={t:b.dataset.t,b:b.dataset.b,id:null};S.view='aud';render();return}setBim(b.dataset.b);S.t=b.dataset.t;S.view=null;S.unlock=false;chips();render()});
+}
+/* ---- Auditoria (única aba que ajusta notas) -------------------------------- */
+const AUD_LABEL={a1:'Ativ 1',a2:'Ativ 2',a3:'Ativ 3',a4:'Ativ 4',p1:'P1',p2:'P2',e:'ENG/TRAB',p3:'P3',r:'REC'};
+function auditoria(){
+ S.au=S.au||{t:S.t,b:S.bim,id:null};if(!db.turmas.includes(S.au.t))S.au.t=db.turmas[0];
+ const ros=db.roster[S.au.t]||[];if(!ros.some(s=>s.id==S.au.id))S.au.id=ros.length?ros[0].id:null;
+ const id=S.au.id,b=S.au.b,t=S.au.t,s=ros.find(x=>x.id==id),raw=((db.grades[b]||{})[t]||{})[id]||{},g=gradeOf(b,t,id),r=calc(t,g,b,id),base=calc(t,raw);
+ const eff=f=>f[0]=='a'?(g.a||[])[+f[1]-1]:f=='p1'?r.p1:f=='p2'?r.p2:f=='e'?r.e:f=='p3'?r.p3:r.rec;
+ const orig=f=>f[0]=='a'?(raw.a||[])[+f[1]-1]:f=='p1'?base.p1:f=='p2'?base.p2:f=='e'?base.e:f=='p3'?base.p3:base.rec;
+ let h=`<h2><span><span class="cn-area" style="background:#5f3dc4;border-color:#5f3dc4">AUDITORIA</span>🛡 Ajuste direto de notas</span><span><button class="btn" id="auPdf">🖨 PDF</button> <button class="btn" id="auV">Voltar</button></span></h2>`;
+ h+=`<div class="lanc"><label>Turma: <select id="auT">${db.turmas.map(x=>`<option value="${x}" ${x==t?'selected':''}>${x}</option>`).join('')}</select></label><label>Aluno: <select id="auA">${ros.map((x,i)=>`<option value="${x.id}" ${x.id==id?'selected':''}>${i+1} · ${esc(x.n)}</option>`).join('')||'<option>sem alunos</option>'}</select></label><label>Bimestre: <select id="auB">${BIMS.map(x=>`<option value="${x}" ${x==b?'selected':''}>${x}º</option>`).join('')}</select></label></div>`;
+ if(!s)h+='<div class="rvw"><p class="mi">Escolha uma turma com alunos.</p></div>';
+ else{
+  h+=`<div class="rvw"><h3 style="margin-top:0">${esc(s.n)} · ${turmaNome(t)} · Nº ${ros.indexOf(s)+1} · ${b}º bimestre</h3><p class="cn-hint">Ajustes feitos aqui <b>entram na média normal</b> e aparecem com a sigla <b>aud</b> na tela, ficha, PDF e planilha. Deixe o campo em branco para remover o ajuste e voltar ao valor original. Os valores “originais” abaixo são os que foram digitados na tela normal.</p>`;
+  h+=kp([[FM(r.any?r.m:null),'média final'],[FM(r.nota),'nota do bimestre'],[Object.keys(db.aud||{}).filter(k=>k.indexOf(b+'|'+t+'|'+id+'|')==0).length,'ajustes neste bimestre'],[audTem(b,t,id)?'sim':'não','tem ajuste']]);
+  h+='<div class="auditGrid">'+AUD_F.map(f=>{const a=audRaw(b,t,id,f),v=eff(f),o=orig(f);return `<label>${AUD_LABEL[f]}<input class="in auIn" data-af="${f}" inputmode="decimal" value="${v==null?'':fmt(v)}" placeholder="em branco = original"><span class="diff">original: ${FM(o)}${a&&a.v!=null?' · <b style="color:#8f3bc4">aud</b> '+fmt(a.v):''}</span>${a&&a.v!=null?`<button class="btn" data-ac="${f}" style="margin-top:4px">Remover ajuste</button>`:''}</label>`}).join('')+'</div>';
+  h+='<div class="row"><input class="in" id="auWhy" style="flex:1;text-align:left" placeholder="Motivo do ajuste (opcional)"><button class="btn" id="auReset">Limpar todos os ajustes deste bimestre</button></div>';
+ }
+ const todas=Object.keys(db.aud||{}).map(k=>{const[bb,tt,iid,f]=k.split('|'),a=db.aud[k],ss=(db.roster[tt]||[]).find(x=>x.id==iid);return{k,bb,tt,iid,f,v:a.v,why:a.why||'',nome:ss?ss.n:'—',i:(db.roster[tt]||[]).indexOf(ss)+1}}).filter(x=>x.v!=null);
+ todas.sort((a,b)=>ordemTurmaConselho(a.tt)-ordemTurmaConselho(b.tt)||a.i-b.i||+a.bb-+b.bb||AUD_F.indexOf(a.f)-AUD_F.indexOf(b.f));
+ h+=`<hr class="sepc"><h3>Todos os ajustes (${todas.length})</h3>`+(todas.length?'<div class="scroll"><table><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th><th>Bim</th><th>Campo</th><th>Valor</th><th style="text-align:left">Motivo</th><th></th></tr></thead><tbody>'+todas.map(x=>`<tr><td>${x.tt}</td><td>${x.i}</td><td style="text-align:left">${esc(x.nome)}</td><td>${x.bb}º</td><td>${AUD_LABEL[x.f]||x.f}</td><td><b>${fmt(x.v)}</b> <small class="audm">aud</small></td><td style="text-align:left">${esc(x.why)}</td><td><button class="btn" data-ae="${esc(x.k)}">Editar</button> <button class="btn" data-ag="${esc(x.k)}">Ver na nota</button> <button class="btn" data-ar="${esc(x.k)}">Remover</button></td></tr>`).join('')+'</tbody></table></div>':'<p class="mi">Nenhum ajuste registrado.</p>');
+ h+='</div>';
+ const c=$('card');c.classList.remove('locked');c.innerHTML=h;
+ $('auV').onclick=()=>{S.view=null;render()};
+ $('auT').onchange=e=>{S.au.t=e.target.value;S.au.id=null;auditoria()};
+ $('auA').onchange=e=>{S.au.id=e.target.value;auditoria()};
+ $('auB').onchange=e=>{S.au.b=e.target.value;auditoria()};
+ c.querySelectorAll('.auIn').forEach(i=>i.onchange=()=>{const v=num(i.value),why=($('auWhy')||{}).value||'';if(v==null)audClear(b,t,id,i.dataset.af);else audSet(b,t,id,i.dataset.af,v,why);auditoria()});
+ c.querySelectorAll('[data-ac]').forEach(x=>x.onclick=()=>{audClear(b,t,id,x.dataset.ac);auditoria()});
+ const ar=$('auReset');if(ar)ar.onclick=()=>{audFields(b,t,id).forEach(f=>{const a=audRaw(b,t,id,f),k=AKEY(b,t,id,f);if(a){lg(b,t,id,'aud '+f,a.v,null);delete db.aud[k]}});save();auditoria()};
+ c.querySelectorAll('[data-ar]').forEach(x=>x.onclick=()=>{const[bb,tt,iid,f]=x.dataset.ar.split('|');audClear(bb,tt,iid,f);auditoria()});
+ c.querySelectorAll('[data-ae]').forEach(x=>x.onclick=()=>{const[bb,tt,iid]=x.dataset.ae.split('|');S.au={t:tt,b:bb,id:iid};auditoria()});
+ c.querySelectorAll('[data-ag]').forEach(x=>x.onclick=()=>{const[bb,tt,iid]=x.dataset.ag.split('|');setBim(bb);S.t=tt;S.view=null;S.unlock=false;S.p3v=true;S.recv=true;chips();render();const alvo=document.querySelector(`tr[data-id="${iid}"]`);if(alvo){alvo.classList.add('hl');alvo.scrollIntoView({block:'center',inline:'nearest'});setTimeout(()=>alvo.classList.remove('hl'),2500)}});
+ $('auPdf').onclick=()=>{const pr=$('pr');pr.className='';pr.innerHTML=`<h2>Lab. de Informática · Auditoria de notas · 2026</h2>`+$('card').innerHTML+`<p>Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;window.print()};
+}
+/* ---- Preferências de layout ------------------------------------------------ */
+function prefs(){
+ const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+ const set=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+ const f=g('notas-font')||'m';document.documentElement.dataset.font=f;
+ document.documentElement.dataset.dense=g('notas-dense')=='1'?'1':'0';
+ document.documentElement.dataset.contrast=g('notas-contrast')=='1'?'1':'0';
+ if($('ad'))$('ad').checked=document.documentElement.dataset.dense=='1';
+ if($('ac'))$('ac').checked=document.documentElement.dataset.contrast=='1';
+}
+function initAjustes(){
+ prefs();
+ $('ax').onclick=()=>{$('axo').classList.add('on')};$('acf').onclick=()=>{$('axo').classList.remove('on')};
+ const font=v=>{document.documentElement.dataset.font=v;try{localStorage.setItem('notas-font',v)}catch(e){}};
+ $('az').onclick=()=>font('s');$('azr').onclick=()=>font('m');$('azm').onclick=()=>font('l');$('azx').onclick=()=>font('xl');
+ $('ad').onchange=e=>{document.documentElement.dataset.dense=e.target.checked?'1':'0';try{localStorage.setItem('notas-dense',e.target.checked?'1':'0')}catch(x){}};
+ $('ac').onchange=e=>{document.documentElement.dataset.contrast=e.target.checked?'1':'0';try{localStorage.setItem('notas-contrast',e.target.checked?'1':'0')}catch(x){}};
+}
+/* ---- Importação do .xlsx exportado pelo app -------------------------------- */
+let IMP=null;
+function withXLSX(cb){
+ if(window.XLSX)return cb();
+ const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';sc.onload=cb;sc.onerror=()=>say('Não consegui carregar a biblioteca de planilha (precisa de internet).');document.head.appendChild(sc);
+}
+const vnum=x=>{if(x==null||String(x).trim()==='')return null;const v=parseFloat(String(x).replace(',','.'));return isNaN(v)?null:Math.max(0,Math.min(10,v))};
+function parsePlanilha(buf,nome){
+ const bim=(nome.match(/Notas-(\d) bim/)||nome.match(/Notas-(\d)bim/)||[])[1]||String(S.bim);
+ withXLSX(()=>{
+  const wb=XLSX.read(buf,{type:'array'}),HDG=['Nº','Nome','Situação','Ativ 1','Ativ 2','Ativ 3','Ativ 4','P1','P2','ENG/TRAB','P3','Nota (antes da REC)','REC','Média final','Obs'],HDC=['Nº','Nome','Situação','1º','2º','3º','4º','Média','Bimestres com nota','Falta p/ 6','Ajuste','Motivo','Obs'];
+  const eq=(a,b)=>a.length>=b.length&&b.every((x,i)=>String(a[i]).trim()===x),ch=[],avisos=[];let kind='';
+  const add=(o)=>{const from=o.from==null?null:o.from,to=o.to==null?null:o.to;if(from===to)return;ch.push(Object.assign({b:o.b,t:o.t,id:o.id,n:o.n,nome:o.nome,src:o.src},o,{from,to}))};
+  wb.SheetNames.forEach(t=>{
+   if(!db.turmas.includes(t))return;
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[t],{header:1,defval:''});
+   const hd=rows.find(x=>eq(x,HDG))||rows.find(x=>eq(x,HDC));if(!hd)return;
+   const grade=eq(hd,HDG);kind=kind||(grade?'notas':'conselho');
+   rows.forEach((row,i)=>{
+    if(row===hd||!String(row[0]).trim())return;
+    const n=parseInt(row[0],10),s=(db.roster[t]||[])[n-1];if(!s)return;
+    if(String(row[1]).trim()!=String(s.n).trim())avisos.push(`${t} nº ${n}: o nome na planilha (“${row[1]}”) é diferente do app (“${s.n}”); este aluno foi ignorado.`);
+    if(grade){
+     const g=gradeOf(bim,t,s.id),base={a:(g.a||[]).slice(),p1:calc(t,g).p1,e:calc(t,g).e,p3:g.p3,r:g.r,rn:g.rn};
+     const put=(f,from,to,extra)=>add(Object.assign({b:bim,t,id:s.id,n,nome:s.n,src:'notas',f,from,to},extra||{}));
+     [0,1,2,3].forEach(k=>{let v=vnum(row[3+k]);if(v!=null)v=v>=1.5?2:1;put('a'+(k+1),(base.a||[])[k]==null?null:(base.a||[])[k],v)});
+     if(f1(t)){put('p1',base.p1,vnum(row[7]));put('p3',base.p3,vnum(row[10]))}
+     else put('e',base.e,vnum(row[9]));
+     const recCell=String(row[12]||'').trim();
+     if(/NÃO FEZ/i.test(recCell)){put('r',base.r,null);put('rn',base.rn?1:0,1)}
+     else{const rv=vnum(row[12]);put('r',base.r,rv);if(rv!=null)put('rn',base.rn?1:0,0)}
+    }else{
+     BIMS.forEach((bb,k)=>{const target=vnum(row[3+k]),cur=calc(t,null,bb,s.id).m;if(target==null||cur==null||Math.abs(cur-target)<.01)return;
+      const base=calc(t,gradeOf(bb,t,s.id));const p2=Math.max(0,Math.min(10,Math.round(((target-(base.e||0))*2-(base.p1||0))*100)/100));
+      add({b:bb,t,id:s.id,n,nome:s.n,src:'conselho',f:'m'+bb,from:cur,to:target,p2})});
+    }
+   });
+  });
+  if(!ch.length)return say('Nenhuma nota diferente encontrada nesta planilha.');
+  IMP={nome,ch,kind,avisos};
+  $('ipInfo').innerHTML=`<b>${esc(nome)}</b><br>Formato: ${kind=='notas'?'notas por bimestre (layout exportado pelo app)':'médias do Conselho'}. <b>${ch.length}</b> alteração(ões) na prévia. Revise antes de aplicar.`+(avisos.length?`<br><span class="ckWarn">${avisos.length} aviso(s): ${esc(avisos.slice(0,3).join(' · '))}${avisos.length>3?' …':''}</span>`:'');
+  $('ip').innerHTML=`<table class="preview"><thead><tr><th>Turma</th><th>Nº</th><th style="text-align:left">Aluno</th><th>Bim</th><th>Campo</th><th>De</th><th>Para</th></tr></thead><tbody>`+ch.slice(0,300).map(x=>`<tr><td>${x.t}</td><td>${x.n}</td><td style="text-align:left">${esc(x.nome)}</td><td>${x.b}º</td><td>${x.src=='conselho'?'média '+x.b+'º → P2':(AUD_LABEL[x.f]||x.f)}</td><td>${FM(x.from)}</td><td><b>${FM(x.to)}</b></td></tr>`).join('')+'</tbody></table>'+(ch.length>300?`<p class="mi">Mostrando as 300 primeiras de ${ch.length} alterações.</p>`:'');
+  $('ov').classList.remove('on');$('io').classList.add('on');$('im').textContent='';
+ });
+}
+function applyImport(){
+ if(!IMP||!IMP.changes&&!IMP.ch)return;const ch=IMP.ch||IMP.changes,before=JSON.parse(JSON.stringify(db));let n=0;
+ ch.forEach(x=>{
+  if(x.src=='conselho'){
+   const old=audRaw(x.b,x.t,x.id,'p2');lg(x.b,x.t,x.id,'aud p2',old?old.v:null,x.p2);db.aud=db.aud||{};db.aud[AKEY(x.b,x.t,x.id,'p2')]={v:x.p2,why:'Importado do Conselho · média '+x.b+'º '+fmt(x.to),at:Date.now()};
+  }else if(x.f=='rn'){const g=G(x.b,x.t)[x.id]||(G(x.b,x.t)[x.id]={});lg(x.b,x.t,x.id,'rn',g.rn?1:0,x.to);g.rn=x.to?1:0}
+  else{const g=G(x.b,x.t)[x.id]||(G(x.b,x.t)[x.id]={});
+   if(x.f[0]=='a'){g.a=g.a||[null,null,null,null];const k=+x.f[1]-1,old=g.a[k]==null?null:g.a[k];g.a[k]=x.to;lg(x.b,x.t,x.id,x.f,old,x.to)}
+   else{const old=g[x.f]==null?null:g[x.f];g[x.f]=x.to;lg(x.b,x.t,x.id,x.f,old,x.to);if(x.f=='r'&&x.to!=null)g.rn=0}
+  }
+  n++;
+ });
+ db.importSnap={at:Date.now(),nome:IMP.nome,before};save();render();$('io').classList.remove('on');IMP=null;say(`Importação aplicada: ${n} alteração(ões). Use “Desfazer importação” se precisar voltar.`);
+}
+function undoImport(){
+ if(!db.importSnap)return say('Não há importação para desfazer.');
+ const s=db.importSnap;db=JSON.parse(JSON.stringify(s.before));save();render();$('io').classList.remove('on');$('ov').classList.remove('on');say('Importação desfeita.');
+}
 function painel(){const b=S.bim,ck=v=>v?'✓':'☐';
  let h=`<h2><span>${b}º BIMESTRE / 2026 · Painel das turmas</span><span><button class="btn" id="pv">Voltar</button></span></h2><div class="scroll"><table><thead><tr><th style="text-align:left">Turma</th><th>Alunos</th><th>Sem nota</th><th>P1 em branco</th><th>Podem P3</th><th>Média</th><th>Lançado P1</th><th>P2</th><th>ENG/TRAB</th><th>⚠</th></tr></thead><tbody>`;
- db.turmas.forEach(t=>{const ros=(db.roster[t]||[]).filter(s=>!s.off),gr=(db.grades[b]||{})[t]||{},l=(((db.launch||{})[b])||{})[t]||{},f=f1(t),ms=ros.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),sem=ros.length-ms.length,
+ db.turmas.forEach(t=>{const ros=(db.roster[t]||[]).filter(s=>!s.off),gr=(db.grades[b]||{})[t]||{},l=(((db.launch||{})[b])||{})[t]||{},f=f1(t),ms=ros.map(s=>calc(t,gr[s.id],b,s.id).m).filter(m=>m!=null),sem=ros.length-ms.length,
   p1b=f?ros.filter(s=>(gr[s.id]||{}).p1==null).length:null,p3=f?ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length:null,dd=Object.keys(l.dirty||{}).length;
   h+=`<tr class="go" data-t="${t}"><td style="text-align:left"><b>${t}</b></td><td>${ros.length}</td><td class="${sem?'org':''}">${sem}</td><td class="${p1b?'org':''}">${p1b==null?'–':p1b}</td><td>${p3==null?'–':p3}</td><td>${ms.length?fmt(ms.reduce((a,c)=>a+c,0)/ms.length):'–'}</td><td>${ck(l.p1)}</td><td>${ck(l.p2)}</td><td>${ck(l.t)}</td><td class="${dd?'red':''}">${dd||''}</td></tr>`});
  h+='</tbody></table></div><div class="rule">Toque em uma turma para abrir. Laranja = ainda há alunos sem nota. ⚠ = notas alteradas depois de lançadas na escola.</div>';
@@ -695,24 +971,25 @@ function report(kind){const t=S.t,ros=db.roster[t]||[],gr=G(S.bim,t),fund=f1(t),
  if(kind){const el=act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX});
   head='<th>Nº</th><th>Nome</th><th>Motivo</th><th>P1</th><th style="width:70px">P3</th>';
   rows=el.map(s=>{const g=gr[s.id]||{};return `<tr><td>${ros.indexOf(s)+1}</td><td>${esc(s.n)}</td><td>${g.p1==null?'P1 não feita':'P1 baixa'}</td><td>${fmt(g.p1)}</td><td>${g.p3==null?'&nbsp;':fmt(g.p3)}</td></tr>`}).join('')}
- else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th><th>P2</th><th>'+(fund?'ENG':'TRAB')+'</th>'+(fund?'<th>P3</th>':'')+(hasRecT(ros,gr)?'<th>Nota</th><th>REC</th>':'')+'<th>Média</th><th>Obs</th>';
-  rows=ros.map((s,i)=>{const g=gr[s.id]||{},r=calc(t,g),a=g.a||[],rd=v=>r.cnt>0&&v!=null&&v<=PROVA_MIN?'rd':'';
-   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}</td>`+`<td class="${rd(r.p2)}">${fmt(r.p2)}</td><td>${fmt(r.e)}</td>`+(fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${fmt(r.p3)}</td>`:'')+(hasRecT(ros,gr)?`<td>${FM(r.nota)}</td><td>${r.rn&&r.rec==null?'não fez':FM(r.rec)}</td>`:'')+`<td class="${r.any&&r.m<MEDIA_MIN?'rd':''}${r.ur&&!s.off?' recm':(r.u3&&!s.off?' p3m':'')}"><b>${r.any?fmt(r.m):''}</b>${r.ur&&!s.off?'<small> REC</small>':''}</td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
- const ms=act.map(s=>calc(t,gr[s.id]).m).filter(m=>m!=null),av=ms.length?ms.reduce((a,c)=>a+c,0)/ms.length:null;
+ else{head='<th>Nº</th><th>Nome</th>'+[1,2,3,4].map(i=>'<th>A'+i+'</th>').join('')+'<th>P1</th><th>P2</th><th>'+(fund?'ENG':'TRAB')+'</th>'+(fund?'<th>P3</th>':'')+(hasRecT(ros,gr,S.bim,t)?'<th>Nota</th><th>REC</th>':'')+'<th>Média</th><th>Obs</th>';
+  rows=ros.map((s,i)=>{const g=gradeOf(S.bim,t,s.id),r=calc(t,g,S.bim,s.id),a=g.a||[],rd=v=>r.cnt>0&&v!=null&&v<=PROVA_MIN?'rd':'',af=f=>audSmall(S.bim,t,s.id,f);
+   return `<tr class="${s.off?'off':''}"><td>${i+1}</td><td>${esc(s.n)}${s.off?' (saiu)':''}</td>`+[0,1,2,3].map(k=>`<td>${a[k]==null?'–':fmt(a[k])}${af('a'+(k+1))}</td>`).join('')+`<td class="${fund?(r.p1!=null&&r.p1<=PROVA_MIN?'rd':''):rd(r.p1)}">${fmt(r.p1)}${af('p1')}</td>`+`<td class="${rd(r.p2)}">${fmt(r.p2)}${af('p2')}</td><td>${fmt(r.e)}${af('e')}</td>`+(fund?`<td class="${r.p3!=null&&!r.u3&&!s.off?'p3n':''}">${fmt(r.p3)}${af('p3')}</td>`:'')+(hasRecT(ros,gr,S.bim,t)?`<td>${FM(r.nota)}</td><td>${r.rn&&r.rec==null?'não fez':FM(r.rec)}${af('r')}</td>`:'')+`<td class="${r.any&&r.m<MEDIA_MIN?'rd':''}${r.ur&&!s.off?' recm':(r.u3&&!s.off?' p3m':'')}"><b>${r.any?fmt(r.m):''}</b>${r.ur&&!s.off?'<small> REC</small>':''}${audFlag(S.bim,t,s.id)}</td><td>${esc(s.obs||'')}</td></tr>`}).join('')}
+ const ms=act.map(s=>calc(t,gr[s.id],S.bim,s.id).m).filter(m=>m!=null),av=ms.length?ms.reduce((a,c)=>a+c,0)/ms.length:null;
  const sm=kind?`<p>Alunos listados: <b>${rows?act.filter(s=>{const g=gr[s.id]||{};return g.p1==null||g.p1<=P3_MAX}).length:0}</b> · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`:`<p>Alunos na sala: <b>${act.length}</b> · Média da turma: <b>${fmt(av)||'–'}</b> · Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b> · Lançado na escola: P1 ${l.p1?'✓':'☐'} P2 ${l.p2?'✓':'☐'} ${fund?'ENG':'TRAB'} ${l.t?'✓':'☐'} · Emitido em ${new Date().toLocaleDateString('pt-BR')}</p>`;
- $('pr').innerHTML=hd+'<table><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table>'+sm;window.print()}
-function foot(){const all=db.roster[S.t]||[],ros=all.filter(s=>!s.off),gr=G(S.bim,S.t);const rb=$('rcv');if(rb)rb.textContent=(S.recv?'🙈 Ocultar REC':'👁 REC')+' ('+recPend(S.t,ros,gr)+')';const ms=ros.map(s=>calc(S.t,gr[s.id]).m).filter(m=>m!=null);
+ const pr=$('pr');pr.className='';pr.innerHTML=hd+'<table><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table>'+sm;window.print()}
+function foot(){const all=db.roster[S.t]||[],ros=all.filter(s=>!s.off),gr=G(S.bim,S.t);const rb=$('rcv');if(rb)rb.textContent=(S.recv?'🙈 Ocultar REC':'👁 REC')+' ('+recPend(S.t,ros,gr)+')';const ms=ros.map(s=>calc(S.t,gr[s.id],S.bim,s.id).m).filter(m=>m!=null);
  const avg=ms.length?ms.reduce((a,b)=>a+b,0)/ms.length:null;
  $('foot').innerHTML=`<span>Na sala: <b>${ros.length}</b></span><span>Saíram: <b>${all.length-ros.length}</b></span><span>Com nota: <b>${ms.length}</b></span><span>Média da turma: <b>${fmt(avg)||'–'}</b></span><span>Abaixo de 6: <b>${ms.filter(m=>m<MEDIA_MIN).length}</b></span><span>Sem nenhuma nota: <b>${ros.length-ms.length}</b></span>${f1(S.t)?`<span>Podem fazer P3: <b>${ros.filter(s=>{const g=gr[s.id]||{};return g.p3==null&&(g.p1==null||g.p1<=P3_MAX)}).length}</b></span>`:''}`}
 function setBim(b){S.bim=b;S.cnBack=false;document.documentElement.dataset.bim=b;document.querySelectorAll('.bb').forEach(x=>x.classList.toggle('on',x.dataset.b==b))}
 document.querySelectorAll('.bb').forEach(x=>x.onclick=()=>{setBim(x.dataset.b);S.edit=false;S.unlock=false;chips();render()});
 setBim(CUR);
-function say(m){$('msg').textContent=m}
+function toast(m){const box=$('toast');if(!box||!m)return;const d=document.createElement('div');d.textContent=m;box.appendChild(d);setTimeout(()=>d.remove(),4000)}
+function say(m){$('msg').textContent=m;toast(m)}
 $('bk').onclick=()=>{$('ov').classList.add('on');say('')};
 $('b5').onclick=()=>$('ov').classList.remove('on');
 $('b1').onclick=()=>{$('ta').value=JSON.stringify(db);say('Backup gerado. Toque em “Copiar texto” e guarde.')};
 $('b2').onclick=()=>{const t=S.t,gr=G(S.bim,t);const L=['Nº\tNome\tAtiv1\tAtiv2\tAtiv3\tAtiv4\tP1\tP2\t'+(f1(t)?'ENG':'TRAB')+'\tP3\tNota\tREC\tMédia\tObs'];
- (db.roster[t]||[]).forEach((s,i)=>{const g=gr[s.id]||{},r=calc(t,g);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p2),fmt(r.e),fmt(r.p3),r.any?fmt(r.nota):'',(r.rn&&r.rec==null?'NÃO FEZ':fmt(r.rec)),r.any?fmt(r.m):'',[s.off?'Saiu da turma':'',s.obs||'',f1(t)&&g.p1==null?'P1 não feita':''].filter(Boolean).join('; ')].join('\t'))});
+ (db.roster[t]||[]).forEach((s,i)=>{const g=gradeOf(S.bim,t,s.id),r=calc(t,g,S.bim,s.id);L.push([i+1,s.n,...[0,1,2,3].map(k=>fmt((g.a||[])[k])),fmt(r.p1),fmt(r.p2),fmt(r.e),fmt(r.p3),r.any?fmt(r.nota):'',(r.rn&&r.rec==null?'NÃO FEZ':fmt(r.rec)),r.any?fmt(r.m):'',[s.off?'Saiu da turma':'',s.obs||'',f1(t)&&g.p1==null?'P1 não feita':''].filter(Boolean).join('; ')].join('\t'))});
  $('ta').value=L.join('\n');say('Notas de '+turmaTitle(t)+' · '+S.bim+'º bimestre.')};
 $('b3').onclick=()=>{const ta=$('ta');ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}say(ok?'Copiado!':'Selecione o texto e copie manualmente.')};
 
@@ -723,6 +1000,9 @@ $('pn').onclick=()=>{S.view=S.view=='p'?null:'p';S.edit=false;chips();render()};
 $('hm').onclick=()=>{S.view='h';S.edit=false;chips();render()};
 $('rt').onclick=()=>{S.view=S.view=='r'?null:'r';S.edit=false;chips();render()};
 $('cn').onclick=()=>{S.view=S.view=='c'?null:'c';if(S.view=='c')S.ct=ctPadrao();S.edit=false;chips();render()};
+$('ht').onclick=()=>{S.view=S.view=='ht'?null:'ht';S.edit=false;chips();render()};
+$('ck').onclick=()=>{S.view=S.view=='ck'?null:'ck';S.edit=false;chips();render()};
+$('au').onclick=()=>{S.view=S.view=='aud'?null:'aud';S.edit=false;chips();render()};
 $('th').onclick=()=>theme(document.documentElement.dataset.theme=='dark'?'light':'dark');
 function load(d){if(!d.roster||!d.grades||!d.turmas)throw 0;db=d;save();if(!db.turmas.includes(S.t))S.t=db.turmas[0];chips();render()}
 $('b4').onclick=()=>{try{load(JSON.parse($('ta').value));say('Backup restaurado.')}catch(e){say('Texto inválido. Cole o backup completo.')}};
@@ -730,9 +1010,24 @@ $('fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileRead
 function mergeBim(d){if(d.merge!=='bimestres'||!d.grades)throw 0;let n=0,l=0;
  Object.keys(d.grades).forEach(b=>Object.keys(d.grades[b]).forEach(t=>{const gt=G(b,t);Object.keys(d.grades[b][t]).forEach(id=>{if(!gt[id]){gt[id]=d.grades[b][t][id];n++}})}));
  Object.keys(d.launch||{}).forEach(b=>Object.keys(d.launch[b]).forEach(t=>{const lt=L(b,t);['p1','p2','t'].forEach(k=>{if(d.launch[b][t][k]&&!lt[k]){lt[k]=1;l++}})}));
+ db.aud=db.aud||{};Object.keys(d.aud||{}).forEach(k=>{if(!db.aud[k])db.aud[k]=d.aud[k]});
  save();render();return[n,l]}
 $('fm').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const[n,l]=mergeBim(JSON.parse(r.result));say(`Pronto: ${n} registros de notas e ${l} marcações de lançamento adicionados. Nada que já existia foi sobrescrito.`)}catch(x){say('Arquivo inválido. Use o arquivo bimestres-1a3.json.')}};r.readAsText(f);e.target.value=''};
 $('b6').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'}));a.download='notas-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()};
+// Importação: somente no formato exportado pelo app, com prévia e desfazer.
+$('ix').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{parsePlanilha(r.result,f.name)}catch(x){say('Não consegui ler esta planilha. Use o .xlsx exportado pelo app.')}};r.readAsArrayBuffer(f);e.target.value=''};
+$('ia').onclick=applyImport;$('iu').onclick=undoImport;$('iu2').onclick=undoImport;
+$('ic').onclick=()=>{$('io').classList.remove('on');IMP=null};
+// Atalhos de teclado (nunca interceptam campos de texto).
+document.addEventListener('keydown',e=>{
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const el=e.target,tag=el&&el.tagName?String(el.tagName).toLowerCase():'';
+ if(['input','textarea','select'].includes(tag)||el.isContentEditable)return;
+ if(e.key=='Escape'){['io','axo','ov','vo'].forEach(id=>$(id).classList.remove('on'));return}
+ if(e.key=='?'){e.preventDefault();$('axo').classList.add('on');const d=$('axo').querySelector('details');if(d)d.open=true;return}
+ const map={h:'hm',r:'rt',c:'cn',p:'pn',t:'ht',k:'ck',u:'au',a:'ax',d:'th'},id=map[e.key.toLowerCase()];
+ if(id){e.preventDefault();$(id).click()}
+});
 // ---- Nuvem (Supabase). Preencha url e key para ativar; vazio = só neste navegador ----
 const CLOUD={url:'https://lvfhxcmnqylioalsluvy.supabase.co',key:'sb_publishable_gZ4FF1BgIlhIzK1b4y91bQ_YPw9WfXN'};
 let sess=null,pt=null,pushing=false,polling=false,remoteTs=null;try{sess=JSON.parse(localStorage.getItem('notas-sess'))}catch(e){}
@@ -753,6 +1048,7 @@ $('go').onclick=async()=>{try{await auth({email:$('em').value.trim(),password:$(
 $('pw').onkeydown=e=>{if(e.key=='Enter')$('go').click()};
 $('cl').onclick=()=>{if(sess)poll(true);else $('lg').classList.add('on')};
 if(on()){if(sess){st('☁️ conectando…');pull()}else{st('☁️ entrar');$('lg').classList.add('on')}}
+initAjustes();
 chips();render();
 const nk2=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 $('bq').oninput=()=>{const q=nk2($('bq').value).trim(),r=$('bres');if(q.length<2){r.style.display='none';return}
@@ -765,7 +1061,7 @@ function checkVer(){if(!/^https?:/.test(location.protocol))return;fetch(location
 setInterval(checkVer,300000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVer()});setTimeout(checkVer,4000);
 $('nvb').onclick=()=>{try{navigator.serviceWorker&&navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.update()))}catch(e){}location.reload()};
 $('bx').onclick=exportXlsx;
-const VER='1.12.0',BUILD='25/11/2026',CHANGES=[["1.12.0", "25/11/2026", ["Conselho: ao escolher uma turma na média anual, a coluna Turma sai da tabela; com Todas as turmas ela permanece.", "Conselho: nomes com 3 sobrenomes têm o penúltimo abreviado; com 4 ou mais, os 2 últimos (tela, PDF e Excel)."]],["1.11.0", "25/11/2026", ["Conselho: todas as listas agora mostram o nº do aluno e seguem a ordem da turma primeiro e, dentro da turma, a ordem do nº."]],["1.10.1", "24/11/2026", ["Corrigido: a REC bimestral só substitui a média se for maior; se for menor ou igual, a nota final permanece a média original."]],["1.10.0", "24/11/2026", ["Média bimestral e média final arredondadas para cima, de 0,5 em 0,5; P1, P2, ENG/TRAB e atividades seguem com notas quebradas.", "Na ficha, tocar numa linha de Notas por bimestre abre o bimestre e a turma do aluno, destacando a linha dele."]],["1.9.0", "23/11/2026", ["REC bimestral: campo e botão NF só para quem tem média abaixo de 6 e ainda está na turma; quem tem 6 ou mais não pode fazer REC.", "A nota da REC substitui a média do bimestre e aparece marcada como REC na nota final."]],["1.8.3", "23/11/2026", ["Todas as listas do Conselho, inclusive a pauta, seguem a ordem por turma e depois pela ordem da listagem (nº da chamada)."]],["1.8.2", "23/11/2026", ["Na área de Conselho, a tabela de média anual abre sempre na 1A (menor turma); a pauta continua com todas as turmas e o seletor permite ver todas."]],["1.8.1", "23/11/2026", ["Conselho com identidade visual própria (roxo), sem turma padrão e com Pauta do Conselho no topo: alunos com média abaixo de 6 (soma dos 4 bimestres < 24) para receber pontos na reunião e evitar REC final.", "Gráficos em barras movidos para o final da tela; ao abrir, aparece primeiro a lista de alunos."]],["1.8.0", "23/11/2026", ["Nova área 🎓 Conselho / Fechamento: acompanhamento durante o ano e fechamento anual, com média por bimestre, média anual, situação, REC final, quanto falta para 6, ajuste no 4º bimestre, resgate, ponto fraco, PDF e Excel."]],["1.7.1", "23/11/2026", ["Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.", "Chamada/Frequência removida por enquanto (não será usada agora).", "REC (0 a 10): média final = (média + REC) ÷ 2, com indicação explícita \"REC\" na média e a conta na ficha do aluno.", "Aluno que precisava e não fez a REC (botão NF): mantém a média anterior, com aviso \"sem REC\", e aparece na seção \"Não fez a REC\" do relatório de Atenção."]], ["1.7.0", "19/11/2026", ["Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.", "Busca de aluno pelo nome, na parte de cima, abre a ficha.", "Aviso de nova versão: o app avisa quando há versão nova e atualiza com um toque.", "Exportar o bimestre em planilha Excel (.xlsx), uma aba por turma + resumo (Relatórios e Backup).", "Frequência: chamada por turma e data (botão 📝 Chamada), pendência automática da chamada do dia, relatório Frequência (presença por turma e faltosos com média baixa) e faltas na ficha."]], ["1.6.0", "18/11/2026", ["Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).", "Campo da P1 só com a identificação \"P1\"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.", "Alunos em amarelo (saíram ou mudaram de turma): sem destaques de P3 (campo, borda e contorno da média).", "Relatório de Atenção: recuperação bimestral separada em Fundamental I e Fundamental II."]], ["1.5.0", "17/11/2026", ["Efeito zebra mais marcado no computador (no celular continua igual).", "Ao passar o mouse, a linha fica destacada e as outras esmaecem.", "Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.", "Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50)."]], ["1.4.0", "16/11/2026", ["Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.", "Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).", "P3 feita sem efeito na média fica amarela; \"P3 pendente\" saiu das pendências.", "Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).", "Alunos que não fizeram nada recebem zero."]], ["1.3.0", "nov/2026", ["Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.", "Ficha do aluno com gráfico de evolução.", "Histórico de alterações com desfazer.", "Aba Estatísticas e app instalável (PWA)."]], ["1.2.0", "nov/2026", ["Relatórios: visão geral, comparativo, atenção e turma, com PDF.", "Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).", "Aviso de nota alterada depois de lançada."]], ["1.1.0", "nov/2026", ["Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.", "Coluna P3 escondida com contorno amarelo na média."]], ["1.0.0", "nov/2026", ["Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro."]]];
+const VER='1.13.0',BUILD='25/11/2026',CHANGES=[["1.13.0","25/11/2026",["Novo mapa de calor turma × bimestre: média da turma, alunos abaixo de 6 e atalho para abrir a turma e o bimestre.","Novo checklist geral de pendências, por turma e bimestre, com opção de concluir e ir direto para a turma.","Nova aba 🛡 Auditoria: ajuste de todas as notas; os valores entram na média e aparecem com a sigla aud. A edição normal limpa o ajuste, e há link direto para corrigir.","Novo relatório executivo de uma página e ficha individual ampliada, com resumo anual e encaminhamento (sem registro de deliberações).","Importação do .xlsx exportado pelo app, com prévia, avisos e desfazer.","Layout: cabeçalho fixo, modo denso, tamanho de fonte, alto contraste, cartões no celular, tooltips, atalhos de teclado, toasts e glossário."]],["1.12.0", "25/11/2026", ["Conselho: ao escolher uma turma na média anual, a coluna Turma sai da tabela; com Todas as turmas ela permanece.", "Conselho: nomes com 3 sobrenomes têm o penúltimo abreviado; com 4 ou mais, os 2 últimos (tela, PDF e Excel)."]],["1.11.0", "25/11/2026", ["Conselho: todas as listas agora mostram o nº do aluno e seguem a ordem da turma primeiro e, dentro da turma, a ordem do nº."]],["1.10.1", "24/11/2026", ["Corrigido: a REC bimestral só substitui a média se for maior; se for menor ou igual, a nota final permanece a média original."]],["1.10.0", "24/11/2026", ["Média bimestral e média final arredondadas para cima, de 0,5 em 0,5; P1, P2, ENG/TRAB e atividades seguem com notas quebradas.", "Na ficha, tocar numa linha de Notas por bimestre abre o bimestre e a turma do aluno, destacando a linha dele."]],["1.9.0", "23/11/2026", ["REC bimestral: campo e botão NF só para quem tem média abaixo de 6 e ainda está na turma; quem tem 6 ou mais não pode fazer REC.", "A nota da REC substitui a média do bimestre e aparece marcada como REC na nota final."]],["1.8.3", "23/11/2026", ["Todas as listas do Conselho, inclusive a pauta, seguem a ordem por turma e depois pela ordem da listagem (nº da chamada)."]],["1.8.2", "23/11/2026", ["Na área de Conselho, a tabela de média anual abre sempre na 1A (menor turma); a pauta continua com todas as turmas e o seletor permite ver todas."]],["1.8.1", "23/11/2026", ["Conselho com identidade visual própria (roxo), sem turma padrão e com Pauta do Conselho no topo: alunos com média abaixo de 6 (soma dos 4 bimestres < 24) para receber pontos na reunião e evitar REC final.", "Gráficos em barras movidos para o final da tela; ao abrir, aparece primeiro a lista de alunos."]],["1.8.0", "23/11/2026", ["Nova área 🎓 Conselho / Fechamento: acompanhamento durante o ano e fechamento anual, com média por bimestre, média anual, situação, REC final, quanto falta para 6, ajuste no 4º bimestre, resgate, ponto fraco, PDF e Excel."]],["1.7.1", "23/11/2026", ["Corrigido: o aviso de nova versão aparecia sempre (lia o texto errado); agora compara os números da versão.", "Chamada/Frequência removida por enquanto (não será usada agora).", "REC (0 a 10): média final = (média + REC) ÷ 2, com indicação explícita \"REC\" na média e a conta na ficha do aluno.", "Aluno que precisava e não fez a REC (botão NF): mantém a média anterior, com aviso \"sem REC\", e aparece na seção \"Não fez a REC\" do relatório de Atenção."]], ["1.7.0", "19/11/2026", ["Recuperação (REC): coluna Nota + REC (botão 👁 REC), média final depois da recuperação, contorno azul na média e regra configurável em Backup. Listas de recuperação usam a nota antes da REC.", "Busca de aluno pelo nome, na parte de cima, abre a ficha.", "Aviso de nova versão: o app avisa quando há versão nova e atualiza com um toque.", "Exportar o bimestre em planilha Excel (.xlsx), uma aba por turma + resumo (Relatórios e Backup).", "Frequência: chamada por turma e data (botão 📝 Chamada), pendência automática da chamada do dia, relatório Frequência (presença por turma e faltosos com média baixa) e faltas na ficha."]], ["1.6.0", "18/11/2026", ["Ficha do aluno: número da chamada e explicação de como a média é calculada (com a conta do próprio aluno).", "Campo da P1 só com a identificação \"P1\"; os cabeçalhos mostram as faixas (P1 0–8, P2 0–8, ENG/TRAB 0–2). ENG no Fundamental I e TRAB no Fundamental II, em toda a tela, relatórios e cópia para planilha.", "Alunos em amarelo (saíram ou mudaram de turma): sem destaques de P3 (campo, borda e contorno da média).", "Relatório de Atenção: recuperação bimestral separada em Fundamental I e Fundamental II."]], ["1.5.0", "17/11/2026", ["Efeito zebra mais marcado no computador (no celular continua igual).", "Ao passar o mouse, a linha fica destacada e as outras esmaecem.", "Rodapé com número da versão e data/hora da build; toque nele para ver o histórico.", "Agenda: cada aula aparece separada, com intervalos e janelas (ex.: terça: 8A 07:00–07:50 e 07:50–08:40, intervalo 09:30–09:50)."]], ["1.4.0", "16/11/2026", ["Colunas Nº e Nome congeladas ao rolar para o lado; linhas zebradas.", "Importação dos bimestres 1, 2 e 3 (Backup > Mesclar bimestres).", "P3 feita sem efeito na média fica amarela; \"P3 pendente\" saiu das pendências.", "Relatório de Atenção por turma e ordem alfabética; lista da recuperação para as professoras (texto e PDF).", "Alunos que não fizeram nada recebem zero."]], ["1.3.0", "nov/2026", ["Tela inicial com aulas do dia, pendências, tarefas, resumo e horários.", "Ficha do aluno com gráfico de evolução.", "Histórico de alterações com desfazer.", "Aba Estatísticas e app instalável (PWA)."]], ["1.2.0", "nov/2026", ["Relatórios: visão geral, comparativo, atenção e turma, com PDF.", "Painel das turmas e controle de lançamento na escola (P1, P2, Eng/T).", "Aviso de nota alterada depois de lançada."]], ["1.1.0", "nov/2026", ["Modo de edição travado, sincronização automática, agenda de aulas, cores pastel por bimestre.", "Coluna P3 escondida com contorno amarelo na média."]], ["1.0.0", "nov/2026", ["Primeira versão: notas por turma e bimestre, regras do Fundamental I e II, nuvem (Supabase), tema escuro."]]];
 $('ver').textContent='Notas · v'+VER+' · build '+BUILD;
 $('ver').onclick=()=>{$('vl').innerHTML=CHANGES.map(c=>`<p><b>v${c[0]}</b> · ${c[1]}</p><ul>${c[2].map(x=>`<li>${x}</li>`).join('')}</ul>`).join('');$('vo').classList.add('on')};
 $('vc').onclick=()=>$('vo').classList.remove('on');

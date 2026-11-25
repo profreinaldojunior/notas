@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## v1.13.0 · 25/11/2026
+- **Mapa de calor turma × bimestre:** nova tela `🔥 Mapa` com a média de cada turma, quantos alunos estão abaixo de 6 e quantos estão com nota. As cores vão do vermelho (abaixo de 6) ao verde (8 ou mais). Toque numa célula para abrir aquela turma e aquele bimestre.
+- **Checklist geral:** nova tela `✅ Checklist` com as pendências de todas as turmas e bimestres (digitar notas, lançar na escola, relançar alterações, P3, REC, ajustes de auditoria e alunos fora da turma). É possível marcar como concluído e ir direto para a turma.
+- **Auditoria:** nova aba `🛡 Auditoria`, única onde todas as notas podem ser ajustadas (A1–A4, P1, P2, ENG/TRAB, P3 e REC). Os valores ajustados **entram na média normalmente** e aparecem com a sigla **aud** abaixo da nota na tela, ficha, relatórios, PDF e Excel. A edição comum limpa o ajuste correspondente. Há link direto para corrigir pela nota e PDF da auditoria.
+- **Relatórios:** novo **executivo de 1 página** com resumo geral, por turma e alunos em atenção (sempre por turma e nº). A **ficha individual** foi ampliada com resumo anual, média por bimestre, falta para 6, posição, encaminhamento e os ajustes de auditoria — sem registro de deliberações.
+- **Importação:** em `Backup / Exportar`, o botão **⬆ Importar planilha** aceita exatamente o `.xlsx` exportado pelo app (notas por bimestre ou médias do Conselho). Mostra prévia com todas as alterações e avisos antes de aplicar, e guarda um snapshot para **Desfazer importação**.
+- **Layout e usabilidade:** cabeçalho fixo, colunas congeladas com cabeçalho de tabela fixo, modo denso, quatro tamanhos de fonte, alto contraste, cartões no celular, tooltips, atalhos de teclado (`H`, `R`, `C`, `P`, `T`, `K`, `U`, `A`, `D`, `?`), toasts e glossário.
+
 ## v1.12.0 · 25/11/2026
 - **Média anual do Conselho:** quando você escolhe uma turma, a coluna **Turma** não aparece na tabela (ela já está selecionada). Com **Todas as turmas**, a coluna continua aparecendo. As demais listas do Conselho seguem mostrando a turma.
 - **Nomes longos no Conselho:** com **3 sobrenomes**, o **penúltimo** é abreviado; com **4 ou mais**, os **2 últimos** são abreviados. Exemplos: `João dos Santos Oliveira Xavier` → `João dos Santos O. Xavier`; `Lucas Sinclair Borja Amorim de Souza` → `Lucas Sinclair Borja A. S.`. A regra vale para tela, PDF e Excel; a ficha do aluno continua com o nome completo.
