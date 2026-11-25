@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v1.11.0 · 25/11/2026
+- **Conselho:** todas as listas (Pauta do Conselho, média anual, resgate/REC final e histórico) agora mostram o **nº do aluno** (nº da chamada).
+- A ordem passa a respeitar primeiro a **ordem das turmas** e, dentro de cada turma, a ordem do **nº do aluno** — inclusive no PDF e no Excel.
+
 ## v1.10.1 · 24/11/2026
 - **Corrigido:** a REC bimestral não podia diminuir a nota. Agora ela **só substitui a média do bimestre se a nota da REC for maior**; se for menor ou igual, a média original permanece (ex.: média 5,0 e REC 4,0 → final 5,0).
 - Quando a REC é digitada mas não entra, a ficha, a lista de recuperação e as dicas na tabela explicam que a média já era maior ou igual.
