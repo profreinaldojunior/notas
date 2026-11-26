@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## v1.14.1 · 25/11/2026
+- **Revisão de layout (celular e computador):** o cabeçalho foi reorganizado: título, botões dos bimestres em uma linha e uma **faixa de atalhos que rola para o lado** (Início, Relatórios, Conselho, Painel, Mapa, Checklist, Auditoria, Ajustes, tema e Backup), no lugar de 5 linhas de botões que ocupavam a tela inteira do celular.
+- **Celular:** as turmas aparecem em **grade**; o **cartão do aluno** ficou compacto (nº e nome, 4 atividades lado a lado, P1/P2/ENG-TRAB e a média em faixa própria); os botões do topo de cada tela ficam menores e quebram de linha sem estourar; o **checklist** mostra a pendência em linha própria e os botões **Ir** e **✓** sempre visíveis, sem precisar rolar para o lado.
+- **Computador:** o título não quebra mais em duas linhas, o cabeçalho fica em duas linhas fixas e a largura útil subiu de 900 para 1040 px.
+- **Corrigido:** selo **AUDITORIA** com texto ilegível (roxo sobre roxo) e dicas (tooltips) cortadas na borda esquerda da tela.
+- **Duplicação de bimestres:** agora também alcança os alunos que **aparecem com 0** no 1º ou no 2º bimestre (o zero mostrado pelo app, sem nota gravada). Eles recebem as notas do 3º/4º **direto na nota normal**, com todos os campos e a identificação `aud`. Exemplo: aluno com 1º/2º em zero passa a ter 1º = 3º e 2º = 4º, com `aud` em cada valor copiado.
+
 ## v1.14.0 · 25/11/2026
 - **Duplicação de bimestres (nova ferramenta na aba 🛡 Auditoria):** alunos **sem nota no 1º bimestre** recebem as notas do **3º bimestre**; alunos **sem nota no 2º bimestre** recebem as notas do **4º bimestre**. Isso resolve os casos de alunos que chegaram no meio do ano e não tiveram as notas contabilizadas nos bimestres iniciais.
 - São copiados **todos os campos**: Ativ 1–4, P1, P2, ENG/TRAB, P3 e REC (inclusive a marcação "não fez a REC").
