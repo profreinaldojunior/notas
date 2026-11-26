@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## v1.14.3 · 26/11/2026
+- **Celular — rolagem da lista de alunos:** corrigido o problema em que, ao abrir uma turma, só era possível deslizar a página tocando na borda da tela. O contêiner da lista de alunos não intercepta mais o gesto: agora você pode colocar o dedo em qualquer ponto da lista para subir ou descer a página.
+- **Celular — Conselho:** as colunas **Turma** e **Nº/Aluno** não ficam mais congeladas nas listas; todas as colunas rolam livremente junto com a tabela.
+
 ## v1.14.2 · 25/11/2026
 - **Transferência entre turmas da mesma série (nova ferramenta na aba 🛡 Auditoria):** quando o aluno aparece como “saiu” em uma turma e está matriculado em outra da **mesma série** (manhã = A/B, tarde = D/E), as notas da turma de origem são levadas para a turma de destino. Exemplo: Heitor saiu da 3D para a 3A; Lívia cursou 1º/2º/3º na 2A e foi para a 2D no 4º.
 - São copiados **todos os campos** dos bimestres que estavam pendentes na turma de destino, **direto na nota normal**, e cada valor recebe a identificação `aud` com o motivo “Transferido de … para … (mesma série)”.
