@@ -1,5 +1,12 @@
 # Histórico de versões
 
+## v1.14.2 · 25/11/2026
+- **Transferência entre turmas da mesma série (nova ferramenta na aba 🛡 Auditoria):** quando o aluno aparece como “saiu” em uma turma e está matriculado em outra da **mesma série** (manhã = A/B, tarde = D/E), as notas da turma de origem são levadas para a turma de destino. Exemplo: Heitor saiu da 3D para a 3A; Lívia cursou 1º/2º/3º na 2A e foi para a 2D no 4º.
+- São copiados **todos os campos** dos bimestres que estavam pendentes na turma de destino, **direto na nota normal**, e cada valor recebe a identificação `aud` com o motivo “Transferido de … para … (mesma série)”.
+- **Precedência:** a transferência é aplicada **antes** da duplicação. Quem tem origem em outra turma da mesma série **não entra** na regra 3º→1º e 4º→2º de alunos que chegaram de outra escola.
+- A ferramenta também **remove ajustes `aud` de duplicação anterior** do mesmo aluno/bimestre antes de gravar a transferência, para não deixar nota duplicada com origem errada.
+- Há **prévia** com aluno, turma de origem/destino, bimestre e média, além de **Desfazer transferência** por snapshot. O histórico de alterações registra cada valor copiado.
+
 ## v1.14.1 · 25/11/2026
 - **Revisão de layout (celular e computador):** o cabeçalho foi reorganizado: título, botões dos bimestres em uma linha e uma **faixa de atalhos que rola para o lado** (Início, Relatórios, Conselho, Painel, Mapa, Checklist, Auditoria, Ajustes, tema e Backup), no lugar de 5 linhas de botões que ocupavam a tela inteira do celular.
 - **Celular:** as turmas aparecem em **grade**; o **cartão do aluno** ficou compacto (nº e nome, 4 atividades lado a lado, P1/P2/ENG-TRAB e a média em faixa própria); os botões do topo de cada tela ficam menores e quebram de linha sem estourar; o **checklist** mostra a pendência em linha própria e os botões **Ir** e **✓** sempre visíveis, sem precisar rolar para o lado.
